@@ -9,7 +9,7 @@ const App: React.FC = () => {
   return (
     <div className="wrapper">
       <nav id="sidebar">
-        <h1>akdakdlk</h1>
+        <h1 className="display-1">akdakdlk</h1>
       </nav>
     </div>
   );

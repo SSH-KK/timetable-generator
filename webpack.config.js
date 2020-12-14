@@ -44,7 +44,7 @@ module.exports = {
         },
       },
       {
-        test: /\.css$/,
+        test: /\.module\.css$/,
         use: [
           "style-loader",
           {
@@ -59,7 +59,11 @@ module.exports = {
             },
           },
         ],
-        include: path.resolve(__dirname, "./src"),
+      },
+      {
+        test: /\.css$/,
+        use: ["style-loader", "css-loader"],
+        exclude: /\.module\.css$/,
       },
       {
         test: /\.(?:ico|gif|png|jpg|jpeg)$/i,

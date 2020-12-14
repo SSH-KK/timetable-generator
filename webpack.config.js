@@ -50,12 +50,11 @@ module.exports = {
           {
             loader: "css-loader",
             options: {
-              modules: isDev
-                ? { localIdentName: "[path]_[name]_[local]" }
-                : {
-                    getLocalIdent: (context, localIdentName, localName) =>
-                      getScopedName(context, localIdentName, localName),
-                  },
+              modules: {
+                localIdentName: isDev
+                  ? "[path]_[name]_[local]"
+                  : "[sha1:hash:hex:4]",
+              },
             },
           },
         ],

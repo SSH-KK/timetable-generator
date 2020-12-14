@@ -44,7 +44,7 @@ export const useTimetable: UseTimetableHookFT = () => {
       )
     );
   };
-
+  
   const addLesson: AddLessonFT = (
     dayId,
     eventId,

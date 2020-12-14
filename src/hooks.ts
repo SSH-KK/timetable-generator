@@ -60,6 +60,5 @@ export const useTimetable: UseTimetableHookFT = () => {
     ))
   }
 
-
   return { state: { cards: cardState, subjects: subjectState, days: dayState }, createCard, createSubject, createDay, addLesson };
 };

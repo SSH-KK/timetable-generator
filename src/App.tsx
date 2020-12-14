@@ -4,9 +4,10 @@ import { createDocument } from "./utils/pdf";
 
 const App: React.FC = () => {
   return (
-    <div>
-      <h1 className={styles.title}>Hello, world</h1>
-      <button onClick={() => createDocument(11, 18)}>Create</button>
+    <div className = 'wrapper'>
+      <nav id = 'sidebar'>
+      	<h1>akdakdlk</h1>
+      </nav>
     </div>
   );
 };

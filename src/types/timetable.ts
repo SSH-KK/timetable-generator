@@ -36,7 +36,14 @@ export type CreateDayFT = (date: number) => void;
 
 export type AddEventFT = (dayId: number) => void;
 
-export type AddLessonFT = (dayId: number, eventId: number, groupId:number, isPair: boolean, lessonId: number, lessonNumber?: number) => void;
+export type AddLessonFT = (
+  dayId: number,
+  eventId: number,
+  groupId: number,
+  isPair: boolean,
+  lessonId: number,
+  lessonNumber?: number
+) => void;
 
 export type UseTimetableHookFT = () => {
   createSubject: CreateSubjectFT;

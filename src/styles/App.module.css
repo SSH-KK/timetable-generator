@@ -1,11 +1,9 @@
 .title {
   color: red;
 }
-.tastiestTest {
-  text-decoration: dashed;
-}
 
-/*just test sunlime merge*/
-body {
-  background-color: blue;
+.wrapper {
+  display: flex;
+  width: 100%;
+  align-items: stretch;
 }

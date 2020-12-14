@@ -59,7 +59,7 @@ module.exports = {
             },
           },
         ],
-        include: path.resolve(__dirname, "./src/styles"),
+        include: path.resolve(__dirname, "./src"),
       },
       {
         test: /\.(?:ico|gif|png|jpg|jpeg)$/i,

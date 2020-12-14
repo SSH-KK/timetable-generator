@@ -46,8 +46,10 @@ export type AddLessonFT = (
 ) => void;
 
 export type UseTimetableHookFT = () => {
+  state: TimetableT;
   createSubject: CreateSubjectFT;
   createCard: CreateCardFT;
   createDay: CreateCardFT;
-  state: TimetableT;
+  addLesson: AddLessonFT;
+  addEvent: AddEventFT;
 };

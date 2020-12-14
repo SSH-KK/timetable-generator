@@ -1,6 +1,5 @@
 import { useState } from "react";
 import {
-  TimetableT,
   UseTimetableHookFT,
   CreateCardFT,
   CreateSubjectFT,
@@ -17,7 +16,6 @@ export const useTimetable: UseTimetableHookFT = () => {
   const [cardState, setCardState] = useState<CardT[]>([]);
   const [dayState, setDayState] = useState<DayT[]>([]);
   const [subjectState, setSubjectState] = useState<SubjectT[]>([]);
-  // const [startDateState, setStartDateState] = useState<number>(0)
 
   const createSubject: CreateSubjectFT = (title, teachers) => {
     setSubjectState(prev => [...prev, { title, teachers }]);
@@ -89,5 +87,6 @@ export const useTimetable: UseTimetableHookFT = () => {
     createSubject,
     createDay,
     addLesson,
+    addEvent,
   };
 };

@@ -3,8 +3,6 @@ const webpack = require("webpack");
 const path = require("path");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 
-const getScopedName = require("./utils/getScopedName.js");
-
 const isDev = process.env.NODE_ENV === "development";
 
 const plugins = [

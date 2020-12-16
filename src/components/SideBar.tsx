@@ -21,5 +21,6 @@ const SideBar: React.FC = () => {
 			</button>
 		</nav>
 	)
+}
 
 export default SideBar;

@@ -8,7 +8,6 @@ const App: React.FC = () => {
 
   useEffect(()=>createSubject('Физика',['Попов','Пачин']), [])
   useEffect(()=>addTeacher('jhjhjdhfj',0), [])
-
   return (
     <div className={styles.wrapper}>
       <SideBar addTeacher={addTeacher} createSubject={createSubject} subjects={state.subjects} />

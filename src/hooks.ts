@@ -31,8 +31,14 @@ export const useTimetable: UseTimetableHookFT = () => {
   };
 
   const addTeacher: AddTeacherFT = (teacher, subjectId) => {
-    setSubjectState(subjects => subjects.map((subject, subjectIndex)=>subjectIndex == subjectId ? {title:subject.title, teachers:[...subject.teachers, teacher]} : subject))
-  }
+    setSubjectState(subjects =>
+      subjects.map((subject, subjectIndex) =>
+        subjectIndex == subjectId
+          ? { title: subject.title, teachers: [...subject.teachers, teacher] }
+          : subject
+      )
+    );
+  };
 
   const addEvent: AddEventFT = dayId => {
     setDayState(days =>

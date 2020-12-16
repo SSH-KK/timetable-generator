@@ -1,16 +1,22 @@
-import React, {createRef} from "react";
+import React, { createRef, useEffect } from "react";
 import styles from "../styles/Sidebar.module.css";
+import { SubjectT } from "../types/timetable";
 
-const SideBar: React.FC = () => {
+type SidebarProps = {
+	subjects: SubjectT[],
+}
 
+const SideBar: React.FC<SidebarProps> = ({subjects}) => {
 	const sideBarRef = createRef<HTMLDivElement>()
+	
 	const toggleSideBar = (event: React.MouseEvent)=>{
 		event.preventDefault()
 		const sidebar = sideBarRef.current!
 		sidebar.classList.toggle(styles.active)
 	}
+
   return (
-    <nav id={styles.sidebar} ref={sideBarRef}>
+    <nav id={styles.sidebar} className='shadow' ref={sideBarRef}>
     	<div>
         <h3>Bootstrap Sidebar</h3>
       </div>

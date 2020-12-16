@@ -1,22 +1,74 @@
-import React, { createRef } from "react";
+import React, { createRef, useState } from "react";
 import styles from "../styles/SideBar.module.css";
+import { SubjectT, CreateSubjectFT, AddTeacherFT } from '../types/timetable';
+import SubjectSingle from './SubjectSingle';
 
-const SideBar: React.FC = () => {
-  const sideBarRef = createRef<HTMLDivElement>();
+type SidebarProps = {
+	subjects: SubjectT[];
+  createSubject: CreateSubjectFT;
+  addTeacher: AddTeacherFT;
+}
+
+type InputStateT = {
+  subject: string;
+  card: string;
+}
+
+const SideBar: React.FC <SidebarProps> = ({subjects, createSubject, addTeacher}) => {
+  const sideBarRef = createRef<HTMLDivElement>()
+  const [inputState, setInputState] = useState<InputStateT>({
+    'subject':'',
+    'card':''
+  })
 
   const toggleSideBar = (event: React.MouseEvent) => {
     event.preventDefault();
-
     if (sideBarRef.current) {
       const sidebar = sideBarRef.current;
       sidebar.classList.toggle(styles.active);
     }
-  };
+  }
+
+  const createSubjectForm = (event: React.FormEvent<HTMLFormElement>)=>{
+    event.preventDefault()
+    const form = new FormData(event.currentTarget);
+    if (event.currentTarget.dataset.name){
+      const name = event.currentTarget.dataset.name;
+      setInputState(prev => ({
+        ...prev,
+        [name]: "",
+      }));
+      if(name == 'subject'){
+        createSubject(inputState.subject,[])
+      }
+    }
+  }
+
+  const inputChange = (event: React.ChangeEvent<HTMLInputElement>)=>{
+    event.preventDefault()
+    setInputState((prev)=>({
+      ...prev,
+      [event.target.name]: event.target.value
+    })
+    )
+  }
 
   return (
-    <nav id={styles.sidebar} ref={sideBarRef}>
-      <div>
-        <h3>Bootstrap Sidebar</h3>
+    <nav id={styles.sidebar} className='shadow me-3' ref={sideBarRef}>
+      <div className='row justify-content-center'>
+      	<h3 className="text-center">Предметы</h3>
+      	{
+      		subjects.map((ob, subjectIndex)=>
+      			<SubjectSingle addTeacher={addTeacher} subjectId={subjectIndex} subject={ob} key={subjectIndex} />
+      		)
+      	}
+        <div className="col-11">
+          <form className="mt-2" data-name='subject' onSubmit={createSubjectForm}>
+            <div className="input-group input-group-sm">
+              <input type="text" name='subject' onChange={inputChange} value={inputState.subject} className="form-control border border-3  rounded rounded-3" placeholder="Предмет"/>
+            </div>
+          </form>
+        </div>
       </div>
       <button
         type="button"

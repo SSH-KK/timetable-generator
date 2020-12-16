@@ -6,6 +6,7 @@ import {
   CreateDayFT,
   AddEventFT,
   AddLessonFT,
+  AddTeacherFT,
   DayT,
   CardT,
   SubjectT,
@@ -28,6 +29,10 @@ export const useTimetable: UseTimetableHookFT = () => {
   const createDay: CreateDayFT = date => {
     setDayState(prev => [...prev, { date, events: [] }]);
   };
+
+  const addTeacher: AddTeacherFT = (teacher, subjectId) => {
+    setSubjectState(subjects => subjects.map((subject, subjectIndex)=>subjectIndex == subjectId ? {title:subject.title, teachers:[...subject.teachers, teacher]} : subject))
+  }
 
   const addEvent: AddEventFT = dayId => {
     setDayState(days =>
@@ -88,5 +93,6 @@ export const useTimetable: UseTimetableHookFT = () => {
     createDay,
     addLesson,
     addEvent,
+    addTeacher,
   };
 };

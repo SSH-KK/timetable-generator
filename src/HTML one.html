@@ -10,9 +10,38 @@
 <body>
 	<div class="wrapper">
 		<nav id="sidebar" class="shadow active me-3">
-			<div class="sidebar-header">
-            	<h3>Bootstrap Sidebar</h3>
-       		</div>
+			<div class="row justify-content-center">
+				<h3 class="text-center">Предметы</h3>
+				<div class="col-11 border rounded rounded-2 border-3 p-2">
+					<h4>Физика</h4>
+					<div class="d-flex flex-wrap">
+						<div class="p-1 rounded rounded-3 me-2 shadow-sm">
+							<h5 class="list-inline-item mb-0 me-0">Попов</h5>
+							<button type="button" class="btn-close h-0" aria-label="Close"></button>
+						</div>
+						<div class="p-1 rounded rounded-3 me-2 shadow-sm">
+							<h5 class="list-inline-item mb-0 me-0">Попов</h5>
+							<button type="button" class="btn-close h-0" aria-label="Close"></button>
+						</div>
+						<div class="p-1 rounded rounded-3 me-2 shadow-sm">
+							<h5 class="list-inline-item mb-0 me-0">Попов</h5>
+							<button type="button" class="btn-close h-0" aria-label="Close"></button>
+						</div>
+					</div>
+					<form class="mt-2">
+						<div class="input-group input-group-sm">
+						  <input type="text" class="form-control border border-3 rounded rounded-3" placeholder="Преподаватель">
+						</div>
+					</form>
+				</div>
+				<div class="col-11">
+					<form class="mt-2">
+						<div class="input-group input-group-sm">
+						  <input type="text" class="form-control border border-3  rounded rounded-3" placeholder="Предмет">
+						</div>
+					</form>
+				</div>
+			</div>
    			<button type="button" id="sidebar-toggle" class="btn btn-secondary rounded-end">X</button>
 		</nav>
 		<div id="content" class="container mt-3">

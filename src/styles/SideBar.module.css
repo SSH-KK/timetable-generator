@@ -5,16 +5,26 @@
   min-height: 100vh;
   position: relative;
   background-color: #adb5bd;
-  transition: all 0.3s;
+  transition: margin-left 0.4s;
 }
 
 #sidebar.active {
   margin-left: 0px;
 }
 
+#sidebar.active #sidebarToggle svg{
+  transform: rotate(180deg);
+}
+
 #sidebarToggle {
   position: absolute;
   border-radius: 0;
+  border-bottom-right-radius: 10%;
+  padding: 0.5rem;
   top: 0;
   left: 100%;
+}
+
+#sidebarToggle svg {
+  transition: transform 0.4s ease-in-out;
 }

@@ -166,7 +166,7 @@ const formatData = (data: TimetableT, firstDay: number): TableCell[][] =>
       },
     ],
     ...day.events.map<TableCell[]>((event, eventId) =>
-      event.lessons.flatMap<TableCell[]>((lesson, lessonIndex) =>
+      event.lessons.flatMap<TableCell[]>(lesson =>
         lesson.map((lessonElement, lessonElementIndex) => [
           [
             lessonElementIndex == 0
@@ -199,8 +199,6 @@ export const createDocument = (
   );
 
   const styledDocument = { ...document, ...documentStyles };
-
-  console.log(styledDocument.content);
 
   pdfMake.createPdf(styledDocument).download(generateDocumentName(classNumber));
 };

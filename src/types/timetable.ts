@@ -38,6 +38,8 @@ export type AddEventFT = (dayId: number) => void;
 
 export type AddTeacherFT = (teacher: string, subjectId: number) => void;
 
+export type DeleteTeacherFT = (subjectId: number, teacherId: number) => void;
+
 export type AddLessonFT = (
   dayId: number,
   eventId: number,
@@ -55,4 +57,5 @@ export type UseTimetableHookFT = () => {
   addLesson: AddLessonFT;
   addEvent: AddEventFT;
   addTeacher: AddTeacherFT;
+  deleteTeacher: DeleteTeacherFT;
 };

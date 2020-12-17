@@ -1,15 +1,17 @@
 import React, { useState } from "react";
-import { SubjectT, AddTeacherFT } from "../types/timetable";
+import { SubjectT, AddTeacherFT, DeleteTeacherFT } from "../types/timetable";
 
 type SubjectSingleProps = {
   subject: SubjectT;
   addTeacher: AddTeacherFT;
+  deleteTeacher: DeleteTeacherFT;
   subjectId: number;
 };
 
 const SubjectSingle: React.FC<SubjectSingleProps> = ({
   subject,
   addTeacher,
+  deleteTeacher,
   subjectId,
 }) => {
   const [inputState, setInputState] = useState("");
@@ -24,6 +26,11 @@ const SubjectSingle: React.FC<SubjectSingleProps> = ({
     event.preventDefault();
     setInputState(event.target.value);
   };
+
+  const deleteTeacherButton = (event: React.MouseEvent<HTMLButtonElement>) => {
+  	event.preventDefault()
+  	deleteTeacher(subjectId, parseInt(event.currentTarget.name))
+  }
   return (
     <div className="col-11 border rounded rounded-2 border-3 p-2 mt-2">
       <h4>{subject.title}</h4>
@@ -34,7 +41,8 @@ const SubjectSingle: React.FC<SubjectSingleProps> = ({
             <button
               type="button"
               className="btn-close h-0"
-              aria-label="Close"
+              onClick={deleteTeacherButton}
+              name={teacherIndex.toString()}
             ></button>
           </div>
         ))}

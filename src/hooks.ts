@@ -42,8 +42,19 @@ export const useTimetable: UseTimetableHookFT = () => {
   };
 
   const deleteTeacher: DeleteTeacherFT = (subjectId, teacherId) => {
-    setSubjectState(subjects => subjects.map((subject, subjectIndex)=>subjectIndex == subjectId ? {title: subject.title, teachers: subject.teachers.filter((teacher, teacherIndex)=>teacherIndex!=teacherId)} : subject))
-  }
+    setSubjectState(subjects =>
+      subjects.map((subject, subjectIndex) =>
+        subjectIndex == subjectId
+          ? {
+              title: subject.title,
+              teachers: subject.teachers.filter(
+                (teacher, teacherIndex) => teacherIndex != teacherId
+              ),
+            }
+          : subject
+      )
+    );
+  };
 
   const addEvent: AddEventFT = dayId => {
     setDayState(days =>

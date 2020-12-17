@@ -28,9 +28,9 @@ const SubjectSingle: React.FC<SubjectSingleProps> = ({
   };
 
   const deleteTeacherButton = (event: React.MouseEvent<HTMLButtonElement>) => {
-  	event.preventDefault()
-  	deleteTeacher(subjectId, parseInt(event.currentTarget.name))
-  }
+    event.preventDefault();
+    deleteTeacher(subjectId, parseInt(event.currentTarget.name));
+  };
   return (
     <div className="col-11 border rounded rounded-2 border-3 p-2 mt-2">
       <h4>{subject.title}</h4>

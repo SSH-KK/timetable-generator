@@ -1,6 +1,11 @@
 import React, { createRef, useState } from "react";
 import styles from "../styles/SideBar.module.css";
-import { SubjectT, CreateSubjectFT, AddTeacherFT, DeleteTeacherFT } from "../types/timetable";
+import {
+  SubjectT,
+  CreateSubjectFT,
+  AddTeacherFT,
+  DeleteTeacherFT,
+} from "../types/timetable";
 import SubjectSingle from "./SubjectSingle";
 
 type SidebarProps = {

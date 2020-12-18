@@ -1,6 +1,6 @@
 import React, { createRef, useState } from "react";
 import styles from "../styles/SideBar.module.css";
-import { SubjectT, CreateSubjectFT, AddTeacherFT, DeleteTeacherFT } from "../types/timetable";
+import { SubjectT, CreateSubjectFT, AddTeacherFT, DeleteTeacherFT, DeleteSubjectFt } from "../types/timetable";
 import SubjectSingle from "./SubjectSingle";
 
 type SidebarProps = {
@@ -8,6 +8,7 @@ type SidebarProps = {
   createSubject: CreateSubjectFT;
   addTeacher: AddTeacherFT;
   deleteTeacher: DeleteTeacherFT;
+  deleteSubject: DeleteSubjectFt;
 };
 
 type InputStateT = {
@@ -20,6 +21,7 @@ const SideBar: React.FC<SidebarProps> = ({
   createSubject,
   addTeacher,
   deleteTeacher,
+  deleteSubject,
 }) => {
   const sideBarRef = createRef<HTMLDivElement>();
   const [inputState, setInputState] = useState<InputStateT>({
@@ -67,6 +69,7 @@ const SideBar: React.FC<SidebarProps> = ({
             addTeacher={addTeacher}
             subjectId={subjectIndex}
             deleteTeacher={deleteTeacher}
+            deleteSubject={deleteSubject}
             subject={ob}
             key={subjectIndex}
           />

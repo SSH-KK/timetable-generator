@@ -8,6 +8,7 @@ import {
   AddLessonFT,
   AddTeacherFT,
   DeleteTeacherFT,
+  DeleteSubjectFt,
   DayT,
   CardT,
   SubjectT,
@@ -40,6 +41,10 @@ export const useTimetable: UseTimetableHookFT = () => {
       )
     );
   };
+
+  const deleteSubject: DeleteSubjectFt = (subjectId) => {
+    setSubjectState(subjects => subjects.filter((subject, subjectIndex)=>subjectId!=subjectIndex))
+  }
 
   const deleteTeacher: DeleteTeacherFT = (subjectId, teacherId) => {
     setSubjectState(subjects => subjects.map((subject, subjectIndex)=>subjectIndex == subjectId ? {title: subject.title, teachers: subject.teachers.filter((teacher, teacherIndex)=>teacherIndex!=teacherId)} : subject))
@@ -106,5 +111,6 @@ export const useTimetable: UseTimetableHookFT = () => {
     addEvent,
     addTeacher,
     deleteTeacher,
+    deleteSubject,
   };
 };

@@ -5,6 +5,7 @@ import {
   CreateSubjectFT,
   AddTeacherFT,
   DeleteTeacherFT,
+  DeleteSubjectFt,
 } from "../types/timetable";
 import SubjectSingle from "./SubjectSingle";
 

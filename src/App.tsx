@@ -4,7 +4,13 @@ import styles from "./styles/App.module.css";
 import { useTimetable } from "./hooks";
 
 const App: React.FC = () => {
-  const { state, createSubject, addTeacher, deleteTeacher, deleteSubject } = useTimetable();
+  const {
+    state,
+    createSubject,
+    addTeacher,
+    deleteTeacher,
+    deleteSubject,
+  } = useTimetable();
 
   useEffect(() => createSubject("Физика", ["Попов", "Пачин"]), []);
 
@@ -14,7 +20,7 @@ const App: React.FC = () => {
         addTeacher={addTeacher}
         createSubject={createSubject}
         deleteTeacher={deleteTeacher}
-        deleteSubject= {deleteSubject}
+        deleteSubject={deleteSubject}
         subjects={state.subjects}
       />
     </div>

@@ -42,9 +42,11 @@ export const useTimetable: UseTimetableHookFT = () => {
     );
   };
 
-  const deleteSubject: DeleteSubjectFt = (subjectId) => {
-    setSubjectState(subjects => subjects.filter((subject, subjectIndex)=>subjectId!=subjectIndex))
-  }
+  const deleteSubject: DeleteSubjectFt = subjectId => {
+    setSubjectState(subjects =>
+      subjects.filter((subject, subjectIndex) => subjectId != subjectIndex)
+    );
+  };
 
   const deleteTeacher: DeleteTeacherFT = (subjectId, teacherId) => {
     setSubjectState(subjects =>

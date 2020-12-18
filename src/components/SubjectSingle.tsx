@@ -39,7 +39,6 @@ const SubjectSingle: React.FC<SubjectSingleProps> = ({
   	event.preventDefault()
   	deleteSubject(subjectId)
   }
-
   return (
     <div className={`${styles.subjectCard} col-11 border rounded rounded-2 border-3 p-2 mt-2`}>
       <h4>{subject.title}</h4>

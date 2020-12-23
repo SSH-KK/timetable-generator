@@ -7,12 +7,14 @@ const App: React.FC = () => {
   const {
     state,
     createSubject,
+    createCard,
     addTeacher,
     deleteTeacher,
     deleteSubject,
   } = useTimetable();
 
   useEffect(() => createSubject("Физика", ["Попов", "Пачин"]), []);
+  useEffect(() => createCard(0,0,505),[]);
 
   return (
     <div className={styles.wrapper}>
@@ -22,6 +24,7 @@ const App: React.FC = () => {
         deleteTeacher={deleteTeacher}
         deleteSubject={deleteSubject}
         subjects={state.subjects}
+        cards={state.cards}
       />
     </div>
   );

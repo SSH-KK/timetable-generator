@@ -11,7 +11,7 @@ type SubjectSingleProps = {
   subject: SubjectT;
   addTeacher: AddTeacherFT;
   deleteTeacher: DeleteTeacherFT;
-  deleteSubject: DeleteSubjectFt;
+  deleteSubjectButton: (event: React.MouseEvent<HTMLButtonElement>) =>void;
   subjectId: number;
 };
 
@@ -19,7 +19,7 @@ const SubjectSingle: React.FC<SubjectSingleProps> = ({
   subject,
   addTeacher,
   deleteTeacher,
-  deleteSubject,
+  deleteSubjectButton,
   subjectId,
 }) => {
   const [inputState, setInputState] = useState("");
@@ -40,10 +40,6 @@ const SubjectSingle: React.FC<SubjectSingleProps> = ({
     deleteTeacher(subjectId, parseInt(event.currentTarget.name));
   };
 
-  const deleteSubjectButton = (event: React.MouseEvent<HTMLButtonElement>) => {
-    event.preventDefault();
-    deleteSubject(subjectId);
-  };
   return (
     <div
       className={`${styles.subjectCard} col-11 border rounded rounded-2 border-3 p-2 mt-2`}
@@ -76,6 +72,7 @@ const SubjectSingle: React.FC<SubjectSingleProps> = ({
           type="button"
           onClick={deleteSubjectButton}
           id={styles.deleteSubject}
+          name={subjectId.toString()}
           className="btn btn-danger border-start border border-3"
         >
           <svg

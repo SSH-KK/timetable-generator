@@ -11,7 +11,7 @@ type SubjectSingleProps = {
   subject: SubjectT;
   addTeacher: AddTeacherFT;
   deleteTeacher: DeleteTeacherFT;
-  deleteSubjectButton: (event: React.MouseEvent<HTMLButtonElement>) =>void;
+  deleteSubjectButton: (event: React.MouseEvent<HTMLButtonElement>) => void;
   subjectId: number;
 };
 

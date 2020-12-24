@@ -50,13 +50,8 @@ const SideBar: React.FC<SidebarProps> = ({
     card: {
       subject: -1,
       teacher: -1,
-<<<<<<< HEAD
       room: '',
     }
-=======
-      room: -1,
-    },
->>>>>>> f1dfe4e411e223046f04d989915edd44d209ea95
   });
 
   const toggleSideBar = (event: React.MouseEvent) => {
@@ -95,29 +90,16 @@ const SideBar: React.FC<SidebarProps> = ({
     }));
   };
 
-<<<<<<< HEAD
   const cardSelectChange = (event: React.ChangeEvent<HTMLSelectElement | HTMLInputElement>)=>{
     if(event.target.name){
       const name = event.target.name
       setInputState(prev =>({
-=======
-  const cardSelectChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
-    if (event.target.name) {
-      const name = event.target.name;
-      setInputState(prev => ({
->>>>>>> f1dfe4e411e223046f04d989915edd44d209ea95
         subject: prev.subject,
         card: {
           ...prev.card,
-<<<<<<< HEAD
           [name]: name!='room'? parseInt(event.target.value) : event.target.value
         }
       }))
-=======
-          [name]: parseInt(event.target.value),
-        },
-      }));
->>>>>>> f1dfe4e411e223046f04d989915edd44d209ea95
     }
   };
 
@@ -138,7 +120,6 @@ const SideBar: React.FC<SidebarProps> = ({
 
   return (
     <>
-<<<<<<< HEAD
     <nav id={styles.sidebar} className="shadow me-3" ref={sideBarRef}>
       <div className="row justify-content-center">
         <h3 className="text-center">Предметы</h3>
@@ -209,96 +190,9 @@ const SideBar: React.FC<SidebarProps> = ({
             ''
             }
           </form>
-=======
-      <nav id={styles.sidebar} className="shadow me-3" ref={sideBarRef}>
-        <div className="row justify-content-center">
-          <h3 className="text-center">Предметы</h3>
-          {subjects.map((ob, subjectIndex) =>
-            ob.status ? (
-              <SubjectSingle
-                addTeacher={addTeacher}
-                subjectId={subjectIndex}
-                deleteTeacher={deleteTeacher}
-                deleteSubjectButton={deleteSubjectButton}
-                subject={ob}
-                key={subjectIndex}
-              />
-            ) : (
-              ""
-            )
-          )}
-          <div className="col-11">
-            <form
-              className="mt-2"
-              data-name="subject"
-              onSubmit={createSubjectForm}
-            >
-              <div className="input-group input-group-sm">
-                <input
-                  type="text"
-                  name="subject"
-                  onChange={inputChange}
-                  value={inputState.subject}
-                  className="form-control border border-3  rounded rounded-3"
-                  placeholder="Предмет"
-                />
-              </div>
-            </form>
-          </div>
-          <h3 className="text-center mt-2">Пары</h3>
-          {cards.map((ob, cardIndex) => (
-            <CardSingle
-              card={{
-                room: ob.room,
-                subject: subjects[ob.subject].title,
-                teacher: subjects[ob.subject].teachers[ob.teacher],
-              }}
-              key={cardIndex}
-            />
-          ))}
-          <div className="col-11">
-            <form className="mt-2" data-name="card">
-              <select
-                name="subject"
-                value={inputState.card.subject}
-                onChange={cardSelectChange}
-                className="form-select"
-              >
-                <option value="-1">Предмет</option>
-                {subjects.map((ob, subjectIndex) =>
-                  ob.status ? (
-                    <option value={subjectIndex} key={subjectIndex}>
-                      {ob.title}
-                    </option>
-                  ) : (
-                    ""
-                  )
-                )}
-              </select>
-              {inputState.card.subject != -1 ? (
-                <select
-                  name="teacher"
-                  value={inputState.card.teacher}
-                  onChange={cardSelectChange}
-                  className="form-select"
-                >
-                  <option value="-1">Преподаватель</option>
-                  {subjects[inputState.card.subject].teachers.map(
-                    (ob, teacherIndex) => (
-                      <option value={teacherIndex} key={teacherIndex}>
-                        {ob}
-                      </option>
-                    )
-                  )}
-                </select>
-              ) : (
-                ""
-              )}
-            </form>
-          </div>
->>>>>>> f1dfe4e411e223046f04d989915edd44d209ea95
         </div>
-      </nav>
+      </div>
+    </nav>
       <button
         type="button"
         onClick={toggleSideBar}

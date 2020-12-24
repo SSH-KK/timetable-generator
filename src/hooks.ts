@@ -26,7 +26,7 @@ export const useTimetable: UseTimetableHookFT = () => {
   };
 
   const createCard: CreateCardFT = (subject, teacher, room) => {
-    setCardState(prev => [...prev, { subject, teacher, room, status:true }]);
+    setCardState(prev => [...prev, { subject, teacher, room, status: true }]);
   };
 
   const createDay: CreateDayFT = date => {
@@ -71,11 +71,13 @@ export const useTimetable: UseTimetableHookFT = () => {
     );
   };
 
-  const deleteCard : DeleteCardFt = (cardId) => {
+  const deleteCard: DeleteCardFt = cardId => {
     setCardState(cards =>
-      cards.map((card, cardIndex)=> cardIndex == cardId ? {...card, status:false} : card)
-     )
-  }
+      cards.map((card, cardIndex) =>
+        cardIndex == cardId ? { ...card, status: false } : card
+      )
+    );
+  };
 
   const addEvent: AddEventFT = dayId => {
     setDayState(days =>

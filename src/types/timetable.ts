@@ -17,7 +17,7 @@ export type CardT = {
   subject: number; // ID
   room: number; // Number
   teacher: number; // ID in subject
-  status : boolean;
+  status: boolean;
 };
 
 export type SubjectT = {

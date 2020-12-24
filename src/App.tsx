@@ -15,7 +15,7 @@ const App: React.FC = () => {
   } = useTimetable();
 
   useEffect(() => createSubject("Физика", ["Попов", "Пачин"]), []);
-  useEffect(() => createCard(0,0,505),[]);
+  useEffect(() => createCard(0, 0, 505), []);
 
   return (
     <div className={styles.wrapper}>

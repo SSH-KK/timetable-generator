@@ -23,7 +23,7 @@ export type CardT = {
 export type SubjectT = {
   title: string;
   teachers: string[]; // teachers allowed for this subject
-  status : boolean;
+  status: boolean;
 };
 
 export type CreateSubjectFT = (title: string, teachers: string[]) => void;

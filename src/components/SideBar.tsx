@@ -4,9 +4,11 @@ import {
   SubjectT,
   CardT,
   CreateSubjectFT,
+  CreateCardFT,
   AddTeacherFT,
   DeleteTeacherFT,
   DeleteSubjectFt,
+  DeleteCardFt,
 } from "../types/timetable";
 import SubjectSingle from "./SubjectSingle";
 import CardSingle from './CardSingle';
@@ -15,23 +17,31 @@ type SidebarProps = {
   subjects: SubjectT[];
   cards: CardT[];
   createSubject: CreateSubjectFT;
+  createCard: CreateCardFT;
   addTeacher: AddTeacherFT;
   deleteTeacher: DeleteTeacherFT;
   deleteSubject: DeleteSubjectFt;
+  deleteCard: DeleteCardFt;
 };
 
 type InputStateT = {
   subject: string;
-  card: CardT;
+  card:{
+    subject: number;
+    teacher: number;
+    room: string;
+  }
 };
 
 const SideBar: React.FC<SidebarProps> = ({
   subjects,
   cards,
   createSubject,
+  createCard,
   addTeacher,
   deleteTeacher,
   deleteSubject,
+  deleteCard,
 }) => {
   const sideBarRef = createRef<HTMLDivElement>();
   const sidebarToggleRef = createRef<HTMLButtonElement>();
@@ -40,7 +50,7 @@ const SideBar: React.FC<SidebarProps> = ({
     card: {
       subject:-1,
       teacher: -1,
-      room: -1,
+      room: '',
     }
   });
 
@@ -54,17 +64,20 @@ const SideBar: React.FC<SidebarProps> = ({
     }
   };
 
-  const createSubjectForm = (event: React.FormEvent<HTMLFormElement>) => {
+  const createForm = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const form = new FormData(event.currentTarget);
     if (event.currentTarget.dataset.name) {
       const name = event.currentTarget.dataset.name;
       setInputState(prev => ({
         ...prev,
-        [name]: "",
+        [name]: name == 'subject' ? '' : {subject:-1, teacher: -1, room: ''},
       }));
-      if (name == "subject") {
+      if (name == 'subject') {
         createSubject(inputState.subject, []);
+      }
+      else if(name == 'card'){
+        createCard(inputState.card.subject, inputState.card.teacher, parseInt(inputState.card.room))
       }
     }
   };
@@ -77,14 +90,14 @@ const SideBar: React.FC<SidebarProps> = ({
     }));
   };
 
-  const cardSelectChange = (event: React.ChangeEvent<HTMLSelectElement>)=>{
+  const cardSelectChange = (event: React.ChangeEvent<HTMLSelectElement | HTMLInputElement>)=>{
     if(event.target.name){
       const name = event.target.name
       setInputState(prev =>({
         subject: prev.subject,
         card:{
           ...prev.card,
-          [name]: parseInt(event.target.value)
+          [name]: name!='room'? parseInt(event.target.value) : event.target.value
         }
       }))
     }
@@ -127,7 +140,7 @@ const SideBar: React.FC<SidebarProps> = ({
           <form
             className="mt-2"
             data-name="subject"
-            onSubmit={createSubjectForm}
+            onSubmit={createForm}
           >
             <div className="input-group input-group-sm">
               <input
@@ -143,10 +156,10 @@ const SideBar: React.FC<SidebarProps> = ({
         </div>
         <h3 className="text-center mt-2">Пары</h3>
         {cards.map((ob, cardIndex)=>(
-          <CardSingle card={{room: ob.room, subject: subjects[ob.subject].title, teacher: subjects[ob.subject].teachers[ob.teacher]}} key={cardIndex}/>
+          <CardSingle deleteCard={deleteCard} card={ {cardIndex: cardIndex, status: subjects[ob.subject].status, room: ob.room, subject: subjects[ob.subject].title, teacher: subjects[ob.subject].teachers[ob.teacher]} } key={cardIndex}/>
          ))}
         <div className='col-11'>
-          <form className='mt-2' data-name='card'>
+          <form className='mt-2' data-name='card' onSubmit={createForm}>
             <select name='subject' value={inputState.card.subject} onChange={cardSelectChange} className="form-select">
               <option value='-1'>Предмет</option>
               {subjects.map((ob, subjectIndex)=>(
@@ -158,7 +171,7 @@ const SideBar: React.FC<SidebarProps> = ({
             </select>
             {
               inputState.card.subject!=-1 ?
-              <select name='teacher' value={inputState.card.teacher} onChange={cardSelectChange} className="form-select">
+              <select name='teacher' value={inputState.card.teacher} onChange={cardSelectChange} className="form-select mt-2">
                 <option value='-1'>Преподаватель</option>
                 {
                   subjects[inputState.card.subject].teachers.map((ob, teacherIndex)=>(
@@ -168,6 +181,13 @@ const SideBar: React.FC<SidebarProps> = ({
               </select>
               :
               ''
+            }
+            { inputState.card.subject!=-1 ?
+            <div className="input-group input-group-sm mt-2">
+              <input type="text" value={inputState.card.room} placeholder='Кабинет' onChange={cardSelectChange} name='room' className="form-control"/>
+            </div>
+            :
+            ''
             }
           </form>
         </div>

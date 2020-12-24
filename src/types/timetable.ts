@@ -17,6 +17,7 @@ export type CardT = {
   subject: number; // ID
   room: number; // Number
   teacher: number; // ID in subject
+  status : boolean;
 };
 
 export type SubjectT = {
@@ -43,6 +44,8 @@ export type DeleteSubjectFt = (subjectId: number) => void;
 
 export type DeleteTeacherFT = (subjectId: number, teacherId: number) => void;
 
+export type DeleteCardFt = (cardId: number) => void;
+
 export type AddLessonFT = (
   dayId: number,
   eventId: number,
@@ -62,4 +65,5 @@ export type UseTimetableHookFT = () => {
   addTeacher: AddTeacherFT;
   deleteTeacher: DeleteTeacherFT;
   deleteSubject: DeleteSubjectFt;
+  deleteCard: DeleteCardFt;
 };

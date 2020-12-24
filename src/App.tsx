@@ -11,6 +11,7 @@ const App: React.FC = () => {
     addTeacher,
     deleteTeacher,
     deleteSubject,
+    deleteCard,
   } = useTimetable();
 
   useEffect(() => createSubject("Физика", ["Попов", "Пачин"]), []);
@@ -21,8 +22,10 @@ const App: React.FC = () => {
       <SideBar
         addTeacher={addTeacher}
         createSubject={createSubject}
+        createCard={createCard}
         deleteTeacher={deleteTeacher}
         deleteSubject={deleteSubject}
+        deleteCard={deleteCard}
         subjects={state.subjects}
         cards={state.cards}
       />

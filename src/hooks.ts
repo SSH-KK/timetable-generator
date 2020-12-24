@@ -9,6 +9,7 @@ import {
   AddTeacherFT,
   DeleteTeacherFT,
   DeleteSubjectFt,
+  DeleteCardFt,
   DayT,
   CardT,
   SubjectT,
@@ -25,7 +26,7 @@ export const useTimetable: UseTimetableHookFT = () => {
   };
 
   const createCard: CreateCardFT = (subject, teacher, room) => {
-    setCardState(prev => [...prev, { subject, teacher, room }]);
+    setCardState(prev => [...prev, { subject, teacher, room, status:true }]);
   };
 
   const createDay: CreateDayFT = date => {
@@ -63,6 +64,12 @@ export const useTimetable: UseTimetableHookFT = () => {
       )
     );
   };
+
+  const deleteCard : DeleteCardFt = (cardId) => {
+    setCardState(cards =>
+      cards.map((card, cardIndex)=> cardIndex == cardId ? {...card, status:false} : card)
+     )
+  }
 
   const addEvent: AddEventFT = dayId => {
     setDayState(days =>
@@ -126,5 +133,6 @@ export const useTimetable: UseTimetableHookFT = () => {
     addTeacher,
     deleteTeacher,
     deleteSubject,
+    deleteCard,
   };
 };

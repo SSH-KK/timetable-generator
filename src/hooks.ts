@@ -71,7 +71,7 @@ export const useTimetable: UseTimetableHookFT = () => {
     );
   };
 
-  const deleteCard : DeleteCardFt = (cardId) => {
+  const deleteCard: DeleteCardFt = (cardId) => {
     setCardState(cards =>
       cards.map((card, cardIndex)=> cardIndex == cardId ? {...card, status:false} : card)
      )

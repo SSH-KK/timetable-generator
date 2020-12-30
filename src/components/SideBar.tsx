@@ -69,15 +69,20 @@ const SideBar: React.FC<SidebarProps> = ({
     const form = new FormData(event.currentTarget);
     if (event.currentTarget.dataset.name) {
       const name = event.currentTarget.dataset.name;
-      setInputState(prev => ({
-        ...prev,
-        [name]: name == 'subject' ? '' : {subject:-1, teacher: -1, room: ''},
-      }));
-      if (name == 'subject') {
+      let reset = false
+      if (name == 'subject' && inputState.subject) {
         createSubject(inputState.subject, []);
+        reset = true
       }
-      else if(name == 'card'){
+      else if(name == 'card' && inputState.card.subject!=-1 && inputState.card.teacher!=-1 && inputState.card.room){
         createCard(inputState.card.subject, inputState.card.teacher, parseInt(inputState.card.room))
+        reset = true
+      }
+      if(reset){
+        setInputState(prev => ({
+          ...prev,
+          [name]: name == 'subject' ? '' : {subject:-1, teacher: -1, room: ''},
+        }));
       }
     }
   };
@@ -93,13 +98,15 @@ const SideBar: React.FC<SidebarProps> = ({
   const cardSelectChange = (event: React.ChangeEvent<HTMLSelectElement | HTMLInputElement>)=>{
     if(event.target.name){
       const name = event.target.name
-      setInputState(prev =>({
-        subject: prev.subject,
-        card: {
-          ...prev.card,
-          [name]: name!='room'? parseInt(event.target.value) : event.target.value
-        }
-      }))
+      if((name == 'room' && (parseInt(event.target.value) || event.target.value=='')) || name!='room'){
+        setInputState(prev =>({
+          subject: prev.subject,
+          card: {
+            ...prev.card,
+            [name]: name!='room'? parseInt(event.target.value) : event.target.value
+          }
+        }))
+      }
     }
   };
 
@@ -117,6 +124,12 @@ const SideBar: React.FC<SidebarProps> = ({
       }));
     }
   };
+
+  const deleteCardButton = (event: React.MouseEvent<HTMLButtonElement>) => {
+    event.preventDefault()
+    const cardIndex = parseInt(event.currentTarget.name)
+    deleteCard(cardIndex)
+  }
 
   return (
     <>
@@ -156,7 +169,7 @@ const SideBar: React.FC<SidebarProps> = ({
         </div>
         <h3 className="text-center mt-2">Пары</h3>
         {cards.map((ob, cardIndex)=>(
-          <CardSingle deleteCard={deleteCard} card={ {cardIndex: cardIndex, status: subjects[ob.subject].status, room: ob.room, subject: subjects[ob.subject].title, teacher: subjects[ob.subject].teachers[ob.teacher]} } key={cardIndex}/>
+          <CardSingle deleteCardButton={deleteCardButton} deleteCard={deleteCard} card={ {cardIndex: cardIndex, subStatus: subjects[ob.subject].status ,status: cards[cardIndex].status, room: ob.room, subject: subjects[ob.subject].title, teacher: subjects[ob.subject].teachers[ob.teacher]} } key={cardIndex}/>
          ))}
         <div className='col-11'>
           <form className='mt-2' data-name='card' onSubmit={createForm}>

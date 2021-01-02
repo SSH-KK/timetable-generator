@@ -30,7 +30,7 @@ module.exports = {
   module: {
     rules: [
       {
-        test: /\.tsx?$/,
+        test: /\.(tsx|ts)?$/,
         use: "ts-loader",
         include: path.resolve(__dirname, "src"),
       },

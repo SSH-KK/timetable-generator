@@ -3,34 +3,67 @@
     {
       "events": [
         {
-          "lessons": [0, 1, 2, 3, 4, 5]
+          "lessons": [
+            [0, 0],
+            [1, 1],
+            [0, 0],
+            [0, -1],
+            [-1, 0],
+            [-1, -1]
+          ]
         },
         {
-          "lessons": [0, 1, 2, 3, 4, 5]
+          "lessons": [
+            [1, 1],
+            [1, 1],
+            [0, 0],
+            [3, 3],
+            [4, 4],
+            [5, 5]
+          ]
+        },
+        {
+          "lessons": [
+            [1, 1],
+            [1, 1],
+            [0, 0],
+            [3, 3],
+            [4, 4],
+            [5, 5]
+          ]
         }
       ],
       "date": 5467546
     },
     {
-      "events": [
-        {
-          "lessons": [0, 1, 2, 3, 4, 5]
-        }
-      ],
+      "events": [],
       "date": 5467546
     }
   ],
   "cards": [
     {
-      "subject": 3,
+      "subject": 0,
       "room": 505,
-      "teacher": 1
+      "teacher": 0,
+      "status": true
+    },
+    {
+      "subject": 1,
+      "room": 507,
+      "teacher": 0,
+      "status": true
     }
   ],
   "subjects": [
     {
-      "title": "Math",
-      "teachers": ["Popov", "somebody"]
+      "title": "Обществознание",
+      "teachers": ["Климова В.Н.", "Кайгородов В.Н"],
+      "status": true
+    },
+    {
+      "title": "Физика лекция/ Астрономия",
+      "teachers": ["Попов Д.А."],
+      "status": true
     }
   ]
 }

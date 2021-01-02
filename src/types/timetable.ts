@@ -9,7 +9,7 @@ export type DayT = {
   date: number; // epoch time
 };
 
-type EventT = {
+export type EventT = {
   lessons: number[][]; // IDs
 };
 

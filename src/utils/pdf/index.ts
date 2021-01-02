@@ -1,10 +1,20 @@
 import pdfMake from "pdfmake/build/pdfmake";
 import { TableCell, TDocumentDefinitions } from "pdfmake/interfaces";
 
-import { DocumentStylesT } from "../types/pdf";
-import { TimetableT } from "../types/timetable";
+import { TimetableT } from "../../types/timetable";
+import dataExample from "../../../dataExample.json";
 
-import vfs from "./vfsFonts";
+import vfs from "../vfsFonts";
+import assets from "../../assets/pdf";
+import {
+  colSpanGenerator,
+  generateDayHeader,
+  generateDocumentName,
+  generateEventContent,
+  getDate,
+  getGroupNumber,
+  rowSpanGenerator,
+} from "./utils";
 
 pdfMake.vfs = vfs;
 
@@ -13,55 +23,6 @@ pdfMake.fonts = {
     normal: "PTSerifRegular.ttf",
     bold: "PTSerifBold.ttf",
   },
-};
-
-const months = [
-  "Января",
-  "Февраля",
-  "Марта",
-  "Апреля",
-  "Мая",
-  "Июня",
-  "Июля",
-  "Августа",
-  "Сентября",
-  "Октября",
-  "Ноября",
-  "Декабря",
-] as const;
-
-const weekDays = [
-  "ПОНЕДЕЛЬНИК",
-  "ВТОРНИК",
-  "СРЕДА",
-  "ЧЕТВЕРГ",
-  "ПЯТНИЦА",
-  "СУББОТА",
-] as const;
-
-const lessonTimes = [
-  "8.30-9.10",
-  "9.20-10.00",
-  "10.15-10.55",
-  "11.10-11.50",
-  "12.00-12.40",
-  "12.50-13.30",
-] as const;
-
-const generateDocumentName = (classNumber: number): string =>
-  `Raspisanie_${classNumber}_Klassy_07_Dek_12_Dek_2020-2021.pdf`;
-
-const getDate = () => {
-  const now = new Date();
-  return `${now.getDate()} ${months[now.getDay()]} ${now.getFullYear()} года`;
-};
-
-const getGroupNumber = (gen: number): number => {
-  while (gen > 9) {
-    gen -= 9;
-  }
-
-  return gen;
 };
 
 const generateDocument = (
@@ -87,15 +48,15 @@ const generateDocument = (
     {
       table: {
         widths: [
-          "4.47%",
-          "4.37%",
-          "8.7%",
-          "13.7%",
-          "13.7%",
-          "13.7%",
-          "13.7%",
-          "13.7%",
-          "13.7%",
+          "4.2%",
+          "4%",
+          "9%",
+          "13.8%",
+          "13.8%",
+          "13.8%",
+          "13.8%",
+          "13.8%",
+          "13.8%",
         ],
         body: [
           [
@@ -127,7 +88,7 @@ const generateDocument = (
   ],
 });
 
-const documentStyles: DocumentStylesT = {
+const documentStyles: Omit<TDocumentDefinitions, "content"> = {
   defaultStyle: {
     font: "PTSerif",
     fontSize: 12,
@@ -142,17 +103,7 @@ const documentStyles: DocumentStylesT = {
     },
   },
   pageOrientation: "landscape",
-};
-
-const generateDayHeader = (firstDay: number, dayNumber: number) => {
-  const date = new Date(firstDay);
-  date.setDate(date.getDate() + dayNumber);
-
-  return `${
-    weekDays[date.getDay()]
-  } ${date.getDate().toPrecision().toString().padStart(2, "0")} ${
-    months[date.getMonth()]
-  }`;
+  pageMargins: [10, 10, 10, 10],
 };
 
 const formatData = (data: TimetableT, firstDay: number): TableCell[][] =>
@@ -165,36 +116,58 @@ const formatData = (data: TimetableT, firstDay: number): TableCell[][] =>
         fillColor: "#a6a6a6",
       },
     ],
-    ...day.events.map<TableCell[]>((event, eventId) =>
-      event.lessons.flatMap<TableCell[]>(lesson =>
-        lesson.map((lessonElement, lessonElementIndex) => [
-          [
-            lessonElementIndex == 0
-              ? { text: eventId.toString(), rowSpan: 2 }
-              : {},
-          ],
-          { text: (eventId * 2 - lessonElementIndex).toString() },
-          { text: lessonTimes[eventId * 2 - lessonElementIndex] },
-          [
-            event.lessons[0] == event.lessons[1]
-              ? [{ text: data.cards[lessonElement] }]
-              : {},
-          ],
-        ])
-      )
+    ...day.events.flatMap<TableCell[]>((event, eventIndex) =>
+      event.lessons.map<TableCell>((lesson, lessonIndex) => [
+        ...[
+          lessonIndex == 0
+            ? { text: (eventIndex + 1).toString(), rowSpan: 2 }
+            : {},
+        ],
+        { text: (eventIndex * 2 + lessonIndex + 1).toString() },
+        { text: assets.lessonTimes[eventIndex * 2 + lessonIndex] },
+        ...lesson.flatMap((lessonElement, groupIndex) => [
+          data.cards[lessonElement]
+            ? {
+                text: generateEventContent(data, lessonElement),
+                rowSpan: rowSpanGenerator(event, lessonIndex, groupIndex),
+                colSpan: colSpanGenerator(event, lessonIndex, groupIndex),
+              }
+            : {
+                text: "",
+                rowSpan:
+                  lessonIndex == 0 && !data.cards[event.lessons[1][groupIndex]]
+                    ? 2
+                    : 1,
+              },
+        ]),
+      ])
     ),
   ]);
 
-export const createDocument = (
+const rotateArray = (data: TimetableT) => ({
+  ...data,
+  days: data.days.map(day => ({
+    ...day,
+    events: day.events.map(event => ({
+      lessons: Array(2)
+        .fill(0)
+        .map((_, index) => event.lessons.map(lesson => lesson[index])),
+    })),
+  })),
+});
+
+const createDocument = (
   classNumber: number,
   generation: number,
   timetableState: TimetableT,
   firstDay: number
 ): void => {
+  const data = timetableState.days.length ? timetableState : dataExample;
+
   const document = generateDocument(
     classNumber,
     generation,
-    timetableState,
+    rotateArray(data),
     firstDay
   );
 
@@ -202,3 +175,5 @@ export const createDocument = (
 
   pdfMake.createPdf(styledDocument).download(generateDocumentName(classNumber));
 };
+
+export { createDocument };

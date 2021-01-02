@@ -15,7 +15,8 @@
   },
   "rules": {
     "no-console": "warn",
-    "prettier/prettier": "warn"
+    "prettier/prettier": "warn",
+    "react/prop-types": "off"
   },
   "settings": {
     "react": {

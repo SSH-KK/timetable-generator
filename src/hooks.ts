@@ -8,11 +8,12 @@ import {
   AddLessonFT,
   AddTeacherFT,
   DeleteTeacherFT,
-  DeleteSubjectFt,
-  DeleteCardFt,
+  DeleteSubjectFT,
+  DeleteCardFT,
   DayT,
   CardT,
   SubjectT,
+  LessonsType,
 } from "./types/timetable";
 import { initialEventLessonsGenrator } from "./utils/timetable";
 
@@ -47,7 +48,7 @@ export const useTimetable: UseTimetableHookFT = () => {
     );
   };
 
-  const deleteSubject: DeleteSubjectFt = subjectId => {
+  const deleteSubject: DeleteSubjectFT = subjectId => {
     setSubjectState(subjects =>
       subjects.map((subject, subjectIndex) =>
         subjectIndex == subjectId ? { ...subject, status: false } : subject
@@ -71,11 +72,9 @@ export const useTimetable: UseTimetableHookFT = () => {
     );
   };
 
-  const deleteCard: DeleteCardFt = (cardId) => {
+  const deleteCard: DeleteCardFT = cardId => {
     setCardState(cards =>
-      cards.map((card, cardIndex) =>
-        cardIndex == cardId ? { ...card, status: false } : card
-      )
+      cards.map((card, cardIndex) => (cardIndex == cardId ? { ...card, status: false } : card))
     );
   };
 
@@ -87,7 +86,10 @@ export const useTimetable: UseTimetableHookFT = () => {
               ...day,
               events: [
                 ...day.events,
-                { lessons: initialEventLessonsGenrator() },
+                {
+                  lessons10: initialEventLessonsGenrator(),
+                  lessons11: initialEventLessonsGenrator(),
+                },
               ],
             }
           : day
@@ -98,6 +100,7 @@ export const useTimetable: UseTimetableHookFT = () => {
   const addLesson: AddLessonFT = (
     dayId,
     eventId,
+    classNumber,
     groupId,
     isPair,
     lessonId,
@@ -111,14 +114,15 @@ export const useTimetable: UseTimetableHookFT = () => {
               events: day.events.map((event, eventIndex) =>
                 eventIndex == eventId
                   ? {
-                      lessons: event.lessons.map((lesson, lessonIndex) =>
+                      ...event,
+                      [`lessons${classNumber}` as LessonsType]: event[
+                        `lessons${classNumber}` as LessonsType
+                      ].map((lesson, lessonIndex) =>
                         lessonIndex == groupId
                           ? isPair
                             ? [lessonId, lessonId]
                             : lesson.map((lessonElement, lessonElementIndex) =>
-                                lessonElementIndex == lessonNumber
-                                  ? lessonId
-                                  : lessonElement
+                                lessonElementIndex == lessonNumber ? lessonId : lessonElement
                               )
                           : lesson
                       ),

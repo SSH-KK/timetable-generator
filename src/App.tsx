@@ -14,8 +14,10 @@ const App: React.FC = () => {
     deleteCard,
   } = useTimetable();
 
-  useEffect(() => createSubject("Физика", ["Попов", "Пачин"]), []);
-  useEffect(() => createCard(0, 0, 505), []);
+  useEffect(() => {
+    createSubject("Физика", ["Попов", "Пачин"]);
+    createCard(0, 0, 505);
+  }, []);
 
   return (
     <div className={styles.wrapper}>

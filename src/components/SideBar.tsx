@@ -7,8 +7,8 @@ import {
   CreateCardFT,
   AddTeacherFT,
   DeleteTeacherFT,
-  DeleteSubjectFt,
-  DeleteCardFt,
+  DeleteSubjectFT,
+  DeleteCardFT,
 } from "../types/timetable";
 import SubjectSingle from "./SubjectSingle";
 import CardSingle from "./CardSingle";
@@ -20,8 +20,8 @@ type SidebarProps = {
   createCard: CreateCardFT;
   addTeacher: AddTeacherFT;
   deleteTeacher: DeleteTeacherFT;
-  deleteSubject: DeleteSubjectFt;
-  deleteCard: DeleteCardFt;
+  deleteSubject: DeleteSubjectFT;
+  deleteCard: DeleteCardFT;
 };
 
 type InputStateT = {
@@ -66,7 +66,6 @@ const SideBar: React.FC<SidebarProps> = ({
 
   const createForm = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    const form = new FormData(event.currentTarget);
     if (event.currentTarget.dataset.name) {
       const name = event.currentTarget.dataset.name;
       let reset = false;
@@ -89,8 +88,7 @@ const SideBar: React.FC<SidebarProps> = ({
       if (reset) {
         setInputState(prev => ({
           ...prev,
-          [name]:
-            name == "subject" ? "" : { subject: -1, teacher: -1, room: "" },
+          [name]: name == "subject" ? "" : { subject: -1, teacher: -1, room: "" },
         }));
       }
     }
@@ -104,24 +102,18 @@ const SideBar: React.FC<SidebarProps> = ({
     }));
   };
 
-  const cardSelectChange = (
-    event: React.ChangeEvent<HTMLSelectElement | HTMLInputElement>
-  ) => {
+  const cardSelectChange = (event: React.ChangeEvent<HTMLSelectElement | HTMLInputElement>) => {
     if (event.target.name) {
       const name = event.target.name;
       if (
-        (name == "room" &&
-          (parseInt(event.target.value) || event.target.value == "")) ||
+        (name == "room" && (parseInt(event.target.value) || event.target.value == "")) ||
         name != "room"
       ) {
         setInputState(prev => ({
           subject: prev.subject,
           card: {
             ...prev.card,
-            [name]:
-              name != "room"
-                ? parseInt(event.target.value)
-                : event.target.value,
+            [name]: name != "room" ? parseInt(event.target.value) : event.target.value,
           },
         }));
       }
@@ -225,13 +217,11 @@ const SideBar: React.FC<SidebarProps> = ({
                   className="form-select mt-2"
                 >
                   <option value="-1">Преподаватель</option>
-                  {subjects[inputState.card.subject].teachers.map(
-                    (ob, teacherIndex) => (
-                      <option value={teacherIndex} key={teacherIndex}>
-                        {ob}
-                      </option>
-                    )
-                  )}
+                  {subjects[inputState.card.subject].teachers.map((ob, teacherIndex) => (
+                    <option value={teacherIndex} key={teacherIndex}>
+                      {ob}
+                    </option>
+                  ))}
                 </select>
               ) : (
                 ""

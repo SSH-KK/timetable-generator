@@ -9,8 +9,11 @@ export type DayT = {
   date: number; // epoch time
 };
 
+export type LessonsType = "lessons10" | "lessons11";
+
 export type EventT = {
-  lessons: number[][]; // IDs
+  lessons10: number[][]; // IDs
+  lessons11: number[][]; // IDs
 };
 
 export type CardT = {
@@ -28,11 +31,7 @@ export type SubjectT = {
 
 export type CreateSubjectFT = (title: string, teachers: string[]) => void;
 
-export type CreateCardFT = (
-  subject: number,
-  teacher: number,
-  room: number
-) => void;
+export type CreateCardFT = (subject: number, teacher: number, room: number) => void;
 
 export type CreateDayFT = (date: number) => void;
 
@@ -40,15 +39,16 @@ export type AddEventFT = (dayId: number) => void;
 
 export type AddTeacherFT = (teacher: string, subjectId: number) => void;
 
-export type DeleteSubjectFt = (subjectId: number) => void;
+export type DeleteSubjectFT = (subjectId: number) => void;
 
 export type DeleteTeacherFT = (subjectId: number, teacherId: number) => void;
 
-export type DeleteCardFt = (cardId: number) => void;
+export type DeleteCardFT = (cardId: number) => void;
 
 export type AddLessonFT = (
   dayId: number,
   eventId: number,
+  classNumber: number,
   groupId: number,
   isPair: boolean,
   lessonId: number,
@@ -64,6 +64,6 @@ export type UseTimetableHookFT = () => {
   addEvent: AddEventFT;
   addTeacher: AddTeacherFT;
   deleteTeacher: DeleteTeacherFT;
-  deleteSubject: DeleteSubjectFt;
-  deleteCard: DeleteCardFt;
+  deleteSubject: DeleteSubjectFT;
+  deleteCard: DeleteCardFT;
 };

@@ -1,10 +1,5 @@
 import React, { useState } from "react";
-import {
-  SubjectT,
-  AddTeacherFT,
-  DeleteTeacherFT,
-  DeleteSubjectFt,
-} from "../types/timetable";
+import { SubjectT, AddTeacherFT, DeleteTeacherFT } from "../types/timetable";
 import styles from "../styles/SideBar.module.css";
 
 type SubjectSingleProps = {
@@ -41,13 +36,11 @@ const SubjectSingle: React.FC<SubjectSingleProps> = ({
   };
 
   return (
-    <div
-      className={`${styles.subjectCard} col-11 border rounded rounded-2 border-3 p-2 mt-2`}
-    >
+    <div className={`${styles.subjectCard} col-11 border rounded rounded-2 border-3 p-2 mt-2`}>
       <h4>{subject.title}</h4>
       <div className="d-flex flex-wrap">
         {subject.teachers.map((teacher, teacherIndex) => (
-          <div className="p-1 rounded rounded-3 me-2 shadow-sm">
+          <div key={teacherIndex} className="p-1 rounded rounded-3 me-2 shadow-sm">
             <h5 className="list-inline-item mb-0 me-0">{teacher}</h5>
             <button
               type="button"
@@ -84,7 +77,7 @@ const SubjectSingle: React.FC<SubjectSingleProps> = ({
             viewBox="0 0 16 16"
           >
             <path
-              fill-rule="evenodd"
+              fillRule="evenodd"
               d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708z"
             />
           </svg>

@@ -1,9 +1,4 @@
-import {
-  Margins,
-  PageOrientation,
-  Style,
-  StyleDictionary,
-} from "pdfmake/interfaces";
+import { Margins, PageOrientation, Style, StyleDictionary } from "pdfmake/interfaces";
 import { EventT } from "./timetable";
 
 export type DocumentStylesT = {
@@ -16,5 +11,6 @@ export type DocumentStylesT = {
 export type SpanGenerator = (
   event: EventT,
   lessonIndex: number,
-  groupIndex: number
+  groupIndex: number,
+  classNumber: number
 ) => number;

@@ -66,7 +66,6 @@ const SideBar: React.FC<SidebarProps> = ({
 
   const createForm = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    const form = new FormData(event.currentTarget);
     if (event.currentTarget.dataset.name) {
       const name = event.currentTarget.dataset.name;
       let reset = false;

@@ -134,7 +134,7 @@ const SideBar: React.FC<SidebarProps> = ({
   };
 
   return (
-    <nav id={styles.sidebar} className='shadow me-3' ref={sidebarRef}>
+    <nav id={styles.sidebar} className="shadow me-3" ref={sidebarRef}>
       <div className="row justify-content-center">
         <h3 className="text-center">Предметы</h3>
         {subjects.map((ob, subjectIndex) =>

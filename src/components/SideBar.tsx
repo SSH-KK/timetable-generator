@@ -15,6 +15,7 @@ import CardSingle from "./CardSingle";
 
 type SidebarProps = {
   subjects: SubjectT[];
+  teachers: string[];
   cards: CardT[];
   createSubject: CreateSubjectFT;
   createCard: CreateCardFT;
@@ -35,6 +36,7 @@ type InputStateT = {
 
 const SideBar: React.FC<SidebarProps> = ({
   subjects,
+  teachers,
   cards,
   createSubject,
   createCard,
@@ -154,6 +156,7 @@ const SideBar: React.FC<SidebarProps> = ({
                 deleteTeacher={deleteTeacher}
                 deleteSubjectButton={deleteSubjectButton}
                 subject={ob}
+                teachers={teachers}
                 key={subjectIndex}
               />
             ) : (
@@ -185,7 +188,7 @@ const SideBar: React.FC<SidebarProps> = ({
                 status: cards[cardIndex].status,
                 room: ob.room,
                 subject: subjects[ob.subject].title,
-                teacher: subjects[ob.subject].teachers[ob.teacher],
+                teacher: teachers[subjects[ob.subject].teachers[ob.teacher]],
               }}
               key={cardIndex}
             />
@@ -219,7 +222,7 @@ const SideBar: React.FC<SidebarProps> = ({
                   <option value="-1">Преподаватель</option>
                   {subjects[inputState.card.subject].teachers.map((ob, teacherIndex) => (
                     <option value={teacherIndex} key={teacherIndex}>
-                      {ob}
+                      {teachers[ob]}
                     </option>
                   ))}
                 </select>

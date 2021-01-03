@@ -2,6 +2,7 @@ export type TimetableT = {
   days: DayT[];
   cards: CardT[];
   subjects: SubjectT[];
+  teachers: string[];
 };
 
 export type DayT = {
@@ -25,7 +26,7 @@ export type CardT = {
 
 export type SubjectT = {
   title: string;
-  teachers: string[]; // teachers allowed for this subject
+  teachers: number[]; // teacher's IDs, allowed for this subject
   status: boolean;
 };
 

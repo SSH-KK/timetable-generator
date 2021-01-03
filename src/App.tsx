@@ -16,7 +16,7 @@ const App: React.FC = () => {
 
   useEffect(() => {
     createSubject("Физика", ["Попов", "Пачин"]);
-    createCard(0, 0, 505);
+    createCard(0, 1, 505);
   }, []);
 
   return (
@@ -30,6 +30,7 @@ const App: React.FC = () => {
         deleteCard={deleteCard}
         subjects={state.subjects}
         cards={state.cards}
+        teachers={state.teachers}
       />
     </div>
   );

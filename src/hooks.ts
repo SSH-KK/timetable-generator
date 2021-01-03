@@ -21,9 +21,13 @@ export const useTimetable: UseTimetableHookFT = () => {
   const [cardState, setCardState] = useState<CardT[]>([]);
   const [dayState, setDayState] = useState<DayT[]>([]);
   const [subjectState, setSubjectState] = useState<SubjectT[]>([]);
+  const [teacherState, setTeacherState] = useState<string[]>([]);
 
   const createSubject: CreateSubjectFT = (title, teachers) => {
-    setSubjectState(prev => [...prev, { title, teachers, status: true }]);
+    const newSubjectID = subjectState.length;
+
+    setSubjectState(prev => [...prev, { title, teachers: [], status: true }]);
+    teachers.forEach(teacher => addTeacher(teacher, newSubjectID));
   };
 
   const createCard: CreateCardFT = (subject, teacher, room) => {
@@ -35,13 +39,21 @@ export const useTimetable: UseTimetableHookFT = () => {
   };
 
   const addTeacher: AddTeacherFT = (teacher, subjectId) => {
+    let teacherID = teacherState.indexOf(teacher);
+    if (teacherID < 0) {
+      setTeacherState(prev => {
+        teacherID = prev.length;
+        return [...prev, teacher];
+      });
+    }
+
     setSubjectState(subjects =>
       subjects.map((subject, subjectIndex) =>
         subjectIndex == subjectId
           ? {
               title: subject.title,
               status: subject.status,
-              teachers: [...subject.teachers, teacher],
+              teachers: [...subject.teachers, teacherID],
             }
           : subject
       )
@@ -57,15 +69,14 @@ export const useTimetable: UseTimetableHookFT = () => {
   };
 
   const deleteTeacher: DeleteTeacherFT = (subjectId, teacherId) => {
+    console.log("Trying to delete", teacherId);
     setSubjectState(subjects =>
       subjects.map((subject, subjectIndex) =>
         subjectIndex == subjectId
           ? {
               title: subject.title,
               status: subject.status,
-              teachers: subject.teachers.filter(
-                (teacher, teacherIndex) => teacherIndex != teacherId
-              ),
+              teachers: subject.teachers.filter(teacher => teacher != teacherId),
             }
           : subject
       )
@@ -136,7 +147,7 @@ export const useTimetable: UseTimetableHookFT = () => {
   };
 
   return {
-    state: { cards: cardState, subjects: subjectState, days: dayState },
+    state: { cards: cardState, subjects: subjectState, days: dayState, teachers: teacherState },
     createCard,
     createSubject,
     createDay,

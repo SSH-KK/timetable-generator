@@ -4,6 +4,7 @@ import styles from "../styles/SideBar.module.css";
 
 type SubjectSingleProps = {
   subject: SubjectT;
+  teachers: string[];
   addTeacher: AddTeacherFT;
   deleteTeacher: DeleteTeacherFT;
   deleteSubjectButton: (event: React.MouseEvent<HTMLButtonElement>) => void;
@@ -12,6 +13,7 @@ type SubjectSingleProps = {
 
 const SubjectSingle: React.FC<SubjectSingleProps> = ({
   subject,
+  teachers,
   addTeacher,
   deleteTeacher,
   deleteSubjectButton,
@@ -39,15 +41,15 @@ const SubjectSingle: React.FC<SubjectSingleProps> = ({
     <div className={`${styles.subjectCard} col-11 border rounded rounded-2 border-3 p-2 mt-2`}>
       <h4>{subject.title}</h4>
       <div className="d-flex flex-wrap">
-        {subject.teachers.map((teacher, teacherIndex) => (
-          <div key={teacherIndex} className="p-1 rounded rounded-3 me-2 shadow-sm">
-            <h5 className="list-inline-item mb-0 me-0">{teacher}</h5>
+        {subject.teachers.map(teacherID => (
+          <div key={teacherID} className="p-1 rounded rounded-3 me-2 shadow-sm">
+            <h5 className="list-inline-item mb-0 me-0">{teachers[teacherID]}</h5>
             <button
               type="button"
               className="btn-close h-0"
               onClick={deleteTeacherButton}
-              name={teacherIndex.toString()}
-            ></button>
+              name={teacherID.toString()}
+            />
           </div>
         ))}
       </div>

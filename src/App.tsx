@@ -1,5 +1,6 @@
 import React, { useEffect } from "react";
 import SideBar from "./components/SideBar";
+import Constructor from "./components/Constructor";
 import styles from "./styles/App.module.css";
 import { useTimetable } from "./hooks";
 
@@ -15,8 +16,7 @@ const App: React.FC = () => {
   } = useTimetable();
 
   useEffect(() => {
-    createSubject("Физика", ["Попов", "Пачин"]);
-    createCard(0, 1, 505);
+    createSubject("Физика");
   }, []);
 
   return (
@@ -32,6 +32,7 @@ const App: React.FC = () => {
         cards={state.cards}
         teachers={state.teachers}
       />
+      <Constructor />
     </div>
   );
 };

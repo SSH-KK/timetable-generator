@@ -3,7 +3,9 @@ import dataExample from "../../../dataExample.json";
 import { CardT } from "../../types/timetable";
 import { ValidationErrorT } from "../../types/validation";
 
-const validationErrorExample: ValidationErrorT[] = [{day: 0, event: 0, lessonNumber: 0, cardID: 0}];
+const validationErrorExample: ValidationErrorT[] = [
+  { day: 0, event: 0, lessonNumber: 0, cardID: 0 },
+];
 
 type ObjectWithFieldsT = {
   field: number;

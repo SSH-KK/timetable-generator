@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import ConstructorPage from './ConstructorPage';
+import ConstructorPage from "./ConstructorPage";
 import styles from "../styles/Constructor.module.css";
 import { DayT, CreateDayFT } from "../types/timetable"
 
@@ -9,32 +9,32 @@ type ConstructorProps = {
 	days: DayT[];
 };
 
-const Constructor: React.FC<ConstructorProps> = ({ constructorRef, createDay , days }) => {
+const Constructor: React.FC<ConstructorProps> = ({ constructorRef, createDay, days }) => {
 	const [pageState, setPageState] = useState<number>(0)
 	const [startDateState, setStartDateState] = useState<Date>(new Date())
 
 	const changePage = (event: React.MouseEvent<HTMLElement>) => {
-		event.preventDefault()
+		event.preventDefault();
 		if (event.currentTarget.dataset.name) {
-			const name = parseInt(event.currentTarget.dataset.name)
-			setPageState(name)
+			const name = parseInt(event.currentTarget.dataset.name);
+			setPageState(name);
 		}
-	}
+	};
 
 	const changeDate = (event: React.ChangeEvent<HTMLInputElement>) => {
-		event.preventDefault()
+		event.preventDefault();
 		if (event.currentTarget.value) {
-			setStartDateState(new Date(event.currentTarget.value))
+			setStartDateState(new Date(event.currentTarget.value));
 		}
-	}
+	};
 
 	const addButton = (event: React.MouseEvent<HTMLButtonElement>) => {
 		event.preventDefault()
-		if(event.currentTarget.dataset.name){
+		if (event.currentTarget.dataset.name) {
 			const name = event.currentTarget.dataset.name
-			console.log(new Date(startDateState.getTime() + 24*3600*1000*days.length))
-			if(name == 'day'){
-				createDay(startDateState.getTime() + 24*3600*1000*days.length)
+			console.log(new Date(startDateState.getTime() + 24 * 3600 * 1000 * days.length))
+			if (name == 'day') {
+				createDay(startDateState.getTime() + 24 * 3600 * 1000 * days.length)
 			}
 		}
 	}
@@ -48,7 +48,11 @@ const Constructor: React.FC<ConstructorProps> = ({ constructorRef, createDay , d
           </a>
 				</li>
 				<li className={`nav-item ${styles.pageItem}`}>
-					<a onClick={changePage} data-name='1' className={`nav-link ${pageState == 1 ? 'active' : ''}`}>
+					<a
+						onClick={changePage}
+						data-name="1"
+						className={`nav-link ${pageState == 1 ? "active" : ""}`}
+					>
 						11 класс
           </a>
 				</li>

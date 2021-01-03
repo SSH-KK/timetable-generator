@@ -1,6 +1,6 @@
 import React from "react";
 import styles from "../styles/Constructor.module.css";
-import { DayT } from "../types/timetable"
+import { DayT } from "../types/timetable";
 
 type ConstructorPageProps = {
 	days: DayT[];

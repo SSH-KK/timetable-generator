@@ -23,10 +23,10 @@ const SubjectSingle: React.FC<SubjectSingleProps> = ({
 
   const addTeacherForm = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    if(inputState){
-	    addTeacher(inputState, subjectId);
-	    setInputState("");
-  	}
+    if (inputState) {
+      addTeacher(inputState, subjectId);
+      setInputState("");
+    }
   };
 
   const inputChange = (event: React.ChangeEvent<HTMLInputElement>) => {

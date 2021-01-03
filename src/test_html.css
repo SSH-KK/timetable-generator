@@ -1,7 +1,6 @@
 .wrapper {
   display: flex;
   width: 100%;
-  align-items: stretch;
 }
 
 #sidebar {
@@ -32,8 +31,6 @@
   top: -3px;
   right: -3px;
   border-radius: 10%;
-  /*padding: 0.5rem;*/
-  /*border-bottom-left-radius: 10%;*/
 }
 
 @media (max-width: 768px) {

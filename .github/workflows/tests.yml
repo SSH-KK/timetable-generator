@@ -3,7 +3,7 @@ name: Jest
 on: push
 
 jobs:
-  format:
+  test:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2

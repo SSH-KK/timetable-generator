@@ -32,7 +32,7 @@ export const useTimetable: UseTimetableHookFT = () => {
     setCardState(prev => [...prev, { subject, teacher, room, status: true }]);
   };
 
-  const createDay: CreateDayFT = date => {
+  const createDay: CreateDayFT = (date) => {
     setDayState(prev => [...prev, { date, events: [] }]);
   };
 

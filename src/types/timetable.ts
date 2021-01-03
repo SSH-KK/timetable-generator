@@ -60,7 +60,7 @@ export type UseTimetableHookFT = () => {
   state: TimetableT;
   createSubject: CreateSubjectFT;
   createCard: CreateCardFT;
-  createDay: CreateCardFT;
+  createDay: CreateDayFT;
   addLesson: AddLessonFT;
   addEvent: AddEventFT;
   addTeacher: AddTeacherFT;

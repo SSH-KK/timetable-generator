@@ -1,14 +1,15 @@
 import React, { useState } from "react";
 import ConstructorPage from './ConstructorPage';
 import styles from "../styles/Constructor.module.css";
-import { DayT } from "../types/timetable"
+import { DayT, CreateDayFT } from "../types/timetable"
 
 type ConstructorProps = {
 	constructorRef: React.RefObject<HTMLDivElement>;
+	createDay: CreateDayFT;
 	days: DayT[];
 };
 
-const Constructor: React.FC<ConstructorProps> = ({ constructorRef, days }) => {
+const Constructor: React.FC<ConstructorProps> = ({ constructorRef, createDay , days }) => {
 	const [pageState, setPageState] = useState<number>(0)
 	const [startDateState, setStartDateState] = useState<Date>(new Date())
 
@@ -24,6 +25,17 @@ const Constructor: React.FC<ConstructorProps> = ({ constructorRef, days }) => {
 		event.preventDefault()
 		if (event.currentTarget.value) {
 			setStartDateState(new Date(event.currentTarget.value))
+		}
+	}
+
+	const addButton = (event: React.MouseEvent<HTMLButtonElement>) => {
+		event.preventDefault()
+		if(event.currentTarget.dataset.name){
+			const name = event.currentTarget.dataset.name
+			console.log(new Date(startDateState.getTime() + 24*3600*1000*days.length))
+			if(name == 'day'){
+				createDay(startDateState.getTime() + 24*3600*1000*days.length)
+			}
 		}
 	}
 
@@ -56,7 +68,7 @@ const Constructor: React.FC<ConstructorProps> = ({ constructorRef, days }) => {
 			<div className='container-fluid'>
 				{
 					pageState == 0 ?
-						<ConstructorPage days={days} classNum={'lessons10'} />
+						<ConstructorPage days={days} addButton={addButton} classNum={'lessons10'} />
 						:
 						''
 				}

@@ -5,12 +5,13 @@ import { DayT } from "../types/timetable"
 type ConstructorPageProps = {
 	days: DayT[];
 	classNum: string;
+	addButton: (event: React.MouseEvent<HTMLButtonElement>) => void;
 }
 
-const ConstructorPage: React.FC<ConstructorPageProps> = ({ days, classNum }) => {
+const ConstructorPage: React.FC<ConstructorPageProps> = ({ days, classNum, addButton }) => {
 	return (
 		<div className="d-grid gap-2 my-2">
-			<button className="btn btn-outline-primary btn-sm" type="button">Новый День</button>
+			<button data-name='day' onClick={addButton} className="btn btn-outline-primary btn-sm" type="button">Новый День</button>
 		</div>
 	);
 };

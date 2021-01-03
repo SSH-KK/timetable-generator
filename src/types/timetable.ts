@@ -30,7 +30,7 @@ export type SubjectT = {
   status: boolean;
 };
 
-export type CreateSubjectFT = (title: string, teachers: string[]) => void;
+export type CreateSubjectFT = (title: string) => void;
 
 export type CreateCardFT = (subject: number, teacher: number, room: number) => void;
 

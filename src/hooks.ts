@@ -23,11 +23,9 @@ export const useTimetable: UseTimetableHookFT = () => {
   const [subjectState, setSubjectState] = useState<SubjectT[]>([]);
   const [teacherState, setTeacherState] = useState<string[]>([]);
 
-  const createSubject: CreateSubjectFT = (title, teachers) => {
+  const createSubject: CreateSubjectFT = (title) => {
     const newSubjectID = subjectState.length;
-
     setSubjectState(prev => [...prev, { title, teachers: [], status: true }]);
-    teachers.forEach(teacher => addTeacher(teacher, newSubjectID));
   };
 
   const createCard: CreateCardFT = (subject, teacher, room) => {

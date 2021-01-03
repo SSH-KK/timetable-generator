@@ -72,7 +72,7 @@ const SideBar: React.FC<SidebarProps> = ({
       const name = event.currentTarget.dataset.name;
       let reset = false;
       if (name == "subject" && inputState.subject) {
-        createSubject(inputState.subject, []);
+        createSubject(inputState.subject);
         reset = true;
       } else if (
         name == "card" &&

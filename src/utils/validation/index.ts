@@ -1,5 +1,6 @@
 import { TimetableT } from "../../types/timetable";
 import { ValidationErrorT } from "../../types/validation";
+import { generateErrorWithAddress } from "./utils";
 
 const validate = (data: TimetableT): ValidationErrorT[] => {
   const errors: ValidationErrorT[] = [];
@@ -13,27 +14,19 @@ const validate = (data: TimetableT): ValidationErrorT[] => {
           const cards = cardIDs.map(cardID => data.cards[cardID]);
           cards.forEach((card, cardIndex) => {
             cards.map((cardForCheck, cardForCheckIndex) => {
-              if (card && cardForCheck)
+              if (card && cardForCheck) {
+                const generateError = generateErrorWithAddress(
+                  dayIndex,
+                  eventIndex,
+                  lessonNumber,
+                  cardIndex,
+                  cardForCheckIndex
+                );
                 if (card.teacher == cardForCheck.teacher && card.room != cardForCheck.room)
-                  errors.push({
-                    position: {
-                      day: dayIndex,
-                      event: eventIndex,
-                      lessonNumber,
-                      classNumber: 10 + Math.floor(cardIndex / 6),
-                      group: cardIndex % 6,
-                    },
-                    message: {
-                      id: 0,
-                      position: {
-                        day: dayIndex,
-                        event: eventIndex,
-                        lessonNumber,
-                        classNumber: 10 + Math.floor(cardForCheckIndex / 6),
-                        group: cardForCheckIndex % 6,
-                      },
-                    },
-                  });
+                  errors.push(generateError(0));
+                if (card.room == cardForCheck.room && card.teacher != cardForCheck.teacher)
+                  errors.push(generateError(1));
+              }
             });
           });
         })

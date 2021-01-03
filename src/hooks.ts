@@ -8,11 +8,12 @@ import {
   AddLessonFT,
   AddTeacherFT,
   DeleteTeacherFT,
-  DeleteSubjectFt,
-  DeleteCardFt,
+  DeleteSubjectFT,
+  DeleteCardFT,
   DayT,
   CardT,
   SubjectT,
+  LessonsType,
 } from "./types/timetable";
 import { initialEventLessonsGenrator } from "./utils/timetable";
 
@@ -20,9 +21,13 @@ export const useTimetable: UseTimetableHookFT = () => {
   const [cardState, setCardState] = useState<CardT[]>([]);
   const [dayState, setDayState] = useState<DayT[]>([]);
   const [subjectState, setSubjectState] = useState<SubjectT[]>([]);
+  const [teacherState, setTeacherState] = useState<string[]>([]);
 
   const createSubject: CreateSubjectFT = (title, teachers) => {
-    setSubjectState(prev => [...prev, { title, teachers, status: true }]);
+    const newSubjectID = subjectState.length;
+
+    setSubjectState(prev => [...prev, { title, teachers: [], status: true }]);
+    teachers.forEach(teacher => addTeacher(teacher, newSubjectID));
   };
 
   const createCard: CreateCardFT = (subject, teacher, room) => {
@@ -34,20 +39,28 @@ export const useTimetable: UseTimetableHookFT = () => {
   };
 
   const addTeacher: AddTeacherFT = (teacher, subjectId) => {
+    let teacherID = teacherState.indexOf(teacher);
+    if (teacherID < 0) {
+      setTeacherState(prev => {
+        teacherID = prev.length;
+        return [...prev, teacher];
+      });
+    }
+
     setSubjectState(subjects =>
       subjects.map((subject, subjectIndex) =>
         subjectIndex == subjectId
           ? {
               title: subject.title,
               status: subject.status,
-              teachers: [...subject.teachers, teacher],
+              teachers: [...subject.teachers, teacherID],
             }
           : subject
       )
     );
   };
 
-  const deleteSubject: DeleteSubjectFt = subjectId => {
+  const deleteSubject: DeleteSubjectFT = subjectId => {
     setSubjectState(subjects =>
       subjects.map((subject, subjectIndex) =>
         subjectIndex == subjectId ? { ...subject, status: false } : subject
@@ -56,26 +69,23 @@ export const useTimetable: UseTimetableHookFT = () => {
   };
 
   const deleteTeacher: DeleteTeacherFT = (subjectId, teacherId) => {
+    console.log("Trying to delete", teacherId);
     setSubjectState(subjects =>
       subjects.map((subject, subjectIndex) =>
         subjectIndex == subjectId
           ? {
               title: subject.title,
               status: subject.status,
-              teachers: subject.teachers.filter(
-                (teacher, teacherIndex) => teacherIndex != teacherId
-              ),
+              teachers: subject.teachers.filter(teacher => teacher != teacherId),
             }
           : subject
       )
     );
   };
 
-  const deleteCard: DeleteCardFt = (cardId) => {
+  const deleteCard: DeleteCardFT = cardId => {
     setCardState(cards =>
-      cards.map((card, cardIndex) =>
-        cardIndex == cardId ? { ...card, status: false } : card
-      )
+      cards.map((card, cardIndex) => (cardIndex == cardId ? { ...card, status: false } : card))
     );
   };
 
@@ -87,7 +97,10 @@ export const useTimetable: UseTimetableHookFT = () => {
               ...day,
               events: [
                 ...day.events,
-                { lessons: initialEventLessonsGenrator() },
+                {
+                  lessons10: initialEventLessonsGenrator(),
+                  lessons11: initialEventLessonsGenrator(),
+                },
               ],
             }
           : day
@@ -98,6 +111,7 @@ export const useTimetable: UseTimetableHookFT = () => {
   const addLesson: AddLessonFT = (
     dayId,
     eventId,
+    classNumber,
     groupId,
     isPair,
     lessonId,
@@ -111,14 +125,15 @@ export const useTimetable: UseTimetableHookFT = () => {
               events: day.events.map((event, eventIndex) =>
                 eventIndex == eventId
                   ? {
-                      lessons: event.lessons.map((lesson, lessonIndex) =>
+                      ...event,
+                      [`lessons${classNumber}` as LessonsType]: event[
+                        `lessons${classNumber}` as LessonsType
+                      ].map((lesson, lessonIndex) =>
                         lessonIndex == groupId
                           ? isPair
                             ? [lessonId, lessonId]
                             : lesson.map((lessonElement, lessonElementIndex) =>
-                                lessonElementIndex == lessonNumber
-                                  ? lessonId
-                                  : lessonElement
+                                lessonElementIndex == lessonNumber ? lessonId : lessonElement
                               )
                           : lesson
                       ),
@@ -132,7 +147,7 @@ export const useTimetable: UseTimetableHookFT = () => {
   };
 
   return {
-    state: { cards: cardState, subjects: subjectState, days: dayState },
+    state: { cards: cardState, subjects: subjectState, days: dayState, teachers: teacherState },
     createCard,
     createSubject,
     createDay,

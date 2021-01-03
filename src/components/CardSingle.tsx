@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import styles from "../styles/SideBar.module.css";
-import { DeleteCardFt } from "../types/timetable";
+import { DeleteCardFT } from "../types/timetable";
 
 type CardSingleProps = {
   card: {
@@ -12,22 +12,16 @@ type CardSingleProps = {
     cardIndex: number;
   };
   deleteCardButton: (event: React.MouseEvent<HTMLButtonElement>) => void;
-  deleteCard: DeleteCardFt;
+  deleteCard: DeleteCardFT;
 };
 
-const CardSingle: React.FC<CardSingleProps> = ({
-  card,
-  deleteCardButton,
-  deleteCard,
-}) => {
+const CardSingle: React.FC<CardSingleProps> = ({ card, deleteCardButton, deleteCard }) => {
   useEffect(() => {
     !card.subStatus ? deleteCard(card.cardIndex) : "";
   }, [card.subStatus]);
 
   return card.status ? (
-    <div
-      className={`${styles.subjectCard} col-11 border rounded rounded-2 border-3 p-2 mt-2`}
-    >
+    <div className={`${styles.subjectCard} col-11 border rounded rounded-2 border-3 p-2 mt-2`}>
       <h4 className="text-center">{card.subject}</h4>
       <h5 className="text-center">{card.room}</h5>
       <h5 className="text-center">{card.teacher}</h5>
@@ -53,9 +47,7 @@ const CardSingle: React.FC<CardSingleProps> = ({
         </svg>
       </button>
     </div>
-  ) : (
-    <></>
-  );
+  ) : null;
 };
 
 export default CardSingle;

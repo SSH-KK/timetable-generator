@@ -1,4 +1,4 @@
-name: Prettier
+name: ESLint
 
 on: push
 

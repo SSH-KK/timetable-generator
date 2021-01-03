@@ -1,2 +1,1 @@
-export const initialEventLessonsGenrator = (): number[][] =>
-  Array(6).map<number[]>(() => [0, 0]);
+export const initialEventLessonsGenrator = (): number[][] => Array(2).fill(Array(6).fill(0));

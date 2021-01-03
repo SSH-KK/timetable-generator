@@ -1,7 +1,7 @@
 import pdfMake from "pdfmake/build/pdfmake";
 import { TableCell, TDocumentDefinitions } from "pdfmake/interfaces";
 
-import { TimetableT } from "../../types/timetable";
+import { LessonsType, TimetableT } from "../../types/timetable";
 import dataExample from "../../../dataExample.json";
 
 import vfs from "../vfsFonts";
@@ -47,17 +47,7 @@ const generateDocument = (
     },
     {
       table: {
-        widths: [
-          "4.2%",
-          "4%",
-          "9%",
-          "13.8%",
-          "13.8%",
-          "13.8%",
-          "13.8%",
-          "13.8%",
-          "13.8%",
-        ],
+        widths: ["4.2%", "4%", "9%", "13.8%", "13.8%", "13.8%", "13.8%", "13.8%", "13.8%"],
         body: [
           [
             { text: "Пара", style: "bold", rowSpan: 2, margin: [0, 10, 0, 0] },
@@ -81,7 +71,7 @@ const generateDocument = (
               text: `${getGroupNumber(generation)}${groupIndex} группа`,
             })),
           ],
-          ...formatData(timetableState, firstDay),
+          ...formatData(timetableState, firstDay, classNumber),
         ],
       },
     },
@@ -106,7 +96,7 @@ const documentStyles: Omit<TDocumentDefinitions, "content"> = {
   pageMargins: [10, 10, 10, 10],
 };
 
-const formatData = (data: TimetableT, firstDay: number): TableCell[][] =>
+const formatData = (data: TimetableT, firstDay: number, classNumber: number): TableCell[][] =>
   data.days.flatMap<TableCell[]>((day, dayIndex) => [
     [
       {
@@ -117,25 +107,22 @@ const formatData = (data: TimetableT, firstDay: number): TableCell[][] =>
       },
     ],
     ...day.events.flatMap<TableCell[]>((event, eventIndex) =>
-      event.lessons.map<TableCell>((lesson, lessonIndex) => [
-        ...[
-          lessonIndex == 0
-            ? { text: (eventIndex + 1).toString(), rowSpan: 2 }
-            : {},
-        ],
+      event[`lessons${classNumber}` as LessonsType].map<TableCell>((lesson, lessonIndex) => [
+        ...[lessonIndex == 0 ? { text: (eventIndex + 1).toString(), rowSpan: 2 } : {}],
         { text: (eventIndex * 2 + lessonIndex + 1).toString() },
         { text: assets.lessonTimes[eventIndex * 2 + lessonIndex] },
         ...lesson.flatMap((lessonElement, groupIndex) => [
           data.cards[lessonElement]
             ? {
                 text: generateEventContent(data, lessonElement),
-                rowSpan: rowSpanGenerator(event, lessonIndex, groupIndex),
-                colSpan: colSpanGenerator(event, lessonIndex, groupIndex),
+                rowSpan: rowSpanGenerator(event, lessonIndex, groupIndex, classNumber),
+                colSpan: colSpanGenerator(event, lessonIndex, groupIndex, classNumber),
               }
             : {
                 text: "",
                 rowSpan:
-                  lessonIndex == 0 && !data.cards[event.lessons[1][groupIndex]]
+                  lessonIndex == 0 &&
+                  !data.cards[event[`lessons${classNumber}` as LessonsType][1][groupIndex]]
                     ? 2
                     : 1,
               },
@@ -143,18 +130,6 @@ const formatData = (data: TimetableT, firstDay: number): TableCell[][] =>
       ])
     ),
   ]);
-
-const rotateArray = (data: TimetableT) => ({
-  ...data,
-  days: data.days.map(day => ({
-    ...day,
-    events: day.events.map(event => ({
-      lessons: Array(2)
-        .fill(0)
-        .map((_, index) => event.lessons.map(lesson => lesson[index])),
-    })),
-  })),
-});
 
 const createDocument = (
   classNumber: number,
@@ -164,12 +139,7 @@ const createDocument = (
 ): void => {
   const data = timetableState.days.length ? timetableState : dataExample;
 
-  const document = generateDocument(
-    classNumber,
-    generation,
-    rotateArray(data),
-    firstDay
-  );
+  const document = generateDocument(classNumber, generation, data, firstDay);
 
   const styledDocument = { ...document, ...documentStyles };
 

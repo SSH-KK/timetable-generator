@@ -49,9 +49,7 @@ module.exports = {
             loader: "css-loader",
             options: {
               modules: {
-                localIdentName: isDev
-                  ? "[path]_[name]_[local]"
-                  : "[sha1:hash:hex:4]",
+                localIdentName: isDev ? "[path]_[name]_[local]" : "[sha1:hash:hex:4]",
               },
             },
           },

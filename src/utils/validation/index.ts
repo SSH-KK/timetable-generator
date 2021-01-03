@@ -26,6 +26,8 @@ const validate = (data: TimetableT): ValidationErrorT[] => {
                   errors.push(generateError(0));
                 if (card.room == cardForCheck.room && card.teacher != cardForCheck.teacher)
                   errors.push(generateError(1));
+                if (card.teacher == cardForCheck.teacher && card.subject != cardForCheck.subject)
+                  errors.push(generateError(2));
               }
             });
           });

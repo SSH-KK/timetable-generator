@@ -1,17 +1,6 @@
 import { TimetableT } from "../../types/timetable";
 import { ValidationErrorT } from "../../types/validation";
 
-const joinErrors = (errors: ValidationErrorT) => [];
-
-function findNotUnique<T extends Record<string, unknown>>(array: T[], field: keyof T): number[] {
-  const fields = array.map(e => (e === undefined ? undefined : e[field]));
-  return array
-    .filter(a =>
-      a === undefined ? false : fields.indexOf(a[field]) != fields.lastIndexOf(a[field])
-    )
-    .map(element => array.indexOf(element));
-}
-
 const validate = (data: TimetableT): ValidationErrorT[] => {
   const errors: ValidationErrorT[] = [];
 
@@ -22,22 +11,35 @@ const validate = (data: TimetableT): ValidationErrorT[] => {
         .forEach((_, lessonNumber) => {
           const cardIDs = [...event.lessons10[lessonNumber], ...event.lessons11[lessonNumber]];
           const cards = cardIDs.map(cardID => data.cards[cardID]);
-          cardFields.forEach(field => {
-            const nonUnique = findNotUnique(cards, field);
-            errors.push(
-              ...nonUnique.map(nonUniqueElementIndex => ({
-                day: dayIndex,
-                event: eventIndex,
-                lessonNumber,
-                cardID: cardIDs[nonUniqueElementIndex],
-                fields: [field],
-              }))
-            );
+          cards.forEach((card, cardIndex) => {
+            cards.map((cardForCheck, cardForCheckIndex) => {
+              if (card && cardForCheck)
+                if (card.teacher == cardForCheck.teacher && card.room != cardForCheck.room)
+                  errors.push({
+                    position: {
+                      day: dayIndex,
+                      event: eventIndex,
+                      lessonNumber,
+                      classNumber: 10 + Math.floor(cardIndex / 6),
+                      group: cardIndex % 6,
+                    },
+                    message: {
+                      id: 0,
+                      position: {
+                        day: dayIndex,
+                        event: eventIndex,
+                        lessonNumber,
+                        classNumber: 10 + Math.floor(cardForCheckIndex / 6),
+                        group: cardForCheckIndex % 6,
+                      },
+                    },
+                  });
+            });
           });
         })
     )
   );
-  return joinErrors(errors);
+  return errors;
 };
 
-export { validate, findNotUnique };
+export { validate };

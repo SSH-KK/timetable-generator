@@ -74,7 +74,12 @@ const App: React.FC = () => {
           />
         </svg>
       </button>
-      <Constructor days={state.days} changeMainDate={changeMainDate} createDay={createDay} constructorRef={constructorRef} />
+      <Constructor
+        days={state.days}
+        changeMainDate={changeMainDate}
+        createDay={createDay}
+        constructorRef={constructorRef}
+      />
     </div>
   );
 };

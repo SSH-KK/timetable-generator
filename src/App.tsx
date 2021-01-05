@@ -12,6 +12,7 @@ const App: React.FC = () => {
     createSubject,
     createDay,
     createCard,
+    changeMainDate,
     addTeacher,
     deleteTeacher,
     deleteSubject,
@@ -73,7 +74,7 @@ const App: React.FC = () => {
           />
         </svg>
       </button>
-      <Constructor days={state.days} createDay={createDay} constructorRef={constructorRef} />
+      <Constructor days={state.days} changeMainDate={changeMainDate} createDay={createDay} constructorRef={constructorRef} />
     </div>
   );
 };

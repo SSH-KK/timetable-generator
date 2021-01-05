@@ -1,15 +1,16 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import ConstructorPage from "./ConstructorPage";
 import styles from "../styles/Constructor.module.css";
-import { DayT, CreateDayFT } from "../types/timetable";
+import { DayT, CreateDayFT, ChangeMainDateFT } from "../types/timetable";
 
 type ConstructorProps = {
   constructorRef: React.RefObject<HTMLDivElement>;
   createDay: CreateDayFT;
+  changeMainDate: ChangeMainDateFT;
   days: DayT[];
 };
 
-const Constructor: React.FC<ConstructorProps> = ({ constructorRef, createDay, days }) => {
+const Constructor: React.FC<ConstructorProps> = ({ constructorRef, createDay, days, changeMainDate }) => {
   const [pageState, setPageState] = useState<number>(0);
   const [startDateState, setStartDateState] = useState<Date>(new Date());
 
@@ -32,12 +33,15 @@ const Constructor: React.FC<ConstructorProps> = ({ constructorRef, createDay, da
     event.preventDefault();
     if (event.currentTarget.dataset.name) {
       const name = event.currentTarget.dataset.name;
-      console.log(new Date(startDateState.getTime() + 24 * 3600 * 1000 * days.length));
       if (name == "day") {
         createDay(startDateState.getTime() + 24 * 3600 * 1000 * days.length);
       }
     }
   };
+
+  useEffect(()=>{
+  	changeMainDate(startDateState)
+  },[startDateState])
 
   return (
     <div id={styles.constructorPages} ref={constructorRef}>

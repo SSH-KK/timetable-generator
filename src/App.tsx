@@ -71,7 +71,15 @@ const App: React.FC = () => {
           />
         </svg>
       </button>
-      <Constructor days={state.days} subjects={state.subjects} cards={state.cards} addEvent={addEvent} changeMainDate={changeMainDate} createDay={createDay} constructorRef={constructorRef} />
+      <Constructor
+        days={state.days}
+        subjects={state.subjects}
+        cards={state.cards}
+        addEvent={addEvent}
+        changeMainDate={changeMainDate}
+        createDay={createDay}
+        constructorRef={constructorRef}
+      />
     </div>
   );
 };

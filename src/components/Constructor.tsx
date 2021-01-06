@@ -1,7 +1,14 @@
 import React, { useState, useEffect } from "react";
 import ConstructorPage from "./ConstructorPage";
 import styles from "../styles/Constructor.module.css";
-import { DayT, SubjectT, CardT, CreateDayFT, ChangeMainDateFT, AddEventFT } from "../types/timetable";
+import {
+  DayT,
+  SubjectT,
+  CardT,
+  CreateDayFT,
+  ChangeMainDateFT,
+  AddEventFT,
+} from "../types/timetable";
 
 type ConstructorProps = {
 	constructorRef: React.RefObject<HTMLDivElement>;
@@ -13,9 +20,17 @@ type ConstructorProps = {
 	days: DayT[];
 };
 
-const Constructor: React.FC<ConstructorProps> = ({ constructorRef, createDay, subjects, days, cards, changeMainDate, addEvent }) => {
-	const [pageState, setPageState] = useState<number>(0);
-	const [startDateState, setStartDateState] = useState<Date>(new Date());
+const Constructor: React.FC<ConstructorProps> = ({
+  constructorRef,
+  createDay,
+  subjects,
+  days,
+  cards,
+  changeMainDate,
+  addEvent,
+}) => {
+  const [pageState, setPageState] = useState<number>(0);
+  const [startDateState, setStartDateState] = useState<Date>(new Date());
 
 	const changePage = (event: React.MouseEvent<HTMLElement>) => {
 		event.preventDefault();
@@ -32,19 +47,18 @@ const Constructor: React.FC<ConstructorProps> = ({ constructorRef, createDay, su
 		}
 	};
 
-	const addButton = (event: React.MouseEvent<HTMLButtonElement>) => {
-		event.preventDefault();
-		if (event.currentTarget.dataset) {
-			const name = event.currentTarget.dataset.name;
-			if (name == "day") {
-				createDay(startDateState.getTime() + 24 * 3600 * 1000 * days.length);
-			}
-			else if (name == 'event' && event.currentTarget.dataset.daynum) {
-				const dayNum = event.currentTarget.dataset.daynum
-				addEvent(parseInt(dayNum))
-			}
-		}
-	};
+  const addButton = (event: React.MouseEvent<HTMLButtonElement>) => {
+    event.preventDefault();
+    if (event.currentTarget.dataset) {
+      const name = event.currentTarget.dataset.name;
+      if (name == "day") {
+        createDay(startDateState.getTime() + 24 * 3600 * 1000 * days.length);
+      } else if (name == "event" && event.currentTarget.dataset.daynum) {
+        const dayNum = event.currentTarget.dataset.daynum;
+        addEvent(parseInt(dayNum));
+      }
+    }
+  };
 
 	useEffect(() => {
 		changeMainDate(startDateState);
@@ -76,25 +90,31 @@ const Constructor: React.FC<ConstructorProps> = ({ constructorRef, createDay, su
 						<label htmlFor="startDate" className="form-label mb-0 pt-1 me-2">
 							Дата начала недели:
             </label>
-						<input
-							type="date"
-							value={`${startDateState.toISOString().split("T")[0]}`}
-							onChange={changeDate}
-							id="startDate"
-							className="form-control rounded rounded-3"
-						/>
-					</div>
-				</form>
-			</ul>
-			<div className="container-fluid">
-				{pageState == 0 ? (
-					<ConstructorPage days={days} subjects={subjects} cards={cards} addButton={addButton} classNum={"lessons10"} />
-				) : (
-						""
-					)}
-			</div>
-		</div>
-	);
+            <input
+              type="date"
+              value={`${startDateState.toISOString().split("T")[0]}`}
+              onChange={changeDate}
+              id="startDate"
+              className="form-control rounded rounded-3"
+            />
+          </div>
+        </form>
+      </ul>
+      <div className="container-fluid">
+        {pageState == 0 ? (
+          <ConstructorPage
+            days={days}
+            subjects={subjects}
+            cards={cards}
+            addButton={addButton}
+            classNum={"lessons10"}
+          />
+        ) : (
+          ""
+        )}
+      </div>
+    </div>
+  );
 };
 
 export default Constructor;

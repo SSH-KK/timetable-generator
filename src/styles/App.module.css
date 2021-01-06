@@ -12,7 +12,7 @@
 }
 
 #sidebarToggle {
-  position: absolute;
+  position: fixed;
   border-radius: 0;
   border-bottom-right-radius: 10%;
   padding: 0.5rem;

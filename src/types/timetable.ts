@@ -51,7 +51,7 @@ export type ChangeMainDateFT = (newDate: Date) => void
 export type AddLessonFT = (
   dayId: number,
   eventId: number,
-  classNumber: number,
+  classNumber: LessonsType,
   groupId: number,
   isPair: boolean,
   lessonId: number,

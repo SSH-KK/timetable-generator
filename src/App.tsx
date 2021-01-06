@@ -15,6 +15,7 @@ const App: React.FC = () => {
     changeMainDate,
     addTeacher,
     addEvent,
+    addLesson,
     deleteTeacher,
     deleteSubject,
     deleteCard,
@@ -76,6 +77,7 @@ const App: React.FC = () => {
         subjects={state.subjects}
         cards={state.cards}
         addEvent={addEvent}
+        addLesson={addLesson}
         changeMainDate={changeMainDate}
         createDay={createDay}
         constructorRef={constructorRef}

@@ -7,6 +7,7 @@ import {
   CardT,
   CreateDayFT,
   ChangeMainDateFT,
+  AddLessonFT,
   AddEventFT,
 } from "../types/timetable"
 
@@ -14,6 +15,7 @@ type ConstructorProps = {
   constructorRef: React.RefObject<HTMLDivElement>
   createDay: CreateDayFT
   addEvent: AddEventFT
+  addLesson: AddLessonFT
   changeMainDate: ChangeMainDateFT
   cards: CardT[]
   subjects: SubjectT[]
@@ -27,6 +29,7 @@ const Constructor: React.FC<ConstructorProps> = ({
   days,
   cards,
   changeMainDate,
+  addLesson,
   addEvent,
 }) => {
   const [pageState, setPageState] = useState<number>(0)
@@ -105,6 +108,7 @@ const Constructor: React.FC<ConstructorProps> = ({
           <ConstructorPage
             days={days}
             subjects={subjects}
+            addLesson={addLesson}
             cards={cards}
             addButton={addButton}
             classNum={"lessons10"}

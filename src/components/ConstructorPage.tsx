@@ -25,20 +25,20 @@ const ConstructorPage: React.FC<ConstructorPageProps> = ({ days, subjects, cards
 								<div className='col-2 border border-1 py-5 px-2'>
 									{
 										event[classNum][0][cardID] == -1 && event[classNum][1][cardID] == -1 ?
-												<select
-													name="subject"
-													className="form-select"
-												>
-													<option value="-1">Пара</option>
-													{
-														cards.map((card, cardIndex) => (
-															card.status ?
-																<option value={cardIndex}>{`${subjects[card.subject].title} - ${subjects[card.subject].teachers[card.teacher]} - ${card.room}`}</option>
-																:
-																''
-														))
-													}
-												</select>
+											<select
+												name="subject"
+												className="form-select"
+											>
+												<option value="-1">Пара</option>
+												{
+													cards.map((card, cardIndex) => (
+														card.status ?
+															<option value={cardIndex}>{`${subjects[card.subject].title} - ${subjects[card.subject].teachers[card.teacher]} - ${card.room}`}</option>
+															:
+															''
+													))
+												}
+											</select>
 											:
 											<h3>Already</h3>
 									}

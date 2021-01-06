@@ -37,12 +37,12 @@ export const useTimetable: UseTimetableHookFT = () => {
     setDayState(prev => [...prev, { date, events: [] }]);
   };
 
-  const changeMainDate: ChangeMainDateFT = (newDate) => {
-    const date = new Date(newDate)
-    setDayState((prev) => (
+  const changeMainDate: ChangeMainDateFT = newDate => {
+    const date = new Date(newDate);
+    setDayState(prev =>
       prev.map((day, dayIndex) => ({ ...day, date: date.getTime() + 24 * 3600 * 1000 * dayIndex }))
-    ))
-  }
+    );
+  };
 
   const addTeacher: AddTeacherFT = (teacher, subjectId) => {
     let teacherID = teacherState.indexOf(teacher);
@@ -57,10 +57,10 @@ export const useTimetable: UseTimetableHookFT = () => {
       subjects.map((subject, subjectIndex) =>
         subjectIndex == subjectId
           ? {
-            title: subject.title,
-            status: subject.status,
-            teachers: [...subject.teachers, teacherID],
-          }
+              title: subject.title,
+              status: subject.status,
+              teachers: [...subject.teachers, teacherID],
+            }
           : subject
       )
     );
@@ -80,10 +80,10 @@ export const useTimetable: UseTimetableHookFT = () => {
       subjects.map((subject, subjectIndex) =>
         subjectIndex == subjectId
           ? {
-            title: subject.title,
-            status: subject.status,
-            teachers: subject.teachers.filter(teacher => teacher != teacherId),
-          }
+              title: subject.title,
+              status: subject.status,
+              teachers: subject.teachers.filter(teacher => teacher != teacherId),
+            }
           : subject
       )
     );
@@ -100,15 +100,15 @@ export const useTimetable: UseTimetableHookFT = () => {
       days.map((day, i) =>
         i == dayId
           ? {
-            ...day,
-            events: [
-              ...day.events,
-              {
-                lessons10: initialEventLessonsGenrator(),
-                lessons11: initialEventLessonsGenrator(),
-              },
-            ],
-          }
+              ...day,
+              events: [
+                ...day.events,
+                {
+                  lessons10: initialEventLessonsGenrator(),
+                  lessons11: initialEventLessonsGenrator(),
+                },
+              ],
+            }
           : day
       )
     );
@@ -127,26 +127,26 @@ export const useTimetable: UseTimetableHookFT = () => {
       days.map((day, dayIndex) =>
         dayIndex == dayId
           ? {
-            ...day,
-            events: day.events.map((event, eventIndex) =>
-              eventIndex == eventId
-                ? {
-                  ...event,
-                  [`lessons${classNumber}` as LessonsType]: event[
-                    `lessons${classNumber}` as LessonsType
-                  ].map((lesson, lessonIndex) =>
-                    lessonIndex == groupId
-                      ? isPair
-                        ? [lessonId, lessonId]
-                        : lesson.map((lessonElement, lessonElementIndex) =>
-                          lessonElementIndex == lessonNumber ? lessonId : lessonElement
-                        )
-                      : lesson
-                  ),
-                }
-                : event
-            ),
-          }
+              ...day,
+              events: day.events.map((event, eventIndex) =>
+                eventIndex == eventId
+                  ? {
+                      ...event,
+                      [`lessons${classNumber}` as LessonsType]: event[
+                        `lessons${classNumber}` as LessonsType
+                      ].map((lesson, lessonIndex) =>
+                        lessonIndex == groupId
+                          ? isPair
+                            ? [lessonId, lessonId]
+                            : lesson.map((lessonElement, lessonElementIndex) =>
+                                lessonElementIndex == lessonNumber ? lessonId : lessonElement
+                              )
+                          : lesson
+                      ),
+                    }
+                  : event
+              ),
+            }
           : day
       )
     );

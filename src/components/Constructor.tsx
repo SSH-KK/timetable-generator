@@ -46,9 +46,9 @@ const Constructor: React.FC<ConstructorProps> = ({ constructorRef, createDay, su
     }
   };
 
-  useEffect(()=>{
-  	changeMainDate(startDateState)
-  },[startDateState])
+  useEffect(() => {
+    changeMainDate(startDateState);
+  }, [startDateState]);
 
   return (
     <div id={styles.constructorPages} ref={constructorRef}>

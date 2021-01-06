@@ -10,6 +10,7 @@ import {
   DeleteTeacherFT,
   DeleteSubjectFT,
   DeleteCardFT,
+  ChangeMainDateFT,
   DayT,
   CardT,
   SubjectT,
@@ -34,6 +35,13 @@ export const useTimetable: UseTimetableHookFT = () => {
 
   const createDay: CreateDayFT = date => {
     setDayState(prev => [...prev, { date, events: [] }]);
+  };
+
+  const changeMainDate: ChangeMainDateFT = newDate => {
+    const date = new Date(newDate);
+    setDayState(prev =>
+      prev.map((day, dayIndex) => ({ ...day, date: date.getTime() + 24 * 3600 * 1000 * dayIndex }))
+    );
   };
 
   const addTeacher: AddTeacherFT = (teacher, subjectId) => {
@@ -154,6 +162,7 @@ export const useTimetable: UseTimetableHookFT = () => {
     addTeacher,
     deleteTeacher,
     deleteSubject,
+    changeMainDate,
     deleteCard,
   };
 };

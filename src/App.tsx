@@ -12,7 +12,9 @@ const App: React.FC = () => {
     createSubject,
     createDay,
     createCard,
+    changeMainDate,
     addTeacher,
+    addEvent,
     deleteTeacher,
     deleteSubject,
     deleteCard,
@@ -21,10 +23,6 @@ const App: React.FC = () => {
   const sidebarToggleRef = createRef<HTMLButtonElement>();
   const sidebarRef = createRef<HTMLDivElement>();
   const constructorRef = createRef<HTMLDivElement>();
-
-  useEffect(() => {
-    createSubject("Физика");
-  }, []);
 
   const toggleSideBar = (event: React.MouseEvent) => {
     event.preventDefault();
@@ -73,7 +71,15 @@ const App: React.FC = () => {
           />
         </svg>
       </button>
-      <Constructor days={state.days} createDay={createDay} constructorRef={constructorRef} />
+      <Constructor
+        days={state.days}
+        subjects={state.subjects}
+        cards={state.cards}
+        addEvent={addEvent}
+        changeMainDate={changeMainDate}
+        createDay={createDay}
+        constructorRef={constructorRef}
+      />
     </div>
   );
 };

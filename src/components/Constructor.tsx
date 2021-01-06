@@ -1,15 +1,34 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import ConstructorPage from "./ConstructorPage";
 import styles from "../styles/Constructor.module.css";
-import { DayT, CreateDayFT } from "../types/timetable";
+import {
+  DayT,
+  SubjectT,
+  CardT,
+  CreateDayFT,
+  ChangeMainDateFT,
+  AddEventFT,
+} from "../types/timetable";
 
 type ConstructorProps = {
   constructorRef: React.RefObject<HTMLDivElement>;
   createDay: CreateDayFT;
+  addEvent: AddEventFT;
+  changeMainDate: ChangeMainDateFT;
+  cards: CardT[];
+  subjects: SubjectT[];
   days: DayT[];
 };
 
-const Constructor: React.FC<ConstructorProps> = ({ constructorRef, createDay, days }) => {
+const Constructor: React.FC<ConstructorProps> = ({
+  constructorRef,
+  createDay,
+  subjects,
+  days,
+  cards,
+  changeMainDate,
+  addEvent,
+}) => {
   const [pageState, setPageState] = useState<number>(0);
   const [startDateState, setStartDateState] = useState<Date>(new Date());
 
@@ -30,14 +49,20 @@ const Constructor: React.FC<ConstructorProps> = ({ constructorRef, createDay, da
 
   const addButton = (event: React.MouseEvent<HTMLButtonElement>) => {
     event.preventDefault();
-    if (event.currentTarget.dataset.name) {
+    if (event.currentTarget.dataset) {
       const name = event.currentTarget.dataset.name;
-      console.log(new Date(startDateState.getTime() + 24 * 3600 * 1000 * days.length));
       if (name == "day") {
         createDay(startDateState.getTime() + 24 * 3600 * 1000 * days.length);
+      } else if (name == "event" && event.currentTarget.dataset.daynum) {
+        const dayNum = event.currentTarget.dataset.daynum;
+        addEvent(parseInt(dayNum));
       }
     }
   };
+
+  useEffect(() => {
+    changeMainDate(startDateState);
+  }, [startDateState]);
 
   return (
     <div id={styles.constructorPages} ref={constructorRef}>
@@ -77,7 +102,13 @@ const Constructor: React.FC<ConstructorProps> = ({ constructorRef, createDay, da
       </ul>
       <div className="container-fluid">
         {pageState == 0 ? (
-          <ConstructorPage days={days} addButton={addButton} classNum={"lessons10"} />
+          <ConstructorPage
+            days={days}
+            subjects={subjects}
+            cards={cards}
+            addButton={addButton}
+            classNum={"lessons10"}
+          />
         ) : (
           ""
         )}

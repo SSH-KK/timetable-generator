@@ -57,10 +57,10 @@ export const useTimetable: UseTimetableHookFT = () => {
       subjects.map((subject, subjectIndex) =>
         subjectIndex == subjectId
           ? {
-            title: subject.title,
-            status: subject.status,
-            teachers: [...subject.teachers, teacherID],
-          }
+              title: subject.title,
+              status: subject.status,
+              teachers: [...subject.teachers, teacherID],
+            }
           : subject
       )
     )
@@ -80,10 +80,10 @@ export const useTimetable: UseTimetableHookFT = () => {
       subjects.map((subject, subjectIndex) =>
         subjectIndex == subjectId
           ? {
-            title: subject.title,
-            status: subject.status,
-            teachers: subject.teachers.filter(teacher => teacher != teacherId),
-          }
+              title: subject.title,
+              status: subject.status,
+              teachers: subject.teachers.filter(teacher => teacher != teacherId),
+            }
           : subject
       )
     )
@@ -100,15 +100,15 @@ export const useTimetable: UseTimetableHookFT = () => {
       days.map((day, i) =>
         i == dayId
           ? {
-            ...day,
-            events: [
-              ...day.events,
-              {
-                lessons10: initialEventLessonsGenrator(),
-                lessons11: initialEventLessonsGenrator(),
-              },
-            ],
-          }
+              ...day,
+              events: [
+                ...day.events,
+                {
+                  lessons10: initialEventLessonsGenrator(),
+                  lessons11: initialEventLessonsGenrator(),
+                },
+              ],
+            }
           : day
       )
     )
@@ -165,29 +165,26 @@ export const useTimetable: UseTimetableHookFT = () => {
       days.map((day, dayIndex) =>
         dayIndex == dayId
           ? {
-            ...day,
-            events: day.events.map((event, eventIndex) =>
-              eventIndex == eventId
-                ? {
-                  ...event,
-                  [classNumber]:event[classNumber].map((lesson, lessonIndex)=>
-                    lesson.map((card, cardId)=>
-                      cardId == groupId ?
-                        isPair ?
-                          lessonId
-                        :
-                          lessonIndex == lessonNumber ?
-                            lessonId
-                          :
-                            card
-                      :
-                        card
-                    )
-                  )
-                }
-                : event
-            ),
-          }
+              ...day,
+              events: day.events.map((event, eventIndex) =>
+                eventIndex == eventId
+                  ? {
+                      ...event,
+                      [classNumber]: event[classNumber].map((lesson, lessonIndex) =>
+                        lesson.map((card, cardId) =>
+                          cardId == groupId
+                            ? isPair
+                              ? lessonId
+                              : lessonIndex == lessonNumber
+                              ? lessonId
+                              : card
+                            : card
+                        )
+                      ),
+                    }
+                  : event
+              ),
+            }
           : day
       )
     )

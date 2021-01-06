@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState } from "react"
 import {
   UseTimetableHookFT,
   CreateCardFT,
@@ -15,42 +15,42 @@ import {
   CardT,
   SubjectT,
   LessonsType,
-} from "./types/timetable";
-import { initialEventLessonsGenrator } from "./utils/timetable";
+} from "./types/timetable"
+import { initialEventLessonsGenrator } from "./utils/timetable"
 
 export const useTimetable: UseTimetableHookFT = () => {
-  const [cardState, setCardState] = useState<CardT[]>([]);
-  const [dayState, setDayState] = useState<DayT[]>([]);
-  const [subjectState, setSubjectState] = useState<SubjectT[]>([]);
-  const [teacherState, setTeacherState] = useState<string[]>([]);
+  const [cardState, setCardState] = useState<CardT[]>([])
+  const [dayState, setDayState] = useState<DayT[]>([])
+  const [subjectState, setSubjectState] = useState<SubjectT[]>([])
+  const [teacherState, setTeacherState] = useState<string[]>([])
 
   const createSubject: CreateSubjectFT = title => {
-    const newSubjectID = subjectState.length;
-    setSubjectState(prev => [...prev, { title, teachers: [], status: true }]);
-  };
+    const newSubjectID = subjectState.length
+    setSubjectState(prev => [...prev, { title, teachers: [], status: true }])
+  }
 
   const createCard: CreateCardFT = (subject, teacher, room) => {
-    setCardState(prev => [...prev, { subject, teacher, room, status: true }]);
-  };
+    setCardState(prev => [...prev, { subject, teacher, room, status: true }])
+  }
 
   const createDay: CreateDayFT = date => {
-    setDayState(prev => [...prev, { date, events: [] }]);
-  };
+    setDayState(prev => [...prev, { date, events: [] }])
+  }
 
   const changeMainDate: ChangeMainDateFT = newDate => {
-    const date = new Date(newDate);
+    const date = new Date(newDate)
     setDayState(prev =>
       prev.map((day, dayIndex) => ({ ...day, date: date.getTime() + 24 * 3600 * 1000 * dayIndex }))
-    );
-  };
+    )
+  }
 
   const addTeacher: AddTeacherFT = (teacher, subjectId) => {
-    let teacherID = teacherState.indexOf(teacher);
+    let teacherID = teacherState.indexOf(teacher)
     if (teacherID < 0) {
       setTeacherState(prev => {
-        teacherID = prev.length;
-        return [...prev, teacher];
-      });
+        teacherID = prev.length
+        return [...prev, teacher]
+      })
     }
 
     setSubjectState(subjects =>
@@ -63,19 +63,19 @@ export const useTimetable: UseTimetableHookFT = () => {
             }
           : subject
       )
-    );
-  };
+    )
+  }
 
   const deleteSubject: DeleteSubjectFT = subjectId => {
     setSubjectState(subjects =>
       subjects.map((subject, subjectIndex) =>
         subjectIndex == subjectId ? { ...subject, status: false } : subject
       )
-    );
-  };
+    )
+  }
 
   const deleteTeacher: DeleteTeacherFT = (subjectId, teacherId) => {
-    console.log("Trying to delete", teacherId);
+    console.log("Trying to delete", teacherId)
     setSubjectState(subjects =>
       subjects.map((subject, subjectIndex) =>
         subjectIndex == subjectId
@@ -86,14 +86,14 @@ export const useTimetable: UseTimetableHookFT = () => {
             }
           : subject
       )
-    );
-  };
+    )
+  }
 
   const deleteCard: DeleteCardFT = cardId => {
     setCardState(cards =>
       cards.map((card, cardIndex) => (cardIndex == cardId ? { ...card, status: false } : card))
-    );
-  };
+    )
+  }
 
   const addEvent: AddEventFT = dayId => {
     setDayState(days =>
@@ -111,8 +111,8 @@ export const useTimetable: UseTimetableHookFT = () => {
             }
           : day
       )
-    );
-  };
+    )
+  }
 
   const addLesson: AddLessonFT = (
     dayId,
@@ -149,8 +149,8 @@ export const useTimetable: UseTimetableHookFT = () => {
             }
           : day
       )
-    );
-  };
+    )
+  }
 
   return {
     state: { cards: cardState, subjects: subjectState, days: dayState, teachers: teacherState },
@@ -164,5 +164,5 @@ export const useTimetable: UseTimetableHookFT = () => {
     deleteSubject,
     changeMainDate,
     deleteCard,
-  };
-};
+  }
+}

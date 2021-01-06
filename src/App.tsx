@@ -1,10 +1,10 @@
-import React, { createRef, useEffect, useState } from "react";
-import SideBar from "./components/SideBar";
-import Constructor from "./components/Constructor";
-import stylesApp from "./styles/App.module.css";
-import stylesSideBar from "./styles/SideBar.module.css";
-import stylesConstructor from "./styles/Constructor.module.css";
-import { useTimetable } from "./hooks";
+import React, { createRef, useEffect, useState } from "react"
+import SideBar from "./components/SideBar"
+import Constructor from "./components/Constructor"
+import stylesApp from "./styles/App.module.css"
+import stylesSideBar from "./styles/SideBar.module.css"
+import stylesConstructor from "./styles/Constructor.module.css"
+import { useTimetable } from "./hooks"
 
 const App: React.FC = () => {
   const {
@@ -18,23 +18,23 @@ const App: React.FC = () => {
     deleteTeacher,
     deleteSubject,
     deleteCard,
-  } = useTimetable();
+  } = useTimetable()
 
-  const sidebarToggleRef = createRef<HTMLButtonElement>();
-  const sidebarRef = createRef<HTMLDivElement>();
-  const constructorRef = createRef<HTMLDivElement>();
+  const sidebarToggleRef = createRef<HTMLButtonElement>()
+  const sidebarRef = createRef<HTMLDivElement>()
+  const constructorRef = createRef<HTMLDivElement>()
 
   const toggleSideBar = (event: React.MouseEvent) => {
-    event.preventDefault();
+    event.preventDefault()
     if (sidebarToggleRef.current && sidebarRef.current && constructorRef.current) {
-      const sidebarToggle = sidebarToggleRef.current;
-      const sidebar = sidebarRef.current;
-      const constructor = constructorRef.current;
-      sidebar.classList.toggle(stylesSideBar.active);
-      sidebarToggle.classList.toggle(stylesApp.active);
-      constructor.classList.toggle(stylesConstructor.active);
+      const sidebarToggle = sidebarToggleRef.current
+      const sidebar = sidebarRef.current
+      const constructor = constructorRef.current
+      sidebar.classList.toggle(stylesSideBar.active)
+      sidebarToggle.classList.toggle(stylesApp.active)
+      constructor.classList.toggle(stylesConstructor.active)
     }
-  };
+  }
 
   return (
     <div className={stylesApp.wrapper}>
@@ -81,7 +81,7 @@ const App: React.FC = () => {
         constructorRef={constructorRef}
       />
     </div>
-  );
-};
+  )
+}
 
-export default App;
+export default App

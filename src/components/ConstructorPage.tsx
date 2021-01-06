@@ -1,15 +1,15 @@
-import React from "react";
-import styles from "../styles/Constructor.module.css";
-import assets from "../assets/pdf";
-import { DayT, SubjectT, CardT, LessonsType } from "../types/timetable";
+import React from "react"
+import styles from "../styles/Constructor.module.css"
+import assets from "../assets/pdf"
+import { DayT, SubjectT, CardT, LessonsType } from "../types/timetable"
 
 type ConstructorPageProps = {
-  days: DayT[];
-  classNum: LessonsType;
-  addButton: (event: React.MouseEvent<HTMLButtonElement>) => void;
-  cards: CardT[];
-  subjects: SubjectT[];
-};
+  days: DayT[]
+  classNum: LessonsType
+  addButton: (event: React.MouseEvent<HTMLButtonElement>) => void
+  cards: CardT[]
+  subjects: SubjectT[]
+}
 
 const ConstructorPage: React.FC<ConstructorPageProps> = ({
   days,
@@ -75,7 +75,7 @@ const ConstructorPage: React.FC<ConstructorPageProps> = ({
         </button>
       </div>
     </>
-  );
-};
+  )
+}
 
-export default ConstructorPage;
+export default ConstructorPage

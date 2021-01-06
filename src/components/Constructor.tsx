@@ -1,6 +1,6 @@
-import React, { useState, useEffect } from "react";
-import ConstructorPage from "./ConstructorPage";
-import styles from "../styles/Constructor.module.css";
+import React, { useState, useEffect } from "react"
+import ConstructorPage from "./ConstructorPage"
+import styles from "../styles/Constructor.module.css"
 import {
   DayT,
   SubjectT,
@@ -8,17 +8,17 @@ import {
   CreateDayFT,
   ChangeMainDateFT,
   AddEventFT,
-} from "../types/timetable";
+} from "../types/timetable"
 
 type ConstructorProps = {
-  constructorRef: React.RefObject<HTMLDivElement>;
-  createDay: CreateDayFT;
-  addEvent: AddEventFT;
-  changeMainDate: ChangeMainDateFT;
-  cards: CardT[];
-  subjects: SubjectT[];
-  days: DayT[];
-};
+  constructorRef: React.RefObject<HTMLDivElement>
+  createDay: CreateDayFT
+  addEvent: AddEventFT
+  changeMainDate: ChangeMainDateFT
+  cards: CardT[]
+  subjects: SubjectT[]
+  days: DayT[]
+}
 
 const Constructor: React.FC<ConstructorProps> = ({
   constructorRef,
@@ -29,40 +29,40 @@ const Constructor: React.FC<ConstructorProps> = ({
   changeMainDate,
   addEvent,
 }) => {
-  const [pageState, setPageState] = useState<number>(0);
-  const [startDateState, setStartDateState] = useState<Date>(new Date());
+  const [pageState, setPageState] = useState<number>(0)
+  const [startDateState, setStartDateState] = useState<Date>(new Date())
 
   const changePage = (event: React.MouseEvent<HTMLElement>) => {
-    event.preventDefault();
+    event.preventDefault()
     if (event.currentTarget.dataset.name) {
-      const name = parseInt(event.currentTarget.dataset.name);
-      setPageState(name);
+      const name = parseInt(event.currentTarget.dataset.name)
+      setPageState(name)
     }
-  };
+  }
 
   const changeDate = (event: React.ChangeEvent<HTMLInputElement>) => {
-    event.preventDefault();
+    event.preventDefault()
     if (event.currentTarget.value) {
-      setStartDateState(new Date(event.currentTarget.value));
+      setStartDateState(new Date(event.currentTarget.value))
     }
-  };
+  }
 
   const addButton = (event: React.MouseEvent<HTMLButtonElement>) => {
-    event.preventDefault();
+    event.preventDefault()
     if (event.currentTarget.dataset) {
-      const name = event.currentTarget.dataset.name;
+      const name = event.currentTarget.dataset.name
       if (name == "day") {
-        createDay(startDateState.getTime() + 24 * 3600 * 1000 * days.length);
+        createDay(startDateState.getTime() + 24 * 3600 * 1000 * days.length)
       } else if (name == "event" && event.currentTarget.dataset.daynum) {
-        const dayNum = event.currentTarget.dataset.daynum;
-        addEvent(parseInt(dayNum));
+        const dayNum = event.currentTarget.dataset.daynum
+        addEvent(parseInt(dayNum))
       }
     }
-  };
+  }
 
   useEffect(() => {
-    changeMainDate(startDateState);
-  }, [startDateState]);
+    changeMainDate(startDateState)
+  }, [startDateState])
 
   return (
     <div id={styles.constructorPages} ref={constructorRef}>
@@ -114,7 +114,7 @@ const Constructor: React.FC<ConstructorProps> = ({
         )}
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default Constructor;
+export default Constructor

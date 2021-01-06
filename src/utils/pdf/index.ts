@@ -1,11 +1,11 @@
-import pdfMake from "pdfmake/build/pdfmake";
-import { TableCell, TDocumentDefinitions } from "pdfmake/interfaces";
+import pdfMake from "pdfmake/build/pdfmake"
+import { TableCell, TDocumentDefinitions } from "pdfmake/interfaces"
 
-import { LessonsType, TimetableT } from "../../types/timetable";
-import dataExample from "../../../dataExample.json";
+import { LessonsType, TimetableT } from "../../types/timetable"
+import dataExample from "../../../dataExample.json"
 
-import vfs from "../vfsFonts";
-import assets from "../../assets/pdf";
+import vfs from "../vfsFonts"
+import assets from "../../assets/pdf"
 import {
   colSpanGenerator,
   generateDayHeader,
@@ -14,16 +14,16 @@ import {
   getDate,
   getGroupNumber,
   rowSpanGenerator,
-} from "./utils";
+} from "./utils"
 
-pdfMake.vfs = vfs;
+pdfMake.vfs = vfs
 
 pdfMake.fonts = {
   PTSerif: {
     normal: "PTSerifRegular.ttf",
     bold: "PTSerifBold.ttf",
   },
-};
+}
 
 const generateDocument = (
   classNumber: number,
@@ -76,7 +76,7 @@ const generateDocument = (
       },
     },
   ],
-});
+})
 
 const documentStyles: Omit<TDocumentDefinitions, "content"> = {
   defaultStyle: {
@@ -94,7 +94,7 @@ const documentStyles: Omit<TDocumentDefinitions, "content"> = {
   },
   pageOrientation: "landscape",
   pageMargins: [10, 10, 10, 10],
-};
+}
 
 const formatData = (data: TimetableT, firstDay: number, classNumber: number): TableCell[][] =>
   data.days.flatMap<TableCell[]>((day, dayIndex) => [
@@ -129,7 +129,7 @@ const formatData = (data: TimetableT, firstDay: number, classNumber: number): Ta
         ]),
       ])
     ),
-  ]);
+  ])
 
 const createDocument = (
   classNumber: number,
@@ -137,13 +137,13 @@ const createDocument = (
   timetableState: TimetableT,
   firstDay: number
 ): void => {
-  const data = timetableState.days.length ? timetableState : dataExample;
+  const data = timetableState.days.length ? timetableState : dataExample
 
-  const document = generateDocument(classNumber, generation, data, firstDay);
+  const document = generateDocument(classNumber, generation, data, firstDay)
 
-  const styledDocument = { ...document, ...documentStyles };
+  const styledDocument = { ...document, ...documentStyles }
 
-  pdfMake.createPdf(styledDocument).download(generateDocumentName(classNumber));
-};
+  pdfMake.createPdf(styledDocument).download(generateDocumentName(classNumber))
+}
 
-export { createDocument };
+export { createDocument }

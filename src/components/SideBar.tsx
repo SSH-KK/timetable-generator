@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import styles from "../styles/SideBar.module.css";
+import React, { useState } from "react"
+import styles from "../styles/SideBar.module.css"
 import {
   SubjectT,
   CardT,
@@ -9,31 +9,31 @@ import {
   DeleteTeacherFT,
   DeleteSubjectFT,
   DeleteCardFT,
-} from "../types/timetable";
-import SubjectSingle from "./SubjectSingle";
-import CardSingle from "./CardSingle";
+} from "../types/timetable"
+import SubjectSingle from "./SubjectSingle"
+import CardSingle from "./CardSingle"
 
 type SidebarProps = {
-  sidebarRef: React.RefObject<HTMLDivElement>;
-  subjects: SubjectT[];
-  teachers: string[];
-  cards: CardT[];
-  createSubject: CreateSubjectFT;
-  createCard: CreateCardFT;
-  addTeacher: AddTeacherFT;
-  deleteTeacher: DeleteTeacherFT;
-  deleteSubject: DeleteSubjectFT;
-  deleteCard: DeleteCardFT;
-};
+  sidebarRef: React.RefObject<HTMLDivElement>
+  subjects: SubjectT[]
+  teachers: string[]
+  cards: CardT[]
+  createSubject: CreateSubjectFT
+  createCard: CreateCardFT
+  addTeacher: AddTeacherFT
+  deleteTeacher: DeleteTeacherFT
+  deleteSubject: DeleteSubjectFT
+  deleteCard: DeleteCardFT
+}
 
 type InputStateT = {
-  subject: string;
+  subject: string
   card: {
-    subject: number;
-    teacher: number;
-    room: string;
-  };
-};
+    subject: number
+    teacher: number
+    room: string
+  }
+}
 
 const SideBar: React.FC<SidebarProps> = ({
   sidebarRef,
@@ -54,49 +54,45 @@ const SideBar: React.FC<SidebarProps> = ({
       teacher: -1,
       room: "",
     },
-  });
+  })
 
   const createForm = (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
+    event.preventDefault()
     if (event.currentTarget.dataset.name) {
-      const name = event.currentTarget.dataset.name;
-      let reset = false;
+      const name = event.currentTarget.dataset.name
+      let reset = false
       if (name == "subject" && inputState.subject) {
-        createSubject(inputState.subject);
-        reset = true;
+        createSubject(inputState.subject)
+        reset = true
       } else if (
         name == "card" &&
         inputState.card.subject != -1 &&
         inputState.card.teacher != -1 &&
         inputState.card.room
       ) {
-        createCard(
-          inputState.card.subject,
-          inputState.card.teacher,
-          parseInt(inputState.card.room)
-        );
-        reset = true;
+        createCard(inputState.card.subject, inputState.card.teacher, parseInt(inputState.card.room))
+        reset = true
       }
       if (reset) {
         setInputState(prev => ({
           ...prev,
           [name]: name == "subject" ? "" : { subject: -1, teacher: -1, room: "" },
-        }));
+        }))
       }
     }
-  };
+  }
 
   const inputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    event.preventDefault();
+    event.preventDefault()
     setInputState(prev => ({
       ...prev,
       [event.target.name]: event.target.value,
-    }));
-  };
+    }))
+  }
 
   const cardSelectChange = (event: React.ChangeEvent<HTMLSelectElement | HTMLInputElement>) => {
     if (event.target.name) {
-      const name = event.target.name;
+      const name = event.target.name
       if (
         (name == "room" && (parseInt(event.target.value) || event.target.value == "")) ||
         name != "room"
@@ -107,15 +103,15 @@ const SideBar: React.FC<SidebarProps> = ({
             ...prev.card,
             [name]: name != "room" ? parseInt(event.target.value) : event.target.value,
           },
-        }));
+        }))
       }
     }
-  };
+  }
 
   const deleteSubjectButton = (event: React.MouseEvent<HTMLButtonElement>) => {
-    event.preventDefault();
-    const subjectIndex = parseInt(event.currentTarget.name);
-    deleteSubject(subjectIndex);
+    event.preventDefault()
+    const subjectIndex = parseInt(event.currentTarget.name)
+    deleteSubject(subjectIndex)
     if (subjectIndex == inputState.card.subject) {
       setInputState(prev => ({
         subject: prev.subject,
@@ -123,15 +119,15 @@ const SideBar: React.FC<SidebarProps> = ({
           ...prev.card,
           subject: -1,
         },
-      }));
+      }))
     }
-  };
+  }
 
   const deleteCardButton = (event: React.MouseEvent<HTMLButtonElement>) => {
-    event.preventDefault();
-    const cardIndex = parseInt(event.currentTarget.name);
-    deleteCard(cardIndex);
-  };
+    event.preventDefault()
+    const cardIndex = parseInt(event.currentTarget.name)
+    deleteCard(cardIndex)
+  }
 
   return (
     <nav id={styles.sidebar} className="shadow me-3" ref={sidebarRef}>
@@ -236,7 +232,7 @@ const SideBar: React.FC<SidebarProps> = ({
         </div>
       </div>
     </nav>
-  );
-};
+  )
+}
 
-export default SideBar;
+export default SideBar

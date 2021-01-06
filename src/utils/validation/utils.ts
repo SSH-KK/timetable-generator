@@ -1,6 +1,6 @@
-import { ValidationErrorT } from "../../types/validation";
+import { ValidationErrorT } from "../../types/validation"
 
-export const getClassNumber = (index: number): number => 10 + Math.floor(index / 6);
+export const getClassNumber = (index: number): number => 10 + Math.floor(index / 6)
 
 export const generateErrorWithAddress = (
   day: number,
@@ -26,4 +26,4 @@ export const generateErrorWithAddress = (
       group: b % 6,
     },
   },
-});
+})

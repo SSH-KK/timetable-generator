@@ -14,11 +14,11 @@
   cursor: pointer;
 }
 
-.splittoggle{
-	padding: 0.35rem !important;
-	position: absolute;
-	top: 0;
-	right: 0;
-	border-radius: 0 !important;
+.splittoggle {
+  padding: 0.35rem !important;
+  position: absolute;
+  top: 0;
+  right: 0;
+  border-radius: 0 !important;
   border-bottom-left-radius: 10% !important;
 }

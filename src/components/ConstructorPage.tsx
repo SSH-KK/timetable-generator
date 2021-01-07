@@ -101,7 +101,7 @@ const ConstructorPage: React.FC<ConstructorPageProps> = ({
           </div>
           {day.events.map((event, eventIndex) =>
             event[classNum][0].map((_, cardID) => (
-              <div className="col-2 border border-1 py-5 px-2 position-relative">
+              <div className={`${styles.eventCard} col-2 border border-1 d-flex flex-column justify-content-center px-2 position-relative`}>
                 {cardSelectionState[dayIndex][eventIndex]
                   ? Array(cardSelectionState[dayIndex][eventIndex][cardID] ? 1 : 2)
                       .fill("")
@@ -140,8 +140,8 @@ const ConstructorPage: React.FC<ConstructorPageProps> = ({
                 >
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
-                    width="20"
-                    height="20"
+                    width="3.35vh"
+                    height="3.35vh"
                     fill="currentColor"
                     className="bi bi-chevron-bar-expand"
                     viewBox="0 0 16 16"

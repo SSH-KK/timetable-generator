@@ -117,7 +117,20 @@ const Constructor: React.FC<ConstructorProps> = ({
             classNum={"lessons10"}
           />
         ) : (
-          ""
+          ''
+        )}
+        {pageState == 1 ? (
+          <ConstructorPage
+            days={days}
+            subjects={subjects}
+            addLesson={addLesson}
+            cards={cards}
+            teachers={teachers}
+            addButton={addButton}
+            classNum={"lessons11"}
+          />
+        ) : (
+          ''
         )}
       </div>
     </div>

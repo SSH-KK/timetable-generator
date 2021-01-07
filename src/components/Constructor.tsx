@@ -16,6 +16,7 @@ type ConstructorProps = {
   createDay: CreateDayFT
   addEvent: AddEventFT
   addLesson: AddLessonFT
+  teachers: string[]
   changeMainDate: ChangeMainDateFT
   cards: CardT[]
   subjects: SubjectT[]
@@ -28,6 +29,7 @@ const Constructor: React.FC<ConstructorProps> = ({
   subjects,
   days,
   cards,
+  teachers,
   changeMainDate,
   addLesson,
   addEvent,
@@ -110,6 +112,7 @@ const Constructor: React.FC<ConstructorProps> = ({
             subjects={subjects}
             addLesson={addLesson}
             cards={cards}
+            teachers={teachers}
             addButton={addButton}
             classNum={"lessons10"}
           />

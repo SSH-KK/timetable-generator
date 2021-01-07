@@ -74,6 +74,7 @@ const App: React.FC = () => {
       </button>
       <Constructor
         days={state.days}
+        teachers={state.teachers}
         subjects={state.subjects}
         cards={state.cards}
         addEvent={addEvent}

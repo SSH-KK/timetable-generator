@@ -4,10 +4,21 @@
   margin-left: auto;
   transition: all 0.4s;
 }
+
 #constructorPages.active {
   min-width: 70%;
   max-width: 70%;
 }
+
 .pageItem:hover {
   cursor: pointer;
+}
+
+.splittoggle{
+	padding: 0.35rem !important;
+	position: absolute;
+	top: 0;
+	right: 0;
+	border-radius: 0 !important;
+  border-bottom-left-radius: 10% !important;
 }

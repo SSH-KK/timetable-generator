@@ -117,7 +117,7 @@ const Constructor: React.FC<ConstructorProps> = ({
             classNum={"lessons10"}
           />
         ) : (
-          ''
+          ""
         )}
         {pageState == 1 ? (
           <ConstructorPage
@@ -130,7 +130,7 @@ const Constructor: React.FC<ConstructorProps> = ({
             classNum={"lessons11"}
           />
         ) : (
-          ''
+          ""
         )}
       </div>
     </div>

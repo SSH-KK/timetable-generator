@@ -101,7 +101,9 @@ const ConstructorPage: React.FC<ConstructorPageProps> = ({
           </div>
           {day.events.map((event, eventIndex) =>
             event[classNum][0].map((_, cardID) => (
-              <div className={`${styles.eventCard} col-2 border border-1 d-flex flex-column justify-content-center px-2 position-relative`}>
+              <div
+                className={`${styles.eventCard} col-2 border border-1 d-flex flex-column justify-content-center px-2 position-relative`}
+              >
                 {cardSelectionState[dayIndex][eventIndex]
                   ? Array(cardSelectionState[dayIndex][eventIndex][cardID] ? 1 : 2)
                       .fill("")

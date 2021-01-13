@@ -24,7 +24,7 @@ export const useTimetable: UseTimetableHookFT = () => {
   const [subjectState, setSubjectState] = useState<SubjectT[]>([])
   const [teacherState, setTeacherState] = useState<string[]>([])
   const [errorState, setErrorState] = useState<ValidationStatusT>({
-    has: false,
+    has: [false, false],
     errors: [],
   })
 

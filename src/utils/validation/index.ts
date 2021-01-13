@@ -18,7 +18,7 @@ const validate = (
   const errors = Array<ValidationErrorT>(12).fill({ id: -1 })
   const event = data.days[dayID].events[eventID]
 
-  const hasErros = [false, false]
+  const hasErros: [boolean, boolean] = [false, false]
 
   Array(2)
     .fill("")
@@ -52,7 +52,7 @@ const validate = (
     })
 
   setError(prev => ({
-    has: true,
+    has: hasErros,
     errors: prev.errors.map((clas, classIndex) =>
       hasErros[classIndex]
         ? clas.map((day, dayIndex) =>

@@ -157,7 +157,9 @@ const createDocument = (
   timetableState: TimetableT,
   firstDay: number
 ): void => {
-  const data = timetableState.days.length ? timetableState : dataExample
+  const data = timetableState.days.length
+    ? timetableState
+    : ((dataExample as unknown) as TimetableT)
 
   const document = generateDocument(classNumber, generation, data, firstDay)
 

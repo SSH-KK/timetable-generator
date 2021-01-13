@@ -33,7 +33,7 @@ export const generateEventContent = (data: TimetableT, cardId: number): string =
   const card = data.cards[cardId]
   const subject = data.subjects[card.subject]
 
-  return `${subject.title} Ауд. ${card.room} ${subject.teachers[card.teacher]}`
+  return `${subject.title} Ауд. ${card.room} ${data.teachers[card.teacher]}`
 }
 
 export const rowSpanGenerator: SpanGenerator = (event, lessonIndex, groupIndex, classNumber) =>

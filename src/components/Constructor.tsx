@@ -10,6 +10,7 @@ import {
   AddLessonFT,
   AddEventFT,
 } from "../types/timetable"
+import { createDocument } from "../utils/pdf"
 
 type ConstructorProps = {
   constructorRef: React.RefObject<HTMLDivElement>
@@ -104,6 +105,19 @@ const Constructor: React.FC<ConstructorProps> = ({
             />
           </div>
         </form>
+        <button
+          className={`btn btn-outline-primary me-2`}
+          onClick={() =>
+            createDocument(
+              pageState + 10,
+              18,
+              { cards, subjects, days, teachers },
+              startDateState.getTime()
+            )
+          }
+        >
+          Отправить
+        </button>
       </ul>
       <div className="container-fluid">
         {pageState == 0 ? (

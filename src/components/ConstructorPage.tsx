@@ -53,7 +53,9 @@ const ConstructorPage: React.FC<ConstructorPageProps> = ({
 					parseInt(event.currentTarget.value),
 					parseInt(lessonnum)
 				)
-				console.log(days)
+				.then((n_days_state) => {
+					validate({days: n_days_state, cards, subjects, teachers, validation}, setValidationErrors, parseInt(dayid), parseInt(eventid))
+				})
 			}
 		}
 	}

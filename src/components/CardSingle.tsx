@@ -28,9 +28,8 @@ const CardSingle: React.FC<CardSingleProps> = ({ card, deleteCardButton, deleteC
       <button
         type="button"
         onClick={deleteCardButton}
-        id={styles.deleteSubject}
         name={card.cardIndex.toString()}
-        className="btn btn-danger border-start border border-3"
+        className={`btn btn-danger border-start border border-3 ${styles.deleteSubject}`}
       >
         <svg
           xmlns="http://www.w3.org/2000/svg"

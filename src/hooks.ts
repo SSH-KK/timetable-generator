@@ -19,8 +19,9 @@ import { ValidationErrorT, ValidationStatusT } from "./types/validation"
 import { initialEventLessonsGenrator } from "./utils/timetable"
 
 export const useTimetable: UseTimetableHookFT = () => {
-
-  const useStateWithPromise = <S>(initialState: S | (() => S)): [S, (stateAction: S | ((prev: S) => S)) => Promise<unknown>] => {
+  const useStateWithPromise = <S>(
+    initialState: S | (() => S)
+  ): [S, (stateAction: S | ((prev: S) => S)) => Promise<unknown>] => {
     const [state, setState] = useState(initialState)
     const resolverRef = useRef<typeof setState | null>(null)
 
@@ -31,12 +32,15 @@ export const useTimetable: UseTimetableHookFT = () => {
       }
     }, [resolverRef.current, state])
 
-    const handleSetState = useCallback((stateAction) => {
-      setState(stateAction);
-      return new Promise(resolve => {
-        resolverRef.current = resolve
-      });
-    }, [setState])
+    const handleSetState = useCallback(
+      stateAction => {
+        setState(stateAction)
+        return new Promise(resolve => {
+          resolverRef.current = resolve
+        })
+      },
+      [setState]
+    )
 
     return [state, handleSetState]
   }
@@ -87,10 +91,10 @@ export const useTimetable: UseTimetableHookFT = () => {
       subjects.map((subject, subjectIndex) =>
         subjectIndex == subjectId
           ? {
-            title: subject.title,
-            status: subject.status,
-            teachers: [...subject.teachers, teacherID],
-          }
+              title: subject.title,
+              status: subject.status,
+              teachers: [...subject.teachers, teacherID],
+            }
           : subject
       )
     )
@@ -109,10 +113,10 @@ export const useTimetable: UseTimetableHookFT = () => {
       subjects.map((subject, subjectIndex) =>
         subjectIndex == subjectId
           ? {
-            title: subject.title,
-            status: subject.status,
-            teachers: subject.teachers.filter(teacher => teacher != teacherId),
-          }
+              title: subject.title,
+              status: subject.status,
+              teachers: subject.teachers.filter(teacher => teacher != teacherId),
+            }
           : subject
       )
     )
@@ -129,15 +133,15 @@ export const useTimetable: UseTimetableHookFT = () => {
       days.map((day, i) =>
         i == dayId
           ? {
-            ...day,
-            events: [
-              ...day.events,
-              {
-                lessons10: initialEventLessonsGenrator(),
-                lessons11: initialEventLessonsGenrator(),
-              },
-            ],
-          }
+              ...day,
+              events: [
+                ...day.events,
+                {
+                  lessons10: initialEventLessonsGenrator(),
+                  lessons11: initialEventLessonsGenrator(),
+                },
+              ],
+            }
           : day
       )
     )
@@ -159,36 +163,35 @@ export const useTimetable: UseTimetableHookFT = () => {
     groupId,
     isPair,
     lessonId,
-    lessonNumber,
-  ) => (
+    lessonNumber
+  ) =>
     setDayState(days =>
       days.map((day, dayIndex) =>
         dayIndex == dayId
           ? {
-            ...day,
-            events: day.events.map((event, eventIndex) =>
-              eventIndex == eventId
-                ? {
-                  ...event,
-                  [classNumber]: event[classNumber].map((lesson, lessonIndex) =>
-                    lesson.map((card, cardId) =>
-                      cardId == groupId
-                        ? isPair
-                          ? lessonId
-                          : lessonIndex == lessonNumber
-                            ? lessonId
+              ...day,
+              events: day.events.map((event, eventIndex) =>
+                eventIndex == eventId
+                  ? {
+                      ...event,
+                      [classNumber]: event[classNumber].map((lesson, lessonIndex) =>
+                        lesson.map((card, cardId) =>
+                          cardId == groupId
+                            ? isPair
+                              ? lessonId
+                              : lessonIndex == lessonNumber
+                              ? lessonId
+                              : card
                             : card
-                        : card
-                    )
-                  ),
-                }
-                : event
-            ),
-          }
+                        )
+                      ),
+                    }
+                  : event
+              ),
+            }
           : day
       )
     )
-  )
 
   return {
     state: {

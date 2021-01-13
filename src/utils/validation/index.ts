@@ -19,7 +19,7 @@ const validate = (
   const event = data.days[dayID].events[eventID]
 
   const hasErros: [boolean, boolean] = [false, false]
-  
+
   Array(2)
     .fill("")
     .forEach((_, lessonIndex) => {

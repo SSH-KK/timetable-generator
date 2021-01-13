@@ -58,7 +58,7 @@ export type AddLessonFT = (
   groupId: number,
   isPair: boolean,
   lessonId: number,
-  lessonNumber?: number,
+  lessonNumber?: number
 ) => Promise<any>
 
 export type SetValidationErrorsFT = Dispatch<SetStateAction<ValidationStatusT>>

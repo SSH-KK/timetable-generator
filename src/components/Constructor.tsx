@@ -5,8 +5,10 @@ import {
   DayT,
   SubjectT,
   CardT,
+  TimetableT,
   CreateDayFT,
   ChangeMainDateFT,
+  SetValidationErrorsFT,
   AddLessonFT,
   AddEventFT,
 } from "../types/timetable"
@@ -24,6 +26,7 @@ type ConstructorProps = {
   subjects: SubjectT[]
   days: DayT[]
   validation: ValidationStatusT
+  setValidationErrors: SetValidationErrorsFT
 }
 
 const Constructor: React.FC<ConstructorProps> = ({
@@ -37,6 +40,7 @@ const Constructor: React.FC<ConstructorProps> = ({
   addLesson,
   addEvent,
   validation,
+  setValidationErrors,
 }) => {
   const [pageState, setPageState] = useState<number>(0)
   const [startDateState, setStartDateState] = useState<Date>(new Date())
@@ -67,6 +71,16 @@ const Constructor: React.FC<ConstructorProps> = ({
         addEvent(parseInt(dayNum))
       }
     }
+  }
+
+  const downloadDocument = (event: React.MouseEvent<HTMLButtonElement>) => {
+  	event.preventDefault()
+  	// createDocument(
+   //            pageState + 10,
+   //            18,
+   //            { cards, subjects, days, teachers, validation },
+   //            startDateState.getTime()
+   //          )
   }
 
   useEffect(() => {
@@ -110,14 +124,7 @@ const Constructor: React.FC<ConstructorProps> = ({
         </form>
         <button
           className={`btn btn-outline-danger me-2 mb-2`}
-          onClick={() =>
-            createDocument(
-              pageState + 10,
-              18,
-              { cards, subjects, days, teachers, validation },
-              startDateState.getTime()
-            )
-          }
+          onClick={downloadDocument}
         >
           Скачать PDF
         </button>
@@ -131,6 +138,8 @@ const Constructor: React.FC<ConstructorProps> = ({
             cards={cards}
             teachers={teachers}
             addButton={addButton}
+            validation={validation}
+            setValidationErrors={setValidationErrors}
             classNum={"lessons10"}
           />
         ) : (
@@ -141,9 +150,11 @@ const Constructor: React.FC<ConstructorProps> = ({
             days={days}
             subjects={subjects}
             addLesson={addLesson}
+            validation={validation}
             cards={cards}
             teachers={teachers}
             addButton={addButton}
+            setValidationErrors={setValidationErrors}
             classNum={"lessons11"}
           />
         ) : (

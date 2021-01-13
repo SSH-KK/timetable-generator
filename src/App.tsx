@@ -19,6 +19,7 @@ const App: React.FC = () => {
     deleteTeacher,
     deleteSubject,
     deleteCard,
+    setValidationErrors
   } = useTimetable()
 
   const sidebarToggleRef = createRef<HTMLButtonElement>()
@@ -83,6 +84,7 @@ const App: React.FC = () => {
         createDay={createDay}
         constructorRef={constructorRef}
         validation={state.validation}
+        setValidationErrors={setValidationErrors}
       />
     </div>
   )

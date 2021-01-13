@@ -19,6 +19,8 @@ const validate = (
   const event = data.days[dayID].events[eventID]
 
   const hasErros: [boolean, boolean] = [false, false]
+  console.log(data)
+  console.log(event)
 
   Array(2)
     .fill("")

@@ -114,44 +114,6 @@ export const useTimetable: UseTimetableHookFT = () => {
     )
   }
 
-  // const addLesson: AddLessonFT = (
-  //   dayId,
-  //   eventId,
-  //   classNumber,
-  //   groupId,
-  //   isPair,
-  //   lessonId,
-  //   lessonNumber
-  // ) => {
-  //   setDayState(days =>
-  //     days.map((day, dayIndex) =>
-  //       dayIndex == dayId
-  //         ? {
-  //           ...day,
-  //           events: day.events.map((event, eventIndex) =>
-  //             eventIndex == eventId
-  //               ? {
-  //                 ...event,
-  //                 [`lessons${classNumber}` as LessonsType]: event[
-  //                   `lessons${classNumber}` as LessonsType
-  //                 ].map((lesson, lessonIndex) =>
-  //                   lessonIndex == groupId
-  //                     ? isPair
-  //                       ? [lessonId, lessonId]
-  //                       : lesson.map((lessonElement, lessonElementIndex) =>
-  //                         lessonElementIndex == lessonNumber ? lessonId : lessonElement
-  //                       )
-  //                     : lesson
-  //                 ),
-  //               }
-  //               : event
-  //           ),
-  //         }
-  //         : day
-  //     )
-  //   )
-  // }
-
   const addLesson: AddLessonFT = (
     dayId,
     eventId,

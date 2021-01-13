@@ -1,3 +1,8 @@
+export type ValidationStatusT = {
+  has: boolean
+  errors: ValidationErrorT[][][][]
+}
+
 export type ValidationErrorPositionT = {
   day: number
   event: number
@@ -6,12 +11,7 @@ export type ValidationErrorPositionT = {
   group: number
 }
 
-export type ValidationErrorMessageT = {
-  id: number
-  position: ValidationErrorPositionT
-}
-
 export type ValidationErrorT = {
-  position: ValidationErrorPositionT
-  message: ValidationErrorMessageT
+  id: number
+  position?: ValidationErrorPositionT
 }

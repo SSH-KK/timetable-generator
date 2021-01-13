@@ -1,4 +1,4 @@
-import React, { createRef, useEffect, useState } from "react"
+import React, { createRef } from "react"
 import SideBar from "./components/SideBar"
 import Constructor from "./components/Constructor"
 import stylesApp from "./styles/App.module.css"
@@ -82,6 +82,7 @@ const App: React.FC = () => {
         changeMainDate={changeMainDate}
         createDay={createDay}
         constructorRef={constructorRef}
+        validation={state.validation}
       />
     </div>
   )

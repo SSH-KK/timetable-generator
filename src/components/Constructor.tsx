@@ -11,6 +11,7 @@ import {
   AddEventFT,
 } from "../types/timetable"
 import { createDocument } from "../utils/pdf"
+import { ValidationStatusT } from "../types/validation"
 
 type ConstructorProps = {
   constructorRef: React.RefObject<HTMLDivElement>
@@ -22,6 +23,7 @@ type ConstructorProps = {
   cards: CardT[]
   subjects: SubjectT[]
   days: DayT[]
+  validation: ValidationStatusT
 }
 
 const Constructor: React.FC<ConstructorProps> = ({
@@ -34,6 +36,7 @@ const Constructor: React.FC<ConstructorProps> = ({
   changeMainDate,
   addLesson,
   addEvent,
+  validation,
 }) => {
   const [pageState, setPageState] = useState<number>(0)
   const [startDateState, setStartDateState] = useState<Date>(new Date())
@@ -111,12 +114,12 @@ const Constructor: React.FC<ConstructorProps> = ({
             createDocument(
               pageState + 10,
               18,
-              { cards, subjects, days, teachers },
+              { cards, subjects, days, teachers, validation },
               startDateState.getTime()
             )
           }
         >
-          Отправить
+          Скачать
         </button>
       </ul>
       <div className="container-fluid">

@@ -60,7 +60,7 @@
   ],
   "teachers": ["Ильин А.Б.", "Кайгородов В.Н", "Климова В.Н.", "Попов Д.А."],
   "validation": {
-    "has": false,
+    "has": [false, false],
     "errors": []
   }
 }

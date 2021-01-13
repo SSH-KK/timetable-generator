@@ -1,8 +1,12 @@
+import { Dispatch, SetStateAction } from "react"
+import { ValidationStatusT } from "./validation"
+
 export type TimetableT = {
   days: DayT[]
   cards: CardT[]
   subjects: SubjectT[]
   teachers: string[]
+  validation: ValidationStatusT
 }
 
 export type DayT = {
@@ -13,8 +17,7 @@ export type DayT = {
 export type LessonsType = "lessons10" | "lessons11"
 
 export type EventT = {
-  lessons10: number[][] // IDs
-  lessons11: number[][] // IDs
+  [a in LessonsType]: number[][]
 }
 
 export type CardT = {
@@ -58,6 +61,8 @@ export type AddLessonFT = (
   lessonNumber?: number
 ) => void
 
+export type SetValidationErrorsFT = Dispatch<SetStateAction<ValidationStatusT>>
+
 export type UseTimetableHookFT = () => {
   state: TimetableT
   createSubject: CreateSubjectFT
@@ -70,4 +75,5 @@ export type UseTimetableHookFT = () => {
   deleteSubject: DeleteSubjectFT
   deleteCard: DeleteCardFT
   changeMainDate: ChangeMainDateFT
+  setValidationErrors: SetValidationErrorsFT
 }

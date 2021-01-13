@@ -14,8 +14,8 @@ import {
   DayT,
   CardT,
   SubjectT,
-  LessonsType,
 } from "./types/timetable"
+import { ValidationErrorT, ValidationStatusT } from "./types/validation"
 import { initialEventLessonsGenrator } from "./utils/timetable"
 
 export const useTimetable: UseTimetableHookFT = () => {
@@ -23,6 +23,10 @@ export const useTimetable: UseTimetableHookFT = () => {
   const [dayState, setDayState] = useState<DayT[]>([])
   const [subjectState, setSubjectState] = useState<SubjectT[]>([])
   const [teacherState, setTeacherState] = useState<string[]>([])
+  const [errorState, setErrorState] = useState<ValidationStatusT>({
+    has: false,
+    errors: [],
+  })
 
   const createSubject: CreateSubjectFT = title => {
     const newSubjectID = subjectState.length
@@ -35,6 +39,10 @@ export const useTimetable: UseTimetableHookFT = () => {
 
   const createDay: CreateDayFT = date => {
     setDayState(prev => [...prev, { date, events: [] }])
+    setErrorState(prev => ({
+      ...prev,
+      errors: prev.errors.map(clas => [...clas, []]),
+    }))
   }
 
   const changeMainDate: ChangeMainDateFT = newDate => {
@@ -75,7 +83,6 @@ export const useTimetable: UseTimetableHookFT = () => {
   }
 
   const deleteTeacher: DeleteTeacherFT = (subjectId, teacherId) => {
-    console.log("Trying to delete", teacherId)
     setSubjectState(subjects =>
       subjects.map((subject, subjectIndex) =>
         subjectIndex == subjectId
@@ -112,6 +119,15 @@ export const useTimetable: UseTimetableHookFT = () => {
           : day
       )
     )
+
+    setErrorState(prev => ({
+      ...prev,
+      errors: prev.errors.map(clas =>
+        clas.map((day, dayIndex) =>
+          dayIndex == dayId ? [...day, Array<ValidationErrorT>(6).fill({ id: -1 })] : day
+        )
+      ),
+    }))
   }
 
   const addLesson: AddLessonFT = (
@@ -153,7 +169,13 @@ export const useTimetable: UseTimetableHookFT = () => {
   }
 
   return {
-    state: { cards: cardState, subjects: subjectState, days: dayState, teachers: teacherState },
+    state: {
+      cards: cardState,
+      subjects: subjectState,
+      days: dayState,
+      teachers: teacherState,
+      validation: errorState,
+    },
     createCard,
     createSubject,
     createDay,
@@ -164,5 +186,6 @@ export const useTimetable: UseTimetableHookFT = () => {
     deleteSubject,
     changeMainDate,
     deleteCard,
+    setValidationErrors: setErrorState,
   }
 }

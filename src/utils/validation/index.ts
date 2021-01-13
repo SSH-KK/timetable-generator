@@ -2,6 +2,13 @@ import { SetValidationErrorsFT, TimetableT } from "../../types/timetable"
 import { ValidationErrorT } from "../../types/validation"
 import { generateErrorWithAddress } from "./utils"
 
+/**
+ * Function to validate timetable for errors in content
+ * @param data State returned by useTimetable hook
+ * @param setError setValidationErrors method returned by useTimetable hook
+ * @param dayID Index of day to validate
+ * @param eventID Index of event to validate
+ */
 const validate = (
   data: TimetableT,
   setError: SetValidationErrorsFT,

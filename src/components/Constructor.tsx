@@ -76,7 +76,7 @@ const Constructor: React.FC<ConstructorProps> = ({
   return (
     <div id={styles.constructorPages} ref={constructorRef}>
       <ul className="nav nav-tabs pt-2">
-        <li className={`nav-item ${styles.pageItem}`}>
+        <li className={`nav-item pt-2 ${styles.pageItem}`}>
           <a
             onClick={changePage}
             data-name="0"
@@ -85,7 +85,7 @@ const Constructor: React.FC<ConstructorProps> = ({
             10 класс
           </a>
         </li>
-        <li className={`nav-item ${styles.pageItem}`}>
+        <li className={`nav-item pt-2 ${styles.pageItem}`}>
           <a
             onClick={changePage}
             data-name="1"
@@ -94,7 +94,7 @@ const Constructor: React.FC<ConstructorProps> = ({
             11 класс
           </a>
         </li>
-        <form className="d-flex align-items-center ms-auto me-2">
+        <form className="d-flex align-items-center ms-auto me-2 mb-2">
           <div className="input-group input-group">
             <label htmlFor="startDate" className="form-label mb-0 pt-1 me-2">
               Дата начала недели:
@@ -109,7 +109,7 @@ const Constructor: React.FC<ConstructorProps> = ({
           </div>
         </form>
         <button
-          className={`btn btn-outline-primary me-2`}
+          className={`btn btn-outline-danger me-2 mb-2`}
           onClick={() =>
             createDocument(
               pageState + 10,
@@ -119,7 +119,7 @@ const Constructor: React.FC<ConstructorProps> = ({
             )
           }
         >
-          Скачать
+          Скачать PDF
         </button>
       </ul>
       <div className="container-fluid">

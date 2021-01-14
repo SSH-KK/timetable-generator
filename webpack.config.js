@@ -66,8 +66,13 @@ module.exports = {
         exclude: /node_modules/,
       },
       {
-        test: /\.(woff(2)?|eot|ttf|otf|svg|)$/,
+        test: /\.(woff(2)?|eot|ttf|otf|)$/,
         type: "asset/inline",
+        exclude: /node_modules/,
+      },
+      {
+        test: /\.svg$/,
+        use: ["@svgr/webpack"],
         exclude: /node_modules/,
       },
     ],

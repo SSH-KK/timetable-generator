@@ -50,7 +50,7 @@ export const generateEventContent = (data: TimetableT, cardId: number): string =
   const card = data.cards[cardId]
   const subject = data.subjects[card.subject]
 
-  return `${subject.title} Ауд. ${card.room} ${data.teachers[card.teacher]}`
+  return `${subject.title} Ауд. ${card.room} ${data.teachers[data.subjects[card.subject].teachers[card.teacher]]}`
 }
 
 /**

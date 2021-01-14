@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef, useCallback } from "react"
+import { useState, useEffect, useRef, useCallback, useReducer } from "react"
 import {
   UseTimetableHookFT,
   CreateCardFT,
@@ -16,34 +16,20 @@ import {
   SubjectT,
 } from "./types/timetable"
 import { ValidationErrorT, ValidationStatusT } from "./types/validation"
+import { reducer } from "./utils/reducer"
 import { initialEventLessonsGenrator } from "./utils/timetable"
 
 export const useTimetable: UseTimetableHookFT = () => {
-  const useStateWithPromise = <S>(
-    initialState: S | (() => S)
-  ): [S, (stateAction: S | ((prev: S) => S)) => Promise<unknown>] => {
-    const [state, setState] = useState(initialState)
-    const resolverRef = useRef<typeof setState | null>(null)
-
-    useEffect(() => {
-      if (resolverRef.current) {
-        resolverRef.current(state)
-        resolverRef.current = null
-      }
-    }, [resolverRef.current, state])
-
-    const handleSetState = useCallback(
-      stateAction => {
-        setState(stateAction)
-        return new Promise(resolve => {
-          resolverRef.current = resolve
-        })
-      },
-      [setState]
-    )
-
-    return [state, handleSetState]
-  }
+  const [state, dispatch] = useReducer<typeof reducer>(reducer, {
+    days: [],
+    cards: [],
+    subjects: [],
+    teachers: [],
+    validation: {
+      has: [false, false],
+      errors: [[], []],
+    },
+  })
 
   const [cardState, setCardState] = useState<CardT[]>([])
   const [dayState, setDayState] = useStateWithPromise<DayT[]>([])
@@ -55,7 +41,6 @@ export const useTimetable: UseTimetableHookFT = () => {
   })
 
   const createSubject: CreateSubjectFT = title => {
-    const newSubjectID = subjectState.length
     setSubjectState(prev => [...prev, { title, teachers: [], status: true }])
   }
 
@@ -217,4 +202,30 @@ export const useTimetable: UseTimetableHookFT = () => {
     deleteCard,
     setValidationErrors: setErrorState,
   }
+}
+
+export const useStateWithPromise = <S>(
+  initialState: S | (() => S)
+): [S, (stateAction: S | ((prev: S) => S)) => Promise<unknown>] => {
+  const [state, setState] = useState(initialState)
+  const resolverRef = useRef<typeof setState | null>(null)
+
+  useEffect(() => {
+    if (resolverRef.current) {
+      resolverRef.current(state)
+      resolverRef.current = null
+    }
+  }, [resolverRef.current, state])
+
+  const handleSetState = useCallback(
+    stateAction => {
+      setState(stateAction)
+      return new Promise(resolve => {
+        resolverRef.current = resolve
+      })
+    },
+    [setState]
+  )
+
+  return [state, handleSetState]
 }

@@ -19,7 +19,6 @@ import { ValidationErrorT, ValidationStatusT } from "./types/validation"
 import { initialEventLessonsGenrator } from "./utils/timetable"
 
 export const useTimetable: UseTimetableHookFT = () => {
-  
   const useStateWithPromise = <S>(
     initialState: S | (() => S)
   ): [S, (stateAction: S | ((prev: S) => S)) => Promise<unknown>] => {

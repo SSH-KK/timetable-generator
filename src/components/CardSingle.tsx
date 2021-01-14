@@ -1,24 +1,24 @@
-import React, { useEffect } from "react";
-import styles from "../styles/SideBar.module.css";
-import { DeleteCardFT } from "../types/timetable";
+import React, { useEffect } from "react"
+import styles from "../styles/SideBar.module.css"
+import { DeleteCardFT } from "../types/timetable"
 
 type CardSingleProps = {
   card: {
-    status: boolean;
-    subStatus: boolean;
-    room: number;
-    subject: string;
-    teacher: string;
-    cardIndex: number;
-  };
-  deleteCardButton: (event: React.MouseEvent<HTMLButtonElement>) => void;
-  deleteCard: DeleteCardFT;
-};
+    status: boolean
+    subStatus: boolean
+    room: number
+    subject: string
+    teacher: string
+    cardIndex: number
+  }
+  deleteCardButton: (event: React.MouseEvent<HTMLButtonElement>) => void
+  deleteCard: DeleteCardFT
+}
 
 const CardSingle: React.FC<CardSingleProps> = ({ card, deleteCardButton, deleteCard }) => {
   useEffect(() => {
-    !card.subStatus ? deleteCard(card.cardIndex) : "";
-  }, [card.subStatus]);
+    !card.subStatus ? deleteCard(card.cardIndex) : ""
+  }, [card.subStatus])
 
   return card.status ? (
     <div className={`${styles.subjectCard} col-11 border rounded rounded-2 border-3 p-2 mt-2`}>
@@ -28,9 +28,8 @@ const CardSingle: React.FC<CardSingleProps> = ({ card, deleteCardButton, deleteC
       <button
         type="button"
         onClick={deleteCardButton}
-        id={styles.deleteSubject}
         name={card.cardIndex.toString()}
-        className="btn btn-danger border-start border border-3"
+        className={`btn btn-danger border-start border border-3 ${styles.deleteSubject}`}
       >
         <svg
           xmlns="http://www.w3.org/2000/svg"
@@ -47,7 +46,7 @@ const CardSingle: React.FC<CardSingleProps> = ({ card, deleteCardButton, deleteC
         </svg>
       </button>
     </div>
-  ) : null;
-};
+  ) : null
+}
 
-export default CardSingle;
+export default CardSingle

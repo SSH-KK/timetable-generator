@@ -1,16 +1,16 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
-const webpack = require("webpack");
-const path = require("path");
-const HtmlWebpackPlugin = require("html-webpack-plugin");
+const webpack = require("webpack")
+const path = require("path")
+const HtmlWebpackPlugin = require("html-webpack-plugin")
 
-const isDev = process.env.NODE_ENV === "development";
+const isDev = process.env.NODE_ENV === "development"
 
 const plugins = [
   new webpack.ProgressPlugin(),
   new HtmlWebpackPlugin({
     template: path.join(__dirname, "public", "index.html"),
   }),
-];
+]
 
 if (!isDev) {
   plugins.push(
@@ -19,7 +19,7 @@ if (!isDev) {
         NODE_ENV: JSON.stringify("production"),
       },
     })
-  );
+  )
 }
 
 module.exports = {
@@ -91,4 +91,4 @@ module.exports = {
   stats: {
     reasons: true,
   },
-};
+}

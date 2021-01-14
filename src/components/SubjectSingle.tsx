@@ -1,15 +1,15 @@
-import React, { useState } from "react";
-import { SubjectT, AddTeacherFT, DeleteTeacherFT } from "../types/timetable";
-import styles from "../styles/SideBar.module.css";
+import React, { useState } from "react"
+import { SubjectT, AddTeacherFT, DeleteTeacherFT } from "../types/timetable"
+import styles from "../styles/SideBar.module.css"
 
 type SubjectSingleProps = {
-  subject: SubjectT;
-  teachers: string[];
-  addTeacher: AddTeacherFT;
-  deleteTeacher: DeleteTeacherFT;
-  deleteSubjectButton: (event: React.MouseEvent<HTMLButtonElement>) => void;
-  subjectId: number;
-};
+  subject: SubjectT
+  teachers: string[]
+  addTeacher: AddTeacherFT
+  deleteTeacher: DeleteTeacherFT
+  deleteSubjectButton: (event: React.MouseEvent<HTMLButtonElement>) => void
+  subjectId: number
+}
 
 const SubjectSingle: React.FC<SubjectSingleProps> = ({
   subject,
@@ -19,25 +19,25 @@ const SubjectSingle: React.FC<SubjectSingleProps> = ({
   deleteSubjectButton,
   subjectId,
 }) => {
-  const [inputState, setInputState] = useState("");
+  const [inputState, setInputState] = useState("")
 
   const addTeacherForm = (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
+    event.preventDefault()
     if (inputState) {
-      addTeacher(inputState, subjectId);
-      setInputState("");
+      addTeacher(inputState, subjectId)
+      setInputState("")
     }
-  };
+  }
 
   const inputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    event.preventDefault();
-    setInputState(event.target.value);
-  };
+    event.preventDefault()
+    setInputState(event.target.value)
+  }
 
   const deleteTeacherButton = (event: React.MouseEvent<HTMLButtonElement>) => {
-    event.preventDefault();
-    deleteTeacher(subjectId, parseInt(event.currentTarget.name));
-  };
+    event.preventDefault()
+    deleteTeacher(subjectId, parseInt(event.currentTarget.name))
+  }
 
   return (
     <div className={`${styles.subjectCard} col-11 border rounded rounded-2 border-3 p-2 mt-2`}>
@@ -68,9 +68,8 @@ const SubjectSingle: React.FC<SubjectSingleProps> = ({
         <button
           type="button"
           onClick={deleteSubjectButton}
-          id={styles.deleteSubject}
           name={subjectId.toString()}
-          className="btn btn-danger border-start border border-3"
+          className={`btn btn-danger border-start border border-3 ${styles.deleteSubject}`}
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -88,7 +87,7 @@ const SubjectSingle: React.FC<SubjectSingleProps> = ({
         </button>
       </form>
     </div>
-  );
-};
+  )
+}
 
-export default SubjectSingle;
+export default SubjectSingle

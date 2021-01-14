@@ -1,9 +1,9 @@
-name: ESLint
+name: Jest
 
 on: push
 
 jobs:
-  lint:
+  test:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -14,7 +14,7 @@ jobs:
         with:
           node-version: "12.x"
 
-      - name: Lint
+      - name: Run tests
         run: |
           npm ci
-          npm run lint
+          npm run test

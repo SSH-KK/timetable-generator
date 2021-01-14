@@ -11,7 +11,7 @@ const months = [
   "Октября",
   "Ноября",
   "Декабря",
-] as const;
+] as const
 
 const weekdays = [
   "ПОНЕДЕЛЬНИК",
@@ -21,7 +21,7 @@ const weekdays = [
   "ПЯТНИЦА",
   "СУББОТА",
   "ВОСКРЕСЕНЬЕ",
-] as const;
+] as const
 
 const lessonTimes = [
   "8.30-9.10",
@@ -30,10 +30,10 @@ const lessonTimes = [
   "11.10-11.50",
   "12.00-12.40",
   "12.50-13.30",
-] as const;
+] as const
 
 export default {
   months,
   weekdays,
   lessonTimes,
-};
+}

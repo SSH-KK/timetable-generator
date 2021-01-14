@@ -1,0 +1,29 @@
+#constructorPages {
+  min-width: 95%;
+  max-width: 95%;
+  margin-left: auto;
+  transition: all 0.4s;
+}
+
+#constructorPages.active {
+  min-width: 70%;
+  max-width: 70%;
+}
+
+.pageItem:hover {
+  cursor: pointer;
+}
+
+.splittoggle {
+  padding: 0 !important;
+  height: 3.75vh;
+  position: absolute;
+  top: 0;
+  right: 0;
+  border-radius: 0 !important;
+  border-bottom-left-radius: 15% !important;
+}
+
+.eventCard {
+  height: 18vh;
+}

@@ -1,11 +1,11 @@
-import pdfMake from "pdfmake/build/pdfmake";
-import { TableCell, TDocumentDefinitions } from "pdfmake/interfaces";
+import pdfMake from "pdfmake/build/pdfmake"
+import { TableCell, TDocumentDefinitions } from "pdfmake/interfaces"
 
-import { LessonsType, TimetableT } from "../../types/timetable";
-import dataExample from "../../../dataExample.json";
+import { LessonsType, TimetableT } from "../../types/timetable"
+import dataExample from "../../../dataExample.json"
 
-import vfs from "../vfsFonts";
-import assets from "../../assets/pdf";
+import vfs from "../vfsFonts"
+import assets from "../../assets/pdf"
 import {
   colSpanGenerator,
   generateDayHeader,
@@ -14,17 +14,24 @@ import {
   getDate,
   getGroupNumber,
   rowSpanGenerator,
-} from "./utils";
+} from "./utils"
 
-pdfMake.vfs = vfs;
+pdfMake.vfs = vfs
 
 pdfMake.fonts = {
   PTSerif: {
     normal: "PTSerifRegular.ttf",
     bold: "PTSerifBold.ttf",
   },
-};
+}
 
+/**
+ * FuUnction to join all content of pdf
+ * @param classNumber Class number
+ * @param generation Generation
+ * @param timetableState State returned by useTimetable hook
+ * @param firstDay First day of week
+ */
 const generateDocument = (
   classNumber: number,
   generation: number,
@@ -76,7 +83,7 @@ const generateDocument = (
       },
     },
   ],
-});
+})
 
 const documentStyles: Omit<TDocumentDefinitions, "content"> = {
   defaultStyle: {
@@ -94,8 +101,14 @@ const documentStyles: Omit<TDocumentDefinitions, "content"> = {
   },
   pageOrientation: "landscape",
   pageMargins: [10, 10, 10, 10],
-};
+}
 
+/**
+ * Function for converting days array into more convinient state
+ * @param data State returned by useTimetable hook
+ * @param firstDay First day of week
+ * @param classNumber Class number
+ */
 const formatData = (data: TimetableT, firstDay: number, classNumber: number): TableCell[][] =>
   data.days.flatMap<TableCell[]>((day, dayIndex) => [
     [
@@ -129,21 +142,30 @@ const formatData = (data: TimetableT, firstDay: number, classNumber: number): Ta
         ]),
       ])
     ),
-  ]);
+  ])
 
+/**
+ * Function for pdf document generation
+ * @param classNumber Class number
+ * @param generation Generation
+ * @param timetableState State returned by useTimetable hook
+ * @param firstDay first day of week
+ */
 const createDocument = (
   classNumber: number,
   generation: number,
   timetableState: TimetableT,
   firstDay: number
 ): void => {
-  const data = timetableState.days.length ? timetableState : dataExample;
+  const data = timetableState.days.length
+    ? timetableState
+    : ((dataExample as unknown) as TimetableT)
 
-  const document = generateDocument(classNumber, generation, data, firstDay);
+  const document = generateDocument(classNumber, generation, data, firstDay)
 
-  const styledDocument = { ...document, ...documentStyles };
+  const styledDocument = { ...document, ...documentStyles }
 
-  pdfMake.createPdf(styledDocument).download(generateDocumentName(classNumber));
-};
+  pdfMake.createPdf(styledDocument).download(generateDocumentName(classNumber))
+}
 
-export { createDocument };
+export { createDocument }

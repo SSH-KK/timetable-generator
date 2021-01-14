@@ -51,7 +51,7 @@ export const useTimetable: UseTimetableHookFT = () => {
   const [teacherState, setTeacherState] = useState<string[]>([])
   const [errorState, setErrorState] = useState<ValidationStatusT>({
     has: [false, false],
-    errors: [],
+    errors: [[], []],
   })
 
   const createSubject: CreateSubjectFT = title => {

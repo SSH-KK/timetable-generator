@@ -76,8 +76,11 @@ const Constructor: React.FC<ConstructorProps> = ({
   const downloadDocument = (event: React.MouseEvent<HTMLButtonElement>) => {
     event.preventDefault()
     if (!validation.has[pageState]) {
-    	let potoch = startDateState.getMonth()<=5 ? startDateState.getFullYear()%2000-1 : startDateState.getFullYear()%2000
-    	potoch = potoch-1-pageState
+      let potoch =
+        startDateState.getMonth() <= 5
+          ? (startDateState.getFullYear() % 2000) - 1
+          : startDateState.getFullYear() % 2000
+      potoch = potoch - 1 - pageState
       createDocument(
         pageState + 10,
         potoch,

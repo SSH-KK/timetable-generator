@@ -35,8 +35,7 @@ const validate = (
               cardForCheckIndex
             )
             if (
-              data.teachers[data.subjects[card.subject].teachers[card.teacher]] ==
-                data.teachers[data.subjects[cardForCheck.subject].teachers[cardForCheck.teacher]] &&
+              data.teachers[card.teacher] == data.teachers[cardForCheck.teacher] &&
               card.room != cardForCheck.room
             ) {
               errors[cardIndex] = generateError(0)
@@ -44,15 +43,13 @@ const validate = (
             }
             if (
               card.room == cardForCheck.room &&
-              data.teachers[data.subjects[card.subject].teachers[card.teacher]] !=
-                data.teachers[data.subjects[cardForCheck.subject].teachers[cardForCheck.teacher]]
+              data.teachers[card.teacher] != data.teachers[cardForCheck.teacher]
             ) {
               errors[cardIndex] = generateError(1)
               hasErros[Math.floor(lessonIndex / 6)] = true
             }
             if (
-              data.teachers[data.subjects[card.subject].teachers[card.teacher]] ==
-                data.teachers[data.subjects[cardForCheck.subject].teachers[cardForCheck.teacher]] &&
+              data.teachers[card.teacher] == data.teachers[cardForCheck.teacher] &&
               card.subject != cardForCheck.subject
             ) {
               errors[cardIndex] = generateError(2)

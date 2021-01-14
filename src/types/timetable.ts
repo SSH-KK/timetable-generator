@@ -23,8 +23,8 @@ export type EventT = {
 export type CardT = {
   subject: number // ID
   room: number // Number
-  teacher: number // ID in subject
-  status: boolean
+  teacher: number // ID in teachers
+  status: boolean // Indicates if card is deleted
 }
 
 export type SubjectT = {

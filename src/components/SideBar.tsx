@@ -173,7 +173,7 @@ const SideBar: React.FC<SidebarProps> = ({
               status: cards[cardIndex].status,
               room: ob.room,
               subject: subjects[ob.subject].title,
-              teacher: teachers[subjects[ob.subject].teachers[ob.teacher]],
+              teacher: teachers[ob.teacher],
             }}
             key={cardIndex}
           />
@@ -205,9 +205,9 @@ const SideBar: React.FC<SidebarProps> = ({
                 className="form-select mt-2"
               >
                 <option value="-1">Преподаватель</option>
-                {subjects[inputState.card.subject].teachers.map((ob, teacherIndex) => (
-                  <option value={teacherIndex} key={teacherIndex}>
-                    {teachers[ob]}
+                {subjects[inputState.card.subject].teachers.map(teacher => (
+                  <option value={teacher} key={teacher}>
+                    {teachers[teacher]}
                   </option>
                 ))}
               </select>

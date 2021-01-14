@@ -21,9 +21,9 @@ import { initialEventLessonsGenrator } from "./utils/timetable"
 export const useTimetable: UseTimetableHookFT = () => {
   const useStateWithPromise = <S>(
     initialState: S | (() => S)
-  ): [S, React.Dispatch<React.SetStateAction<S>>] => {
+  ): [S, (stateAction: S | ((prev: S) => S)) => Promise<unknown>] => {
     const [state, setState] = useState(initialState)
-    const resolverRef = useRef(null) as React.MutableRefObject<any>
+    const resolverRef = useRef<typeof setState | null>(null)
 
     useEffect(() => {
       if (resolverRef.current) {
@@ -164,7 +164,7 @@ export const useTimetable: UseTimetableHookFT = () => {
     isPair,
     lessonId,
     lessonNumber
-  ) => {
+  ) =>
     setDayState(days =>
       days.map((day, dayIndex) =>
         dayIndex == dayId
@@ -191,10 +191,7 @@ export const useTimetable: UseTimetableHookFT = () => {
             }
           : day
       )
-    ).then(() => {
-      console.log(dayState)
-    })
-  }
+    )
 
   return {
     state: {

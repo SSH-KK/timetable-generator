@@ -68,9 +68,8 @@ const SubjectSingle: React.FC<SubjectSingleProps> = ({
         <button
           type="button"
           onClick={deleteSubjectButton}
-          id={styles.deleteSubject}
           name={subjectId.toString()}
-          className="btn btn-danger border-start border border-3"
+          className={`btn btn-danger border-start border border-3 ${styles.deleteSubject}`}
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"

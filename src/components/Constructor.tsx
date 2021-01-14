@@ -75,12 +75,14 @@ const Constructor: React.FC<ConstructorProps> = ({
 
   const downloadDocument = (event: React.MouseEvent<HTMLButtonElement>) => {
     event.preventDefault()
-    // createDocument(
-    //            pageState + 10,
-    //            18,
-    //            { cards, subjects, days, teachers, validation },
-    //            startDateState.getTime()
-    //          )
+    if (!validation.has[pageState]) {
+      createDocument(
+        pageState + 10,
+        18,
+        { cards, subjects, days, teachers, validation },
+        startDateState.getTime()
+      )
+    }
   }
 
   useEffect(() => {
@@ -122,7 +124,11 @@ const Constructor: React.FC<ConstructorProps> = ({
             />
           </div>
         </form>
-        <button className={`btn btn-outline-danger me-2 mb-2`} onClick={downloadDocument}>
+        <button
+          className={`btn btn-outline-danger me-2 mb-2`}
+          disabled={validation.has[pageState]}
+          onClick={downloadDocument}
+        >
           Скачать PDF
         </button>
       </ul>

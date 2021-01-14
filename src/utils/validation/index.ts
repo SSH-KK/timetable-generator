@@ -66,7 +66,11 @@ const validate = (
       hasErros[classIndex]
         ? clas.map((day, dayIndex) =>
             dayIndex == dayID
-              ? day.map((event, eventIndex) => (eventIndex == eventID ? errors : event))
+              ? day.map((event, eventIndex) =>
+                  eventIndex == eventID
+                    ? errors.slice(classIndex ? 6 : 0, !classIndex ? 12 : 6)
+                    : event
+                )
               : day
           )
         : clas

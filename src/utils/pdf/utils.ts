@@ -22,11 +22,7 @@ export const getDate = (): string => {
  * @param gen Generation
  */
 export const getGroupNumber = (gen: number): number => {
-  while (gen > 9) {
-    gen -= 9
-  }
-
-  return gen
+  return gen%9 == 0 ? 9 : gen%9-1
 }
 
 /**

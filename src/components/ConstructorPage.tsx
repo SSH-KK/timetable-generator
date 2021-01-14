@@ -115,7 +115,7 @@ const ConstructorPage: React.FC<ConstructorPageProps> = ({
             event[classNum][0].map((_, cardID) => (
               <div
                 key={cardID}
-                className={`${styles.eventCard} col-2 border border-1 d-flex flex-column justify-content-center px-2 position-relative`}
+                className={`${styles.eventCard} ${validation.errors[parseInt(classNum.replace('lessons',''))%10][dayIndex][eventIndex][cardID].id != -1 ? 'bg-danger' : ''} col-2 border border-1 d-flex flex-column justify-content-center px-2 position-relative`}
               >
                 {cardSelectionState[dayIndex][eventIndex]
                   ? Array(cardSelectionState[dayIndex][eventIndex][cardID] ? 1 : 2)

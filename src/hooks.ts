@@ -120,6 +120,10 @@ export const useTimetable: UseTimetableHookFT = () => {
           : subject
       )
     )
+
+    setCardState(cards =>
+      cards.map(card => (card.teacher == teacherId ? { ...card, status: false } : card))
+    )
   }
 
   const deleteCard: DeleteCardFT = cardId => {

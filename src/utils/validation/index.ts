@@ -34,15 +34,15 @@ const validate = (
               lessonIndex,
               cardForCheckIndex
             )
-            if (card.teacher == cardForCheck.teacher && card.room != cardForCheck.room) {
+            if (data.teachers[data.subjects[card.subject].teachers[card.teacher]] == data.teachers[data.subjects[cardForCheck.subject].teachers[cardForCheck.teacher]] && card.room != cardForCheck.room) {
               errors[cardIndex] = generateError(0)
               hasErros[Math.floor(lessonIndex / 6)] = true
             }
-            if (card.room == cardForCheck.room && card.teacher != cardForCheck.teacher) {
+            if (card.room == cardForCheck.room && data.teachers[data.subjects[card.subject].teachers[card.teacher]] != data.teachers[data.subjects[cardForCheck.subject].teachers[cardForCheck.teacher]]) {
               errors[cardIndex] = generateError(1)
               hasErros[Math.floor(lessonIndex / 6)] = true
             }
-            if (card.teacher == cardForCheck.teacher && card.subject != cardForCheck.subject) {
+            if (data.teachers[data.subjects[card.subject].teachers[card.teacher]] == data.teachers[data.subjects[cardForCheck.subject].teachers[cardForCheck.teacher]] && card.subject != cardForCheck.subject) {
               errors[cardIndex] = generateError(2)
               hasErros[Math.floor(lessonIndex / 6)] = true
             }

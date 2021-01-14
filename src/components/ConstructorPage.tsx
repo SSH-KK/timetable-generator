@@ -137,7 +137,7 @@ const ConstructorPage: React.FC<ConstructorPageProps> = ({
                           {cards.map((card, cardIndex) =>
                             card.status ? (
                               <option value={cardIndex}>{`${subjects[card.subject].title} - ${
-                                teachers[subjects[card.subject].teachers[card.teacher]]
+                                teachers[card.teacher]
                               } - ${card.room}`}</option>
                             ) : (
                               ""

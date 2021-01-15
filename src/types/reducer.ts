@@ -1,16 +1,17 @@
 import { LessonsType } from "./timetable"
 
-export type ActionType =
-  | "CREATE_SUBJECT"
-  | "CREATE_CARD"
-  | "CREATE_DAY"
-  | "ADD_EVENT"
-  | "ADD_TEACHER"
-  | "DELETE_SUBJECT"
-  | "DELETE_TEACHER"
-  | "DELETE_CARD"
-  | "ADD_LESSON"
-  | "CHANGE_MAIN_DATE"
+export enum ActionType {
+  CREATE_SUBJECT,
+  CREATE_CARD,
+  CREATE_DAY,
+  ADD_EVENT,
+  ADD_TEACHER,
+  DELETE_SUBJECT,
+  DELETE_TEACHER,
+  DELETE_CARD,
+  ADD_LESSON,
+  CHANGE_MAIN_DATE,
+}
 
 export interface Action {
   type: ActionType
@@ -64,31 +65,31 @@ export interface AddLessonAction extends Action {
 }
 
 export const isCreateSubjectAction = (action: Action): action is CreateSubjectAction =>
-  action.type === "CREATE_SUBJECT"
+  action.type === ActionType.CREATE_SUBJECT
 
 export const isCreateCardAction = (action: Action): action is CreateCardAction =>
-  action.type === "CREATE_CARD"
+  action.type === ActionType.CREATE_CARD
 
 export const isCreateDayAction = (action: Action): action is CreateDayAction =>
-  action.type === "CREATE_DAY"
+  action.type === ActionType.CREATE_DAY
 
 export const isAddEventAction = (action: Action): action is AddEventAction =>
-  action.type === "ADD_EVENT"
+  action.type === ActionType.ADD_EVENT
 
 export const isAddTeacherAction = (action: Action): action is AddTeacherAction =>
-  action.type === "ADD_TEACHER"
+  action.type === ActionType.ADD_TEACHER
 
 export const isDeleteSubjectAction = (action: Action): action is DeleteSubjectAction =>
-  action.type === "DELETE_SUBJECT"
+  action.type === ActionType.DELETE_SUBJECT
 
 export const isDeleteTeacherAction = (action: Action): action is DeleteTeacherAction =>
-  action.type === "DELETE_TEACHER"
+  action.type === ActionType.DELETE_TEACHER
 
 export const isDeleteCardAction = (action: Action): action is DeleteCardAction =>
-  action.type === "DELETE_CARD"
+  action.type === ActionType.DELETE_CARD
 
 export const isChangeMainDateAction = (action: Action): action is ChangeMainDateAction =>
-  action.type === "CHANGE_MAIN_DATE"
+  action.type === ActionType.CHANGE_MAIN_DATE
 
 export const isAddLessonAction = (action: Action): action is AddLessonAction =>
-  action.type === "ADD_LESSON"
+  action.type === ActionType.ADD_LESSON

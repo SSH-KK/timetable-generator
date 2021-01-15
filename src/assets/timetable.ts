@@ -8,6 +8,6 @@ export const initialState: TimetableT = {
   validation: {
     has: [false, false],
     errors: [[], []],
-    rows: []
+    rows: [],
   },
 }

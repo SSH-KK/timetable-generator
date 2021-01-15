@@ -119,7 +119,7 @@ const SideBar: React.FC<SidebarProps> = ({ sidebarRef, subjects, teachers, cards
 
   return (
     <nav id={styles.sidebar} className="shadow me-3" ref={sidebarRef}>
-      <div className="row justify-content-center">
+      <div className="row pb-5 justify-content-center">
         <h3 className="text-center">Предметы</h3>
         {subjects.map((ob, subjectIndex) =>
           ob.status ? (
@@ -150,22 +150,7 @@ const SideBar: React.FC<SidebarProps> = ({ sidebarRef, subjects, teachers, cards
           </form>
         </div>
         <h3 className="text-center mt-2">Пары</h3>
-        {cards.map((ob, cardIndex) => (
-          <CardSingle
-            deleteCardButton={deleteCardButton}
-            dispatcher={dispatcher}
-            card={{
-              cardIndex: cardIndex,
-              subStatus: subjects[ob.subject].status,
-              status: cards[cardIndex].status,
-              room: ob.room,
-              subject: subjects[ob.subject].title,
-              teacher: teachers[ob.teacher],
-            }}
-            key={cardIndex}
-          />
-        ))}
-        <div className="col-11">
+                <div className="col-11">
           <form className="mt-2" data-name="card" onSubmit={createForm}>
             <select
               name="subject"
@@ -217,6 +202,21 @@ const SideBar: React.FC<SidebarProps> = ({ sidebarRef, subjects, teachers, cards
             )}
           </form>
         </div>
+        {cards.map((ob, cardIndex) => (
+          <CardSingle
+            deleteCardButton={deleteCardButton}
+            dispatcher={dispatcher}
+            card={{
+              cardIndex: cardIndex,
+              subStatus: subjects[ob.subject].status,
+              status: cards[cardIndex].status,
+              room: ob.room,
+              subject: subjects[ob.subject].title,
+              teacher: teachers[ob.teacher],
+            }}
+            key={cardIndex}
+          />
+        ))}
       </div>
     </nav>
   )

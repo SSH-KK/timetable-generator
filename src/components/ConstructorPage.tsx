@@ -27,6 +27,7 @@ const ConstructorPage: React.FC<ConstructorPageProps> = ({
   classNum: classNumber,
   addButton,
   dispatcher,
+  validation,
 }) => {
   const [cardSelectionState, setCardSelectionState] = useState<boolean[][][]>(
     cardSelectionStateGenerator(days, classNumber)
@@ -102,7 +103,7 @@ const ConstructorPage: React.FC<ConstructorPageProps> = ({
               <div
                 key={cardID}
                 className={`${styles.eventCard} ${
-                  validation.errors[parseInt(classNum.replace("lessons", "")) % 10][dayIndex][
+                  validation.errors[parseInt(classNumber.replace("lessons", "")) % 10][dayIndex][
                     eventIndex
                   ][cardID].id != -1
                     ? "bg-danger"

@@ -8,20 +8,7 @@ import { useTimetable } from "./hooks"
 import SidebarToggleIcon from "./icons/sidebarToggle.svg"
 
 const App: React.FC = () => {
-  const {
-    state,
-    createSubject,
-    createDay,
-    createCard,
-    changeMainDate,
-    addTeacher,
-    addEvent,
-    addLesson,
-    deleteTeacher,
-    deleteSubject,
-    deleteCard,
-    setValidationErrors,
-  } = useTimetable()
+  const [state, dispatcher] = useTimetable()
 
   const sidebarToggleRef = createRef<HTMLButtonElement>()
   const sidebarRef = createRef<HTMLDivElement>()
@@ -43,12 +30,7 @@ const App: React.FC = () => {
     <div className={stylesApp.wrapper}>
       <SideBar
         sidebarRef={sidebarRef}
-        addTeacher={addTeacher}
-        createSubject={createSubject}
-        createCard={createCard}
-        deleteTeacher={deleteTeacher}
-        deleteSubject={deleteSubject}
-        deleteCard={deleteCard}
+        dispatcher={dispatcher}
         subjects={state.subjects}
         cards={state.cards}
         teachers={state.teachers}
@@ -67,13 +49,9 @@ const App: React.FC = () => {
         teachers={state.teachers}
         subjects={state.subjects}
         cards={state.cards}
-        addEvent={addEvent}
-        addLesson={addLesson}
-        changeMainDate={changeMainDate}
-        createDay={createDay}
+        dispatcher={dispatcher}
         constructorRef={constructorRef}
         validation={state.validation}
-        setValidationErrors={setValidationErrors}
       />
     </div>
   )

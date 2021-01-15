@@ -1,31 +1,31 @@
-import React, { useState } from "react"
-import { SubjectT, AddTeacherFT, DeleteTeacherFT } from "../types/timetable"
+import React, { Dispatch, useState } from "react"
+import { SubjectT } from "../types/timetable"
 import styles from "../styles/SideBar.module.css"
+import { ReducerAction } from "../types/reducer"
+import { addTeacherAction, deleteTeacherAction } from "../utils/reducer/actions"
 import DeleteButtonIcon from "../icons/deleteButton.svg"
 
 type SubjectSingleProps = {
   subject: SubjectT
   teachers: string[]
-  addTeacher: AddTeacherFT
-  deleteTeacher: DeleteTeacherFT
+  dispatcher: Dispatch<ReducerAction>
   deleteSubjectButton: (event: React.MouseEvent<HTMLButtonElement>) => void
-  subjectId: number
+  subjectID: number
 }
 
 const SubjectSingle: React.FC<SubjectSingleProps> = ({
   subject,
   teachers,
-  addTeacher,
-  deleteTeacher,
+  dispatcher,
   deleteSubjectButton,
-  subjectId,
+  subjectID,
 }) => {
   const [inputState, setInputState] = useState("")
 
   const addTeacherForm = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault()
     if (inputState) {
-      addTeacher(inputState, subjectId)
+      dispatcher(addTeacherAction({ teacher: inputState, subjectID }))
       setInputState("")
     }
   }
@@ -37,7 +37,7 @@ const SubjectSingle: React.FC<SubjectSingleProps> = ({
 
   const deleteTeacherButton = (event: React.MouseEvent<HTMLButtonElement>) => {
     event.preventDefault()
-    deleteTeacher(subjectId, parseInt(event.currentTarget.name))
+    dispatcher(deleteTeacherAction({ subjectID, teacherID: parseInt(event.currentTarget.name) }))
   }
 
   return (
@@ -69,7 +69,7 @@ const SubjectSingle: React.FC<SubjectSingleProps> = ({
         <button
           type="button"
           onClick={deleteSubjectButton}
-          name={subjectId.toString()}
+          name={subjectID.toString()}
           className={`btn btn-danger border-start border border-3 ${styles.deleteSubject}`}
         >
           <DeleteButtonIcon />

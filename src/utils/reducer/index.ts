@@ -15,6 +15,7 @@ import {
 import { TimetableT } from "../../types/timetable"
 import { ValidationErrorT } from "../../types/validation"
 import { initialEventLessonsGenrator } from "../timetable"
+import { validate } from "../validation"
 
 export const reducer = (state: TimetableT = initialState, action: ReducerAction): TimetableT => {
   const errors = state.validation.errors
@@ -38,6 +39,7 @@ export const reducer = (state: TimetableT = initialState, action: ReducerAction)
       validation: {
         ...state.validation,
         errors: errors.map(clas => [...clas, []]),
+        rows: [...state.validation.rows, []],
       },
     }
 
@@ -66,6 +68,9 @@ export const reducer = (state: TimetableT = initialState, action: ReducerAction)
               ? [...day, Array<ValidationErrorT>(6).fill({ id: -1 })]
               : day
           )
+        ),
+        rows: state.validation.rows.map((day, dayIndex) =>
+          dayIndex == action.payload.dayID ? [...day, [false, false]] : day
         ),
       },
     }
@@ -130,7 +135,8 @@ export const reducer = (state: TimetableT = initialState, action: ReducerAction)
 
   if (isAddLessonAction(action)) {
     const { dayID, eventID, classNumber, groupID, isPair, lessonID, lessonNumber } = action.payload
-    return {
+
+    const newState = {
       ...state,
       days: state.days.map((day, dayIndex) =>
         dayIndex == dayID
@@ -158,6 +164,8 @@ export const reducer = (state: TimetableT = initialState, action: ReducerAction)
           : day
       ),
     }
+
+    return { ...newState, validation: validate(newState, dayID, eventID) }
   }
 
   return state

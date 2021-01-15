@@ -53,15 +53,6 @@ const ConstructorPage: React.FC<ConstructorPageProps> = ({
             lessonNumber: parseInt(lessonnum),
           })
         )
-        // Until realized in dispatcher
-        // .then(n_days_state => {
-        //   validate(
-        //     { days: n_days_state, cards, subjects, teachers, validation },
-        //     setValidationErrors,
-        //     parseInt(dayid),
-        //     parseInt(eventid)
-        //   )
-        // })
       }
     }
   }

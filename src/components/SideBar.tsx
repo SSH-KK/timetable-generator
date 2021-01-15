@@ -150,7 +150,7 @@ const SideBar: React.FC<SidebarProps> = ({ sidebarRef, subjects, teachers, cards
           </form>
         </div>
         <h3 className="text-center mt-2">Пары</h3>
-                <div className="col-11">
+        <div className="col-11">
           <form className="mt-2" data-name="card" onSubmit={createForm}>
             <select
               name="subject"

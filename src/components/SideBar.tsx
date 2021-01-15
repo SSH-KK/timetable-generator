@@ -1,29 +1,22 @@
-import React, { useState } from "react"
+import React, { Dispatch, useState } from "react"
 import styles from "../styles/SideBar.module.css"
-import {
-  SubjectT,
-  CardT,
-  CreateSubjectFT,
-  CreateCardFT,
-  AddTeacherFT,
-  DeleteTeacherFT,
-  DeleteSubjectFT,
-  DeleteCardFT,
-} from "../types/timetable"
+import { SubjectT, CardT } from "../types/timetable"
 import SubjectSingle from "./SubjectSingle"
 import CardSingle from "./CardSingle"
+import { ReducerAction } from "../types/reducer"
+import {
+  createCardAction,
+  createSubjectAction,
+  deleteCardAction,
+  deleteSubjectAction,
+} from "../utils/reducer/actions"
 
 type SidebarProps = {
   sidebarRef: React.RefObject<HTMLDivElement>
   subjects: SubjectT[]
   teachers: string[]
   cards: CardT[]
-  createSubject: CreateSubjectFT
-  createCard: CreateCardFT
-  addTeacher: AddTeacherFT
-  deleteTeacher: DeleteTeacherFT
-  deleteSubject: DeleteSubjectFT
-  deleteCard: DeleteCardFT
+  dispatcher: Dispatch<ReducerAction>
 }
 
 type InputStateT = {
@@ -35,18 +28,7 @@ type InputStateT = {
   }
 }
 
-const SideBar: React.FC<SidebarProps> = ({
-  sidebarRef,
-  subjects,
-  teachers,
-  cards,
-  createSubject,
-  createCard,
-  addTeacher,
-  deleteTeacher,
-  deleteSubject,
-  deleteCard,
-}) => {
+const SideBar: React.FC<SidebarProps> = ({ sidebarRef, subjects, teachers, cards, dispatcher }) => {
   const [inputState, setInputState] = useState<InputStateT>({
     subject: "",
     card: {
@@ -62,7 +44,7 @@ const SideBar: React.FC<SidebarProps> = ({
       const name = event.currentTarget.dataset.name
       let reset = false
       if (name == "subject" && inputState.subject) {
-        createSubject(inputState.subject)
+        dispatcher(createSubjectAction({ title: inputState.subject }))
         reset = true
       } else if (
         name == "card" &&
@@ -70,7 +52,13 @@ const SideBar: React.FC<SidebarProps> = ({
         inputState.card.teacher != -1 &&
         inputState.card.room
       ) {
-        createCard(inputState.card.subject, inputState.card.teacher, parseInt(inputState.card.room))
+        dispatcher(
+          createCardAction({
+            subject: inputState.card.subject,
+            teacher: inputState.card.teacher,
+            room: parseInt(inputState.card.room),
+          })
+        )
         reset = true
       }
       if (reset) {
@@ -111,7 +99,7 @@ const SideBar: React.FC<SidebarProps> = ({
   const deleteSubjectButton = (event: React.MouseEvent<HTMLButtonElement>) => {
     event.preventDefault()
     const subjectIndex = parseInt(event.currentTarget.name)
-    deleteSubject(subjectIndex)
+    dispatcher(deleteSubjectAction({ subjectID: subjectIndex }))
     if (subjectIndex == inputState.card.subject) {
       setInputState(prev => ({
         subject: prev.subject,
@@ -126,7 +114,7 @@ const SideBar: React.FC<SidebarProps> = ({
   const deleteCardButton = (event: React.MouseEvent<HTMLButtonElement>) => {
     event.preventDefault()
     const cardIndex = parseInt(event.currentTarget.name)
-    deleteCard(cardIndex)
+    dispatcher(deleteCardAction({ cardID: cardIndex }))
   }
 
   return (
@@ -136,9 +124,8 @@ const SideBar: React.FC<SidebarProps> = ({
         {subjects.map((ob, subjectIndex) =>
           ob.status ? (
             <SubjectSingle
-              addTeacher={addTeacher}
-              subjectId={subjectIndex}
-              deleteTeacher={deleteTeacher}
+              dispatcher={dispatcher}
+              subjectID={subjectIndex}
               deleteSubjectButton={deleteSubjectButton}
               subject={ob}
               teachers={teachers}
@@ -166,7 +153,7 @@ const SideBar: React.FC<SidebarProps> = ({
         {cards.map((ob, cardIndex) => (
           <CardSingle
             deleteCardButton={deleteCardButton}
-            deleteCard={deleteCard}
+            dispatcher={dispatcher}
             card={{
               cardIndex: cardIndex,
               subStatus: subjects[ob.subject].status,

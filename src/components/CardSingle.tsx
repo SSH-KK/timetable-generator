@@ -1,6 +1,7 @@
-import React, { useEffect } from "react"
+import React, { Dispatch, useEffect } from "react"
 import styles from "../styles/SideBar.module.css"
-import { DeleteCardFT } from "../types/timetable"
+import { ReducerAction } from "../types/reducer"
+import { deleteCardAction } from "../utils/reducer/actions"
 
 type CardSingleProps = {
   card: {
@@ -12,12 +13,12 @@ type CardSingleProps = {
     cardIndex: number
   }
   deleteCardButton: (event: React.MouseEvent<HTMLButtonElement>) => void
-  deleteCard: DeleteCardFT
+  dispatcher: Dispatch<ReducerAction>
 }
 
-const CardSingle: React.FC<CardSingleProps> = ({ card, deleteCardButton, deleteCard }) => {
+const CardSingle: React.FC<CardSingleProps> = ({ card, deleteCardButton, dispatcher }) => {
   useEffect(() => {
-    !card.subStatus ? deleteCard(card.cardIndex) : ""
+    !card.subStatus ? dispatcher(deleteCardAction({ cardID: card.cardIndex })) : ""
   }, [card.subStatus])
 
   return card.status ? (

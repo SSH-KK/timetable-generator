@@ -1,46 +1,30 @@
-import React, { useState, useEffect } from "react"
+import React, { useState, useEffect, Dispatch } from "react"
 import ConstructorPage from "./ConstructorPage"
 import styles from "../styles/Constructor.module.css"
-import {
-  DayT,
-  SubjectT,
-  CardT,
-  TimetableT,
-  CreateDayFT,
-  ChangeMainDateFT,
-  SetValidationErrorsFT,
-  AddLessonFT,
-  AddEventFT,
-} from "../types/timetable"
+import { DayT, SubjectT, CardT } from "../types/timetable"
 import { createDocument } from "../utils/pdf"
 import { ValidationStatusT } from "../types/validation"
+import { ReducerAction } from "../types/reducer"
+import { addEventAction, changeMainDateAction, createDayAction } from "../utils/reducer/actions"
 
 type ConstructorProps = {
   constructorRef: React.RefObject<HTMLDivElement>
-  createDay: CreateDayFT
-  addEvent: AddEventFT
-  addLesson: AddLessonFT
+  dispatcher: Dispatch<ReducerAction>
   teachers: string[]
-  changeMainDate: ChangeMainDateFT
   cards: CardT[]
   subjects: SubjectT[]
   days: DayT[]
   validation: ValidationStatusT
-  setValidationErrors: SetValidationErrorsFT
 }
 
 const Constructor: React.FC<ConstructorProps> = ({
   constructorRef,
-  createDay,
   subjects,
   days,
   cards,
   teachers,
-  changeMainDate,
-  addLesson,
-  addEvent,
+  dispatcher,
   validation,
-  setValidationErrors,
 }) => {
   const [pageState, setPageState] = useState<number>(0)
   const [startDateState, setStartDateState] = useState<Date>(new Date())
@@ -65,10 +49,14 @@ const Constructor: React.FC<ConstructorProps> = ({
     if (event.currentTarget.dataset) {
       const name = event.currentTarget.dataset.name
       if (name == "day") {
-        createDay(startDateState.getTime() + 24 * 3600 * 1000 * days.length)
+        dispatcher(
+          createDayAction({
+            date: startDateState.getTime() + 24 * 3600 * 1000 * days.length,
+          })
+        )
       } else if (name == "event" && event.currentTarget.dataset.daynum) {
         const dayNum = event.currentTarget.dataset.daynum
-        addEvent(parseInt(dayNum))
+        dispatcher(addEventAction({ dayID: parseInt(dayNum) }))
       }
     }
   }
@@ -91,7 +79,7 @@ const Constructor: React.FC<ConstructorProps> = ({
   }
 
   useEffect(() => {
-    changeMainDate(startDateState)
+    dispatcher(changeMainDateAction({ newDate: startDateState }))
   }, [startDateState])
 
   return (
@@ -142,12 +130,11 @@ const Constructor: React.FC<ConstructorProps> = ({
           <ConstructorPage
             days={days}
             subjects={subjects}
-            addLesson={addLesson}
+            dispatcher={dispatcher}
             cards={cards}
             teachers={teachers}
             addButton={addButton}
             validation={validation}
-            setValidationErrors={setValidationErrors}
             classNum={"lessons10"}
           />
         ) : (
@@ -157,12 +144,11 @@ const Constructor: React.FC<ConstructorProps> = ({
           <ConstructorPage
             days={days}
             subjects={subjects}
-            addLesson={addLesson}
+            dispatcher={dispatcher}
             validation={validation}
             cards={cards}
             teachers={teachers}
             addButton={addButton}
-            setValidationErrors={setValidationErrors}
             classNum={"lessons11"}
           />
         ) : (

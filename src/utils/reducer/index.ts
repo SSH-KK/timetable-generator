@@ -1,6 +1,6 @@
 import { initialState } from "../../assets/timetable"
 import {
-  Action,
+  ReducerAction,
   isCreateCardAction,
   isCreateDayAction,
   isCreateSubjectAction,
@@ -16,7 +16,7 @@ import { TimetableT } from "../../types/timetable"
 import { ValidationErrorT } from "../../types/validation"
 import { initialEventLessonsGenrator } from "../timetable"
 
-export const reducer = (state: TimetableT = initialState, action: Action): TimetableT => {
+export const reducer = (state: TimetableT = initialState, action: ReducerAction): TimetableT => {
   const errors = state.validation.errors
 
   if (isCreateSubjectAction(action))

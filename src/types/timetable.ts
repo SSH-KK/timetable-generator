@@ -1,5 +1,5 @@
 import { Dispatch, SetStateAction } from "react"
-import { Action as ReducerAction } from "./reducer"
+import { ReducerAction } from "./reducer"
 import { ValidationStatusT } from "./validation"
 
 export type TimetableT = {

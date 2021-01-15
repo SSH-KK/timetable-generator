@@ -13,9 +13,11 @@ export enum ActionType {
   CHANGE_MAIN_DATE,
 }
 
-export interface Action {
+interface Action {
   type: ActionType
 }
+
+export { Action as ReducerAction }
 
 export interface CreateSubjectAction extends Action {
   payload: { title: string }

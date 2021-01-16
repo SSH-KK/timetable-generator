@@ -1,4 +1,4 @@
-import React, { createRef } from "react"
+import React, { createRef, useEffect } from "react"
 import SideBar from "./components/SideBar"
 import Constructor from "./components/Constructor"
 import stylesApp from "./styles/App.module.css"
@@ -13,6 +13,10 @@ const App: React.FC = () => {
   const sidebarToggleRef = createRef<HTMLButtonElement>()
   const sidebarRef = createRef<HTMLDivElement>()
   const constructorRef = createRef<HTMLDivElement>()
+
+  useEffect(()=>{
+    localStorage.setItem('TimetableState', JSON.stringify(state))
+  },[state])
 
   const toggleSideBar = (event: React.MouseEvent) => {
     event.preventDefault()

@@ -71,14 +71,12 @@ const validate = (data: TimetableT, dayID: number, eventID: number): ValidationS
     rows: newRows,
     errors: data.validation.errors.map((clas, classIndex) =>
       clas.map((day, dayIndex) =>
-            dayIndex == dayID
-              ? day.map((event, eventIndex) =>
-                  eventIndex == eventID
-                    ? errors.slice(classIndex ? 6 : 0, classIndex ? 12 : 6)
-                    : event
-                )
-              : day
-          )
+        dayIndex == dayID
+          ? day.map((event, eventIndex) =>
+              eventIndex == eventID ? errors.slice(classIndex ? 6 : 0, classIndex ? 12 : 6) : event
+            )
+          : day
+      )
     ),
   }
 }

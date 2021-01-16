@@ -14,9 +14,9 @@ const App: React.FC = () => {
   const sidebarRef = createRef<HTMLDivElement>()
   const constructorRef = createRef<HTMLDivElement>()
 
-  useEffect(()=>{
-    localStorage.setItem('TimetableState', JSON.stringify(state))
-  },[state])
+  useEffect(() => {
+    localStorage.setItem("TimetableState", JSON.stringify(state))
+  }, [state])
 
   const toggleSideBar = (event: React.MouseEvent) => {
     event.preventDefault()

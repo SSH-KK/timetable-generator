@@ -70,8 +70,7 @@ const validate = (data: TimetableT, dayID: number, eventID: number): ValidationS
     has: newHasErrors,
     rows: newRows,
     errors: data.validation.errors.map((clas, classIndex) =>
-      newHasErrors[classIndex]
-        ? clas.map((day, dayIndex) =>
+      clas.map((day, dayIndex) =>
             dayIndex == dayID
               ? day.map((event, eventIndex) =>
                   eventIndex == eventID
@@ -80,7 +79,6 @@ const validate = (data: TimetableT, dayID: number, eventID: number): ValidationS
                 )
               : day
           )
-        : clas
     ),
   }
 }

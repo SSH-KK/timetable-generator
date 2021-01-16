@@ -70,7 +70,7 @@ const validate = (data: TimetableT, dayID: number, eventID: number): ValidationS
     has: newHasErrors,
     rows: newRows,
     errors: data.validation.errors.map((clas, classIndex) =>
-      thisRowHasErrors[classIndex]
+      newHasErrors[classIndex]
         ? clas.map((day, dayIndex) =>
             dayIndex == dayID
               ? day.map((event, eventIndex) =>

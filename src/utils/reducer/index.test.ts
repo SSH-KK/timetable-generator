@@ -101,7 +101,10 @@ const tests: {
 describe("Timetable reducer", () => {
   tests.forEach(e =>
     test(e.title, () =>
-      expect(reducer(e.initialState, e.action)).toEqual({ ...initialState, ...e.result })
+      expect(reducer({ ...initialState, ...e.initialState }, e.action)).toEqual({
+        ...initialState,
+        ...e.result,
+      })
     )
   )
 })

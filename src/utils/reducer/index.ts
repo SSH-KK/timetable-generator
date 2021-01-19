@@ -1,4 +1,4 @@
-import produce, { Draft } from "immer"
+import produce from "immer"
 import { initialState } from "../../assets/timetable"
 import {
   ReducerAction,
@@ -20,8 +20,6 @@ import { validate } from "../validation"
 
 export const reducer = produce(
   (draft: TimetableT = initialState, action: ReducerAction): TimetableT => {
-    const errors = draft.validation.errors
-
     if (isCreateSubjectAction(action))
       draft.subjects.push({ title: action.payload.title, teachers: [], status: true })
 
@@ -57,10 +55,13 @@ export const reducer = produce(
 
     if (isDeleteSubjectAction(action)) draft.subjects[action.payload.subjectID].status = false
 
-    if (isDeleteTeacherAction(action))
-      draft.subjects[action.payload.subjectID].teachers.filter(
-        teacherID => teacherID != action.payload.teacherID
+    if (isDeleteTeacherAction(action)) {
+      const index = draft.subjects[action.payload.subjectID].teachers.indexOf(
+        action.payload.teacherID
       )
+
+      if (index !== -1) draft.subjects[action.payload.subjectID].teachers.splice(index, 1)
+    }
 
     if (isDeleteCardAction(action)) draft.cards[action.payload.cardID].status = false
 
@@ -81,9 +82,10 @@ export const reducer = produce(
         lessonNumber,
       } = action.payload
 
-      if (isPair) draft.days[dayID].events[eventID][classNumber][groupID] = [lessonID, lessonID]
-      else if (lessonNumber)
-        draft.days[dayID].events[eventID][classNumber][groupID][lessonNumber] = lessonID
+      draft.days[dayID].events[eventID][classNumber].forEach(
+        (lesson, lessonIndex) =>
+          (lesson[groupID] = isPair || lessonIndex == lessonNumber ? lessonID : lesson[groupID])
+      )
 
       draft.validation = validate(draft, dayID, eventID)
     }

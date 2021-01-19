@@ -2,7 +2,6 @@ import pdfMake from "pdfmake/build/pdfmake"
 import { TableCell, TDocumentDefinitions } from "pdfmake/interfaces"
 
 import { LessonsType, TimetableT } from "../../types/timetable"
-import dataExample from "../../../dataExample.json"
 
 import vfs from "../vfsFonts"
 import assets from "../../assets/pdf"
@@ -157,11 +156,7 @@ const createDocument = (
   timetableState: TimetableT,
   firstDay: number
 ): void => {
-  const data = timetableState.days.length
-    ? timetableState
-    : ((dataExample as unknown) as TimetableT)
-
-  const document = generateDocument(classNumber, generation, data, firstDay)
+  const document = generateDocument(classNumber, generation, timetableState, firstDay)
 
   const styledDocument = { ...document, ...documentStyles }
 

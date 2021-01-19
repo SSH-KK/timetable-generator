@@ -21,8 +21,7 @@ import { validate } from "../validation"
 export const reducer = (state: TimetableT = initialState, action: ReducerAction): TimetableT => {
   const errors = state.validation.errors
 
-  if(isSetStateFromLocalStorageAction(action))
-    return(JSON.parse(action.payload.ldata))
+  if (isSetStateFromLocalStorageAction(action)) return JSON.parse(action.payload.ldata)
 
   if (isCreateSubjectAction(action))
     return {

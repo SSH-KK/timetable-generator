@@ -17,25 +17,22 @@ const App: React.FC = () => {
   const constructorRef = createRef<HTMLDivElement>()
 
   useEffect(() => {
-    let ldata = localStorage.getItem('TimetableState')
+    let ldata = localStorage.getItem("TimetableState")
     console.log(ldata)
     if (ldata) {
-      console.log('efect state load prev')
-      dispatcher(
-          setStateFromLocalStorageAction({ldata})
-        )
-    }
-    else{
-      console.log('efect state no data')
-      localStorage.setItem('TimetableState', JSON.stringify(state))
+      console.log("efect state load prev")
+      dispatcher(setStateFromLocalStorageAction({ ldata }))
+    } else {
+      console.log("efect state no data")
+      localStorage.setItem("TimetableState", JSON.stringify(state))
     }
   }, [])
 
   useEffect(() => {
-    let ldata = localStorage.getItem('TimetableState')
-    if(ldata && JSON.stringify(state)!=JSON.stringify(initialState)){
-      console.log('efect state')
-      localStorage.setItem('TimetableState', JSON.stringify(state))
+    let ldata = localStorage.getItem("TimetableState")
+    if (ldata && JSON.stringify(state) != JSON.stringify(initialState)) {
+      console.log("efect state")
+      localStorage.setItem("TimetableState", JSON.stringify(state))
     }
   }, [state])
 

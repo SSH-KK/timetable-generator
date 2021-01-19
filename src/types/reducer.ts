@@ -20,7 +20,7 @@ interface Action {
 
 export { Action as ReducerAction }
 
-export interface SetStateFromLocalStorageAction extends Action{
+export interface SetStateFromLocalStorageAction extends Action {
   payload: {
     ldata: string
   }
@@ -73,7 +73,9 @@ export interface AddLessonAction extends Action {
   }
 }
 
-export const isSetStateFromLocalStorageAction = (action: Action): action is SetStateFromLocalStorageAction =>
+export const isSetStateFromLocalStorageAction = (
+  action: Action
+): action is SetStateFromLocalStorageAction =>
   action.type === ActionType.SET_STATE_FROM_LOCAL_STORAGE
 
 export const isCreateSubjectAction = (action: Action): action is CreateSubjectAction =>

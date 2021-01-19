@@ -1,3 +1,4 @@
+import produce, { Draft } from "immer"
 import { initialState } from "../../assets/timetable"
 import {
   ReducerAction,
@@ -17,156 +18,77 @@ import { ValidationErrorT } from "../../types/validation"
 import { initialEventLessonsGenrator } from "../timetable"
 import { validate } from "../validation"
 
-export const reducer = (state: TimetableT = initialState, action: ReducerAction): TimetableT => {
-  const errors = state.validation.errors
+export const reducer = produce(
+  (draft: TimetableT = initialState, action: ReducerAction): TimetableT => {
+    const errors = draft.validation.errors
 
-  if (isCreateSubjectAction(action))
-    return {
-      ...state,
-      subjects: [...state.subjects, { title: action.payload.title, teachers: [], status: true }],
+    if (isCreateSubjectAction(action))
+      draft.subjects.push({ title: action.payload.title, teachers: [], status: true })
+
+    if (isCreateCardAction(action)) draft.cards.push({ ...action.payload, status: true })
+
+    if (isCreateDayAction(action)) {
+      draft.days.push({ ...action.payload, events: [] })
+      draft.validation.errors.forEach(errorsClass => errorsClass.push([]))
+      draft.validation.rows.push([])
     }
 
-  if (isCreateCardAction(action))
-    return {
-      ...state,
-      cards: [...state.cards, { ...action.payload, status: true }],
+    if (isAddEventAction(action)) {
+      draft.days[action.payload.dayID].events.push({
+        lessons10: initialEventLessonsGenrator(),
+        lessons11: initialEventLessonsGenrator(),
+      })
+
+      draft.validation.errors.forEach(errorsClass =>
+        errorsClass[action.payload.dayID].push(Array<ValidationErrorT>(6).fill({ id: -1 }))
+      )
+
+      draft.validation.rows[action.payload.dayID].push([false, false])
     }
 
-  if (isCreateDayAction(action))
-    return {
-      ...state,
-      days: [...state.days, { ...action.payload, events: [] }],
-      validation: {
-        ...state.validation,
-        errors: errors.map(clas => [...clas, []]),
-        rows: [...state.validation.rows, []],
-      },
+    if (isAddTeacherAction(action)) {
+      const teacherPos = draft.teachers.indexOf(action.payload.teacher)
+      const teacherID = teacherPos < 0 ? draft.teachers.length : teacherPos
+
+      if (teacherPos != teacherID) draft.teachers.push(action.payload.teacher)
+
+      draft.subjects[action.payload.subjectID].teachers.push(teacherID)
     }
 
-  if (isAddEventAction(action))
-    return {
-      ...state,
-      days: state.days.map((day, dayIndex) =>
-        dayIndex == action.payload.dayID
-          ? {
-              ...day,
-              events: [
-                ...day.events,
-                {
-                  lessons10: initialEventLessonsGenrator(),
-                  lessons11: initialEventLessonsGenrator(),
-                },
-              ],
-            }
-          : day
-      ),
-      validation: {
-        ...state.validation,
-        errors: state.validation.errors.map(clas =>
-          clas.map((day, dayIndex) =>
-            dayIndex == action.payload.dayID
-              ? [...day, Array<ValidationErrorT>(6).fill({ id: -1 })]
-              : day
-          )
-        ),
-        rows: state.validation.rows.map((day, dayIndex) =>
-          dayIndex == action.payload.dayID ? [...day, [false, false]] : day
-        ),
-      },
+    if (isDeleteSubjectAction(action)) draft.subjects[action.payload.subjectID].status = false
+
+    if (isDeleteTeacherAction(action))
+      draft.subjects[action.payload.subjectID].teachers.filter(
+        teacherID => teacherID != action.payload.teacherID
+      )
+
+    if (isDeleteCardAction(action)) draft.cards[action.payload.cardID].status = false
+
+    if (isChangeMainDateAction(action))
+      draft.days.forEach(
+        (day, dayIndex) =>
+          (day.date = action.payload.newDate.getTime() + 24 * 3600 * 1000 * dayIndex)
+      )
+
+    if (isAddLessonAction(action)) {
+      const {
+        dayID,
+        eventID,
+        classNumber,
+        groupID,
+        isPair,
+        lessonID,
+        lessonNumber,
+      } = action.payload
+
+      if (isPair) draft.days[dayID].events[eventID][classNumber][groupID] = [lessonID, lessonID]
+      else if (lessonNumber)
+        draft.days[dayID].events[eventID][classNumber][groupID][lessonNumber] = lessonID
+
+      draft.validation = validate(draft, dayID, eventID)
     }
 
-  if (isAddTeacherAction(action)) {
-    const teacherPos = state.teachers.indexOf(action.payload.teacher)
-    const teacherID = teacherPos < 0 ? state.teachers.length : teacherPos
-
-    return {
-      ...state,
-      teachers:
-        teacherPos === teacherID ? state.teachers : [...state.teachers, action.payload.teacher],
-      subjects: state.subjects.map((subject, subjectIndex) =>
-        subjectIndex == action.payload.subjectID
-          ? {
-              title: subject.title,
-              status: subject.status,
-              teachers: [...subject.teachers, teacherID],
-            }
-          : subject
-      ),
-    }
-  }
-
-  if (isDeleteSubjectAction(action))
-    return {
-      ...state,
-      subjects: state.subjects.map((subject, subjectIndex) =>
-        subjectIndex == action.payload.subjectID ? { ...subject, status: false } : subject
-      ),
-    }
-
-  if (isDeleteTeacherAction(action))
-    return {
-      ...state,
-      subjects: state.subjects.map((subject, subjectIndex) =>
-        subjectIndex == action.payload.subjectID
-          ? {
-              ...subject,
-              teachers: subject.teachers.filter(teacherID => teacherID != action.payload.teacherID),
-            }
-          : subject
-      ),
-    }
-
-  if (isDeleteCardAction(action))
-    return {
-      ...state,
-      cards: state.cards.map((card, cardIndex) =>
-        cardIndex == action.payload.cardID ? { ...card, status: false } : card
-      ),
-    }
-
-  if (isChangeMainDateAction(action))
-    return {
-      ...state,
-      days: state.days.map((day, dayIndex) => ({
-        ...day,
-        date: action.payload.newDate.getTime() + 24 * 3600 * 1000 * dayIndex,
-      })),
-    }
-
-  if (isAddLessonAction(action)) {
-    const { dayID, eventID, classNumber, groupID, isPair, lessonID, lessonNumber } = action.payload
-
-    const newState = {
-      ...state,
-      days: state.days.map((day, dayIndex) =>
-        dayIndex == dayID
-          ? {
-              ...day,
-              events: day.events.map((event, eventIndex) =>
-                eventIndex == eventID
-                  ? {
-                      ...event,
-                      [classNumber]: event[classNumber].map((lesson, lessonIndex) =>
-                        lesson.map((card, cardIndex) =>
-                          cardIndex == groupID
-                            ? isPair
-                              ? lessonID
-                              : lessonIndex == lessonNumber
-                              ? lessonID
-                              : card
-                            : card
-                        )
-                      ),
-                    }
-                  : event
-              ),
-            }
-          : day
-      ),
-    }
-
-    return { ...newState, validation: validate(newState, dayID, eventID) }
-  }
-
-  return state
-}
+    return draft
+  },
+  {}
+)

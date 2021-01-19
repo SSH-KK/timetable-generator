@@ -1,4 +1,4 @@
-import React, { useState, useEffect, Dispatch } from "react"
+import React, { useState, useEffect, Dispatch, createRef } from "react"
 import { saveAs } from "file-saver"
 import ConstructorPage from "./ConstructorPage"
 import styles from "../styles/Constructor.module.css"
@@ -6,7 +6,7 @@ import { DayT, SubjectT, CardT } from "../types/timetable"
 import { createDocument } from "../utils/pdf"
 import { ValidationStatusT } from "../types/validation"
 import { ReducerAction } from "../types/reducer"
-import { addEventAction, changeMainDateAction, createDayAction } from "../utils/reducer/actions"
+import { addEventAction, changeMainDateAction, createDayAction, setStateFromLocalStorageAction } from "../utils/reducer/actions"
 
 type ConstructorProps = {
   constructorRef: React.RefObject<HTMLDivElement>
@@ -29,6 +29,7 @@ const Constructor: React.FC<ConstructorProps> = ({
 }) => {
   const [pageState, setPageState] = useState<number>(0)
   const [startDateState, setStartDateState] = useState<Date>(new Date())
+  const fileInputRef = createRef<HTMLInputElement>()
 
   const changePage = (event: React.MouseEvent<HTMLElement>) => {
     event.preventDefault()
@@ -88,6 +89,29 @@ const Constructor: React.FC<ConstructorProps> = ({
       })
       saveAs(fileToSave, "TimetableState.json")
     }
+  }
+
+  const importFile = (event: React.MouseEvent<HTMLFormElement>) => {
+    event.preventDefault()
+    if(fileInputRef.current && fileInputRef.current.files){
+      let reader = new FileReader()
+      reader.readAsText(fileInputRef.current.files[0])
+      reader.onload = ()=>{
+        let result = reader.result
+        if(typeof(result) == 'string'){
+          try{
+            JSON.parse(result)
+            dispatcher(
+              setStateFromLocalStorageAction({ldata: result})
+            )
+          }
+          catch{
+            alert('Неверный формат данных')
+          }
+        }
+      }
+    }
+    event.currentTarget.reset()
   }
 
   useEffect(() => {
@@ -165,8 +189,8 @@ const Constructor: React.FC<ConstructorProps> = ({
             classNum={"lessons10"}
           />
         ) : (
-          ""
-        )}
+            ""
+          )}
         {pageState == 1 ? (
           <ConstructorPage
             days={days}
@@ -179,8 +203,14 @@ const Constructor: React.FC<ConstructorProps> = ({
             classNum={"lessons11"}
           />
         ) : (
-          ""
-        )}
+            ""
+          )}
+        <form onSubmit={importFile}>
+          <div className="input-group mb-3">
+            <input className="form-control" ref={fileInputRef} type="file" />
+            <button type="submit" className="btn btn-info">Загрузить</button>
+          </div>
+        </form>
       </div>
     </div>
   )

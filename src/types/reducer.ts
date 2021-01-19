@@ -11,6 +11,7 @@ export enum ActionType {
   DELETE_CARD,
   ADD_LESSON,
   CHANGE_MAIN_DATE,
+  SET_STATE_FROM_LOCAL_STORAGE,
 }
 
 interface Action {
@@ -18,6 +19,12 @@ interface Action {
 }
 
 export { Action as ReducerAction }
+
+export interface SetStateFromLocalStorageAction extends Action{
+  payload: {
+    ldata: string
+  }
+}
 
 export interface CreateSubjectAction extends Action {
   payload: { title: string }
@@ -65,6 +72,9 @@ export interface AddLessonAction extends Action {
     lessonNumber?: number
   }
 }
+
+export const isSetStateFromLocalStorageAction = (action: Action): action is SetStateFromLocalStorageAction =>
+  action.type === ActionType.SET_STATE_FROM_LOCAL_STORAGE
 
 export const isCreateSubjectAction = (action: Action): action is CreateSubjectAction =>
   action.type === ActionType.CREATE_SUBJECT

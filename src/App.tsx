@@ -6,6 +6,8 @@ import stylesSideBar from "./styles/SideBar.module.css"
 import stylesConstructor from "./styles/Constructor.module.css"
 import { useTimetable } from "./hooks"
 import SidebarToggleIcon from "./icons/sidebarToggle.svg"
+import { initialState } from "./assets/timetable"
+import { setStateFromLocalStorageAction } from "./utils/reducer/actions"
 
 const App: React.FC = () => {
   const [state, dispatcher] = useTimetable()
@@ -15,7 +17,26 @@ const App: React.FC = () => {
   const constructorRef = createRef<HTMLDivElement>()
 
   useEffect(() => {
-    localStorage.setItem("TimetableState", JSON.stringify(state))
+    let ldata = localStorage.getItem('TimetableState')
+    console.log(ldata)
+    if (ldata) {
+      console.log('efect state load prev')
+      dispatcher(
+          setStateFromLocalStorageAction({ldata})
+        )
+    }
+    else{
+      console.log('efect state no data')
+      localStorage.setItem('TimetableState', JSON.stringify(state))
+    }
+  }, [])
+
+  useEffect(() => {
+    let ldata = localStorage.getItem('TimetableState')
+    if(ldata && JSON.stringify(state)!=JSON.stringify(initialState)){
+      console.log('efect state')
+      localStorage.setItem('TimetableState', JSON.stringify(state))
+    }
   }, [state])
 
   const toggleSideBar = (event: React.MouseEvent) => {

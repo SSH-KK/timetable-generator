@@ -11,6 +11,7 @@ import {
   isDeleteCardAction,
   isChangeMainDateAction,
   isAddLessonAction,
+  isSetStateFromLocalStorageAction,
 } from "../../types/reducer"
 import { TimetableT } from "../../types/timetable"
 import { ValidationErrorT } from "../../types/validation"
@@ -19,6 +20,9 @@ import { validate } from "../validation"
 
 export const reducer = (state: TimetableT = initialState, action: ReducerAction): TimetableT => {
   const errors = state.validation.errors
+
+  if(isSetStateFromLocalStorageAction(action))
+    return(JSON.parse(action.payload.ldata))
 
   if (isCreateSubjectAction(action))
     return {

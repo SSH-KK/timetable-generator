@@ -10,7 +10,13 @@ import {
   DeleteCardAction,
   DeleteSubjectAction,
   DeleteTeacherAction,
+  SetStateFromLocalStorageAction
 } from "../../types/reducer"
+
+export const setStateFromLocalStorageAction = (payload: SetStateFromLocalStorageAction['payload']): SetStateFromLocalStorageAction => ({
+  type: ActionType.SET_STATE_FROM_LOCAL_STORAGE,
+  payload
+})
 
 export const createSubjectAction = (
   payload: CreateSubjectAction["payload"]

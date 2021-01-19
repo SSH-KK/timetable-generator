@@ -110,7 +110,7 @@ const ConstructorPage: React.FC<ConstructorPageProps> = ({
                     : ""
                 } col-2 border border-1 d-flex flex-column justify-content-center px-2 position-relative`}
               >
-                {cardSelectionState[dayIndex][eventIndex]
+                {cardSelectionState[dayIndex] && cardSelectionState[dayIndex][eventIndex]
                   ? Array(cardSelectionState[dayIndex][eventIndex][cardID] ? 1 : 2)
                       .fill("")
                       .map((_, newIndex) => (

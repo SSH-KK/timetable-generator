@@ -7,7 +7,12 @@ import { DayT, SubjectT, CardT } from "../types/timetable"
 import { createDocument } from "../utils/pdf"
 import { ValidationStatusT } from "../types/validation"
 import { ReducerAction } from "../types/reducer"
-import { addEventAction, changeMainDateAction, createDayAction, setStateFromLocalStorageAction } from "../utils/reducer/actions"
+import {
+  addEventAction,
+  changeMainDateAction,
+  createDayAction,
+  setStateFromLocalStorageAction,
+} from "../utils/reducer/actions"
 
 type ConstructorProps = {
   constructorRef: React.RefObject<HTMLDivElement>
@@ -94,20 +99,17 @@ const Constructor: React.FC<ConstructorProps> = ({
 
   const importFile = (event: React.MouseEvent<HTMLFormElement>) => {
     event.preventDefault()
-    if(fileInputRef.current && fileInputRef.current.files){
+    if (fileInputRef.current && fileInputRef.current.files) {
       let reader = new FileReader()
       reader.readAsText(fileInputRef.current.files[0])
-      reader.onload = ()=>{
+      reader.onload = () => {
         let result = reader.result
-        if(typeof(result) == 'string'){
-          try{
+        if (typeof result == "string") {
+          try {
             JSON.parse(result)
-            dispatcher(
-              setStateFromLocalStorageAction({ldata: result})
-            )
-          }
-          catch{
-            alert('Неверный формат данных')
+            dispatcher(setStateFromLocalStorageAction({ ldata: result }))
+          } catch {
+            alert("Неверный формат данных")
           }
         }
       }
@@ -181,8 +183,8 @@ const Constructor: React.FC<ConstructorProps> = ({
             classNum={"lessons10"}
           />
         ) : (
-            ""
-          )}
+          ""
+        )}
         {pageState == 1 ? (
           <ConstructorPage
             days={days}
@@ -195,12 +197,14 @@ const Constructor: React.FC<ConstructorProps> = ({
             classNum={"lessons11"}
           />
         ) : (
-            ""
-          )}
+          ""
+        )}
         <form onSubmit={importFile}>
           <div className="input-group mb-3">
             <input className="form-control" ref={fileInputRef} type="file" />
-            <button type="submit" className="btn btn-info">Загрузить</button>
+            <button type="submit" className="btn btn-info">
+              Загрузить
+            </button>
           </div>
         </form>
       </div>

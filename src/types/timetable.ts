@@ -1,4 +1,4 @@
-import { Dispatch, SetStateAction } from "react"
+import { Dispatch } from "react"
 import { ReducerAction } from "./reducer"
 import { ValidationStatusT } from "./validation"
 
@@ -33,7 +33,5 @@ export type SubjectT = {
   teachers: number[] // teacher's IDs, allowed for this subject
   status: boolean // set false to mark as removed
 }
-
-export type SetValidationErrorsFT = Dispatch<SetStateAction<ValidationStatusT>>
 
 export type UseTimetableHookFT = () => [TimetableT, Dispatch<ReducerAction>]

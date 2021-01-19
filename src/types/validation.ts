@@ -4,7 +4,7 @@ export type ValidationStatusT = {
   rows: [boolean, boolean][][] // Array of days consisting of arrays of events consisting of classes. Indicates if event row has errors
 }
 
-export type ValidationErrorPositionT = {
+type ValidationErrorPositionT = {
   day: number
   event: number
   lessonNumber: number

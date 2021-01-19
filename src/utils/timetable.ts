@@ -24,7 +24,7 @@ export const cardSelectionStateGenerator = (
                     event[classNum][0][cardIndex] == event[classNum][1][cardIndex] ? true : false
                   )
             )
-          : day.events.map((event, eventIndex) =>
+          : day.events.map(event =>
               event[classNum][0].map((_, cardIndex) =>
                 event[classNum][0][cardIndex] == event[classNum][1][cardIndex] ? true : false
               )

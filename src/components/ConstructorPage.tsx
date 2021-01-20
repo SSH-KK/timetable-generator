@@ -5,7 +5,7 @@ import { cardSelectionStateGenerator } from "../utils/timetable"
 import { DayT, SubjectT, CardT, LessonsType } from "../types/timetable"
 import { ValidationStatusT } from "../types/validation"
 import { ReducerAction } from "../types/reducer"
-import { addLessonAction } from "../utils/reducer/actions"
+import { addLessonAction, deleteEventAction } from "../utils/reducer/actions"
 import SplitButtonIcon from "../icons/splitButton.svg"
 
 type ConstructorPageProps = {
@@ -74,16 +74,28 @@ const ConstructorPage: React.FC<ConstructorPageProps> = ({
             prev.map((day, dayIndex) =>
               dayIndex == dayid
                 ? day.map((event, eventIndex) =>
-                    eventIndex == eventid
-                      ? event.map((group, groupIndex) => (groupIndex == groupid ? !group : group))
-                      : event
-                  )
+                  eventIndex == eventid
+                    ? event.map((group, groupIndex) => (groupIndex == groupid ? !group : group))
+                    : event
+                )
                 : day
             )
           )
         }
         // can add split for different selection in lessons
       }
+    }
+  }
+
+  const deleteLastEvents = (event: React.MouseEvent<HTMLButtonElement>) => {
+    event.preventDefault()
+    const dataset = event.currentTarget.dataset
+    if (dataset.dayid && dataset.eventid) {
+      const dayid = parseInt(dataset.dayid)
+      const eventid = parseInt(dataset.eventid)
+      dispatcher(
+        deleteEventAction({ dayID: dayid, eventID: eventid })
+      )
     }
   }
 
@@ -94,9 +106,9 @@ const ConstructorPage: React.FC<ConstructorPageProps> = ({
           <div className="col-12 text-center border-bottom border-1">
             <h4>{`${new Date(day.date).getDate()} ${
               assets.weekdays[
-                new Date(day.date).getDay() - 1 != -1 ? new Date(day.date).getDay() - 1 : 6
+              new Date(day.date).getDay() - 1 != -1 ? new Date(day.date).getDay() - 1 : 6
               ]
-            }`}</h4>
+              }`}</h4>
           </div>
           {day.events.map((event, eventIndex) =>
             event[classNumber][0].map((_, cardID) => (
@@ -108,36 +120,36 @@ const ConstructorPage: React.FC<ConstructorPageProps> = ({
                   ][cardID].id != -1
                     ? "bg-danger"
                     : ""
-                } col-2 border border-1 d-flex flex-column justify-content-center px-2 position-relative`}
+                  } col-2 border border-1 d-flex flex-column justify-content-center px-2 position-relative`}
               >
                 {cardSelectionState[dayIndex] && cardSelectionState[dayIndex][eventIndex]
                   ? Array(cardSelectionState[dayIndex][eventIndex][cardID] ? 1 : 2)
-                      .fill("")
-                      .map((_, newIndex) => (
-                        <select
-                          key={newIndex}
-                          onChange={selectChange}
-                          data-dayId={dayIndex}
-                          data-eventId={eventIndex}
-                          data-groupId={cardID}
-                          data-lessonNum={newIndex}
-                          className="form-select"
-                          value={event[classNumber][newIndex][cardID]}
-                        >
-                          <option value="-1">
-                            {cardSelectionState[dayIndex][eventIndex][cardID] ? "Пара" : "Урок"}
-                          </option>
-                          {cards.map((card, cardIndex) =>
-                            card.status ? (
-                              <option value={cardIndex}>{`${subjects[card.subject].title} - ${
-                                teachers[card.teacher]
+                    .fill("")
+                    .map((_, newIndex) => (
+                      <select
+                        key={newIndex}
+                        onChange={selectChange}
+                        data-dayId={dayIndex}
+                        data-eventId={eventIndex}
+                        data-groupId={cardID}
+                        data-lessonNum={newIndex}
+                        className="form-select"
+                        value={event[classNumber][newIndex][cardID]}
+                      >
+                        <option value="-1">
+                          {cardSelectionState[dayIndex][eventIndex][cardID] ? "Пара" : "Урок"}
+                        </option>
+                        {cards.map((card, cardIndex) =>
+                          card.status ? (
+                            <option value={cardIndex}>{`${subjects[card.subject].title} - ${
+                              teachers[card.teacher]
                               } - ${card.room}`}</option>
-                            ) : (
+                          ) : (
                               ""
                             )
-                          )}
-                        </select>
-                      ))
+                        )}
+                      </select>
+                    ))
                   : ""}
                 <button
                   onClick={splittoggle}
@@ -152,16 +164,37 @@ const ConstructorPage: React.FC<ConstructorPageProps> = ({
               </div>
             ))
           )}
-          <div className="d-grid gap-2 my-2">
-            <button
-              data-name="event"
-              data-dayNum={dayIndex}
-              onClick={addButton}
-              className="btn btn-outline-primary btn-sm"
-              type="button"
-            >
-              Новые пары
+          <div className="btn-group">
+            <div className={`${day.events.length > 1 ? 'col-6' : 'col-12'}`}>
+              <div className="d-grid gap-2">
+                <button
+                  data-name="event"
+                  data-dayNum={dayIndex}
+                  onClick={addButton}
+                  className="btn btn-outline-primary rounded rounded-0 rounded-start btn-sm"
+                  type="button"
+                >
+                  Новые пары
             </button>
+              </div>
+            </div>
+            {day.events.length > 1 ?
+              <div className='col-6'>
+                <div className="d-grid gap-2">
+                  <button
+                    className="btn btn-outline-danger rounded rounded-0 rounded-end btn-sm"
+                    type="button"
+                    data-dayId={dayIndex}
+                    data-eventId={day.events.length - 1}
+                    onClick={deleteLastEvents}
+                  >
+                    Удалить последнии пары
+                </button>
+                </div>
+              </div>
+              :
+              ''
+            }
           </div>
         </div>
       ))}

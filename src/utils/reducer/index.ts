@@ -119,6 +119,10 @@ export const reducer = produce(
 
     if (isClearStateAction(action)) {
       draft = initialState
+      let ldata = localStorage.getItem("TimetableState")
+      if(ldata){
+        localStorage.setItem('TimetableState',JSON.stringify(initialState))
+      }
     }
 
     return draft

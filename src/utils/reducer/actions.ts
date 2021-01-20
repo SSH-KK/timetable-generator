@@ -79,7 +79,7 @@ export const addLessonAction = (payload: AddLessonAction["payload"]): AddLessonA
   payload,
 })
 
-export const deleteEvent = (payload: DeleteEventAction["payload"]): DeleteEventAction => ({
+export const deleteEventAction = (payload: DeleteEventAction["payload"]): DeleteEventAction => ({
   type: ActionType.DELETE_EVENT,
   payload,
 })

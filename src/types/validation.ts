@@ -16,3 +16,13 @@ export type ValidationErrorT = {
   id: number // Can be either -1, what means than there is no error or >= 0, meaning error index
   position?: ValidationErrorPositionT // Must be set if id is not -1
 }
+
+export type SetErrorsStatusFT = (
+  hasErrors: [boolean, boolean],
+  rows: ValidationStatusT["rows"],
+  dayID: number,
+  eventID: number
+) => {
+  newHasErrors: [boolean, boolean]
+  newRows: ValidationStatusT["rows"]
+}

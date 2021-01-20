@@ -18,7 +18,7 @@ import {
 import { TimetableT } from "../../types/timetable"
 import { ValidationErrorT } from "../../types/validation"
 import { initialEventLessonsGenrator } from "../timetable"
-import { validate } from "../validation"
+import { setErrorsStatus, validate } from "../validation"
 
 export const reducer = produce(
   (draft: TimetableT = initialState, action: ReducerAction): TimetableT => {
@@ -36,16 +36,18 @@ export const reducer = produce(
     }
 
     if (isAddEventAction(action)) {
-      draft.days[action.payload.dayID].events.push({
+      const { dayID } = action.payload
+
+      draft.days[dayID].events.push({
         lessons10: initialEventLessonsGenrator(),
         lessons11: initialEventLessonsGenrator(),
       })
 
       draft.validation.errors.forEach(errorsClass =>
-        errorsClass[action.payload.dayID].push(Array<ValidationErrorT>(6).fill({ id: -1 }))
+        errorsClass[dayID].push(Array<ValidationErrorT>(6).fill({ id: -1 }))
       )
 
-      draft.validation.rows[action.payload.dayID].push([false, false])
+      draft.validation.rows[dayID].push([false, false])
     }
 
     if (isAddTeacherAction(action)) {
@@ -94,8 +96,25 @@ export const reducer = produce(
       draft.validation = validate(draft, dayID, eventID)
     }
 
-    if (isDeleteEventAction(action))
-      draft.days[action.payload.dayID].events.splice(action.payload.eventID, 1)
+    if (isDeleteEventAction(action)) {
+      const { dayID, eventID } = action.payload
+
+      draft.days[dayID].events.splice(eventID, 1)
+
+      if (draft.validation.has.reduce((acc, has) => acc || has)) {
+        const { newHasErrors } = setErrorsStatus(
+          [false, false],
+          draft.validation.rows,
+          dayID,
+          eventID
+        )
+
+        draft.validation.has = newHasErrors
+      }
+
+      draft.validation.errors.forEach(errorClass => errorClass[dayID].splice(eventID, 1))
+      draft.validation.rows[dayID].splice(eventID)
+    }
 
     return draft
   },

@@ -10,6 +10,7 @@ import {
   createCardAction,
   createDayAction,
   createSubjectAction,
+  deleteEventAction,
   deleteSubjectAction,
 } from "./actions"
 
@@ -94,6 +95,37 @@ const tests: {
     action: deleteSubjectAction({ subjectID: 0 }),
     result: {
       subjects: [{ status: false, teachers: [0], title: "Physics" }],
+    },
+  },
+  {
+    title: "Deletes event",
+    initialState: {
+      ...initialState,
+      days: [
+        {
+          date: 1000,
+          events: [
+            { lessons10: initialEventLessonsGenrator(), lessons11: initialEventLessonsGenrator() },
+          ],
+        },
+      ],
+      validation: {
+        has: [true, false],
+        errors: [
+          [[[...Array(4).fill({ id: -1 }), ...Array(2).fill({ id: 1 })]]],
+          [[Array<ValidationErrorT>(6).fill({ id: -1 })]],
+        ],
+        rows: [[[true, false]]],
+      },
+    },
+    action: deleteEventAction({ dayID: 0, eventID: 0 }),
+    result: {
+      days: [{ date: 1000, events: [] }],
+      validation: {
+        errors: [[[]], [[]]],
+        rows: [[]],
+        has: [false, false],
+      },
     },
   },
 ]

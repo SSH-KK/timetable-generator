@@ -1,5 +1,5 @@
 import { TimetableT } from "../../types/timetable"
-import { ValidationErrorT, ValidationStatusT } from "../../types/validation"
+import { SetErrorsStatusFT, ValidationErrorT, ValidationStatusT } from "../../types/validation"
 import { generateErrorWithAddress } from "./utils"
 
 /**
@@ -55,15 +55,11 @@ const validate = (data: TimetableT, dayID: number, eventID: number): ValidationS
       )
     })
 
-  const newHasErrors: [boolean, boolean] = [...thisRowHasErrors]
-  const newRows = data.validation.rows.map((day, dayIndex) =>
-    day.map((event, eventIndex) => {
-      if (dayIndex == dayID && eventIndex == eventID) return thisRowHasErrors
-
-      newHasErrors[0] ||= event[0]
-      newHasErrors[1] ||= event[1]
-      return event
-    })
+  const { newHasErrors, newRows } = setErrorsStatus(
+    thisRowHasErrors,
+    data.validation.rows,
+    dayID,
+    eventID
   )
 
   return {
@@ -81,4 +77,18 @@ const validate = (data: TimetableT, dayID: number, eventID: number): ValidationS
   }
 }
 
-export { validate }
+const setErrorsStatus: SetErrorsStatusFT = (hasErrors, rows, dayID, eventID) => {
+  const newRows = rows.map((day, dayIndex) =>
+    day.map((event, eventIndex) => {
+      if (dayIndex == dayID && eventIndex == eventID) return hasErrors
+
+      hasErrors[0] ||= event[0]
+      hasErrors[1] ||= event[1]
+      return event
+    })
+  )
+
+  return { newHasErrors: hasErrors, newRows }
+}
+
+export { validate, setErrorsStatus }

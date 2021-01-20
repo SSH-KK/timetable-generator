@@ -1,29 +1,22 @@
-import React, { useState } from "react"
+import React, { Dispatch, useState } from "react"
 import styles from "../styles/SideBar.module.css"
-import {
-  SubjectT,
-  CardT,
-  CreateSubjectFT,
-  CreateCardFT,
-  AddTeacherFT,
-  DeleteTeacherFT,
-  DeleteSubjectFT,
-  DeleteCardFT,
-} from "../types/timetable"
+import { SubjectT, CardT } from "../types/timetable"
 import SubjectSingle from "./SubjectSingle"
 import CardSingle from "./CardSingle"
+import { ReducerAction } from "../types/reducer"
+import {
+  createCardAction,
+  createSubjectAction,
+  deleteCardAction,
+  deleteSubjectAction,
+} from "../utils/reducer/actions"
 
 type SidebarProps = {
   sidebarRef: React.RefObject<HTMLDivElement>
   subjects: SubjectT[]
   teachers: string[]
   cards: CardT[]
-  createSubject: CreateSubjectFT
-  createCard: CreateCardFT
-  addTeacher: AddTeacherFT
-  deleteTeacher: DeleteTeacherFT
-  deleteSubject: DeleteSubjectFT
-  deleteCard: DeleteCardFT
+  dispatcher: Dispatch<ReducerAction>
 }
 
 type InputStateT = {
@@ -35,18 +28,7 @@ type InputStateT = {
   }
 }
 
-const SideBar: React.FC<SidebarProps> = ({
-  sidebarRef,
-  subjects,
-  teachers,
-  cards,
-  createSubject,
-  createCard,
-  addTeacher,
-  deleteTeacher,
-  deleteSubject,
-  deleteCard,
-}) => {
+const SideBar: React.FC<SidebarProps> = ({ sidebarRef, subjects, teachers, cards, dispatcher }) => {
   const [inputState, setInputState] = useState<InputStateT>({
     subject: "",
     card: {
@@ -62,7 +44,7 @@ const SideBar: React.FC<SidebarProps> = ({
       const name = event.currentTarget.dataset.name
       let reset = false
       if (name == "subject" && inputState.subject) {
-        createSubject(inputState.subject)
+        dispatcher(createSubjectAction({ title: inputState.subject }))
         reset = true
       } else if (
         name == "card" &&
@@ -70,7 +52,13 @@ const SideBar: React.FC<SidebarProps> = ({
         inputState.card.teacher != -1 &&
         inputState.card.room
       ) {
-        createCard(inputState.card.subject, inputState.card.teacher, parseInt(inputState.card.room))
+        dispatcher(
+          createCardAction({
+            subject: inputState.card.subject,
+            teacher: inputState.card.teacher,
+            room: parseInt(inputState.card.room),
+          })
+        )
         reset = true
       }
       if (reset) {
@@ -111,7 +99,7 @@ const SideBar: React.FC<SidebarProps> = ({
   const deleteSubjectButton = (event: React.MouseEvent<HTMLButtonElement>) => {
     event.preventDefault()
     const subjectIndex = parseInt(event.currentTarget.name)
-    deleteSubject(subjectIndex)
+    dispatcher(deleteSubjectAction({ subjectID: subjectIndex }))
     if (subjectIndex == inputState.card.subject) {
       setInputState(prev => ({
         subject: prev.subject,
@@ -126,19 +114,18 @@ const SideBar: React.FC<SidebarProps> = ({
   const deleteCardButton = (event: React.MouseEvent<HTMLButtonElement>) => {
     event.preventDefault()
     const cardIndex = parseInt(event.currentTarget.name)
-    deleteCard(cardIndex)
+    dispatcher(deleteCardAction({ cardID: cardIndex }))
   }
 
   return (
     <nav id={styles.sidebar} className="shadow me-3" ref={sidebarRef}>
-      <div className="row justify-content-center">
+      <div className="row pb-5 justify-content-center">
         <h3 className="text-center">Предметы</h3>
         {subjects.map((ob, subjectIndex) =>
           ob.status ? (
             <SubjectSingle
-              addTeacher={addTeacher}
-              subjectId={subjectIndex}
-              deleteTeacher={deleteTeacher}
+              dispatcher={dispatcher}
+              subjectID={subjectIndex}
               deleteSubjectButton={deleteSubjectButton}
               subject={ob}
               teachers={teachers}
@@ -163,21 +150,6 @@ const SideBar: React.FC<SidebarProps> = ({
           </form>
         </div>
         <h3 className="text-center mt-2">Пары</h3>
-        {cards.map((ob, cardIndex) => (
-          <CardSingle
-            deleteCardButton={deleteCardButton}
-            deleteCard={deleteCard}
-            card={{
-              cardIndex: cardIndex,
-              subStatus: subjects[ob.subject].status,
-              status: cards[cardIndex].status,
-              room: ob.room,
-              subject: subjects[ob.subject].title,
-              teacher: teachers[subjects[ob.subject].teachers[ob.teacher]],
-            }}
-            key={cardIndex}
-          />
-        ))}
         <div className="col-11">
           <form className="mt-2" data-name="card" onSubmit={createForm}>
             <select
@@ -205,9 +177,9 @@ const SideBar: React.FC<SidebarProps> = ({
                 className="form-select mt-2"
               >
                 <option value="-1">Преподаватель</option>
-                {subjects[inputState.card.subject].teachers.map((ob, teacherIndex) => (
-                  <option value={teacherIndex} key={teacherIndex}>
-                    {teachers[ob]}
+                {subjects[inputState.card.subject].teachers.map(teacher => (
+                  <option value={teacher} key={teacher}>
+                    {teachers[teacher]}
                   </option>
                 ))}
               </select>
@@ -230,6 +202,21 @@ const SideBar: React.FC<SidebarProps> = ({
             )}
           </form>
         </div>
+        {cards.map((ob, cardIndex) => (
+          <CardSingle
+            deleteCardButton={deleteCardButton}
+            dispatcher={dispatcher}
+            card={{
+              cardIndex: cardIndex,
+              subStatus: subjects[ob.subject].status,
+              status: cards[cardIndex].status,
+              room: ob.room,
+              subject: subjects[ob.subject].title,
+              teacher: teachers[ob.teacher],
+            }}
+            key={cardIndex}
+          />
+        ))}
       </div>
     </nav>
   )

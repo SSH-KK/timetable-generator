@@ -1,9 +1,10 @@
 export type ValidationStatusT = {
   has: [boolean, boolean] // Indicates if class has errors
   errors: ValidationErrorT[][][][] // Array of classes consisting of arrays of days consisting of arrays of events consisting of arrays of lessons
+  rows: [boolean, boolean][][] // Array of days consisting of arrays of events consisting of classes. Indicates if event row has errors
 }
 
-export type ValidationErrorPositionT = {
+type ValidationErrorPositionT = {
   day: number
   event: number
   lessonNumber: number

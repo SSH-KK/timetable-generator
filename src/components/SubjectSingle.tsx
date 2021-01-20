@@ -1,30 +1,31 @@
-import React, { useState } from "react"
-import { SubjectT, AddTeacherFT, DeleteTeacherFT } from "../types/timetable"
+import React, { Dispatch, useState } from "react"
+import { SubjectT } from "../types/timetable"
 import styles from "../styles/SideBar.module.css"
+import { ReducerAction } from "../types/reducer"
+import { addTeacherAction, deleteTeacherAction } from "../utils/reducer/actions"
+import DeleteButtonIcon from "../icons/deleteButton.svg"
 
 type SubjectSingleProps = {
   subject: SubjectT
   teachers: string[]
-  addTeacher: AddTeacherFT
-  deleteTeacher: DeleteTeacherFT
+  dispatcher: Dispatch<ReducerAction>
   deleteSubjectButton: (event: React.MouseEvent<HTMLButtonElement>) => void
-  subjectId: number
+  subjectID: number
 }
 
 const SubjectSingle: React.FC<SubjectSingleProps> = ({
   subject,
   teachers,
-  addTeacher,
-  deleteTeacher,
+  dispatcher,
   deleteSubjectButton,
-  subjectId,
+  subjectID,
 }) => {
   const [inputState, setInputState] = useState("")
 
   const addTeacherForm = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault()
     if (inputState) {
-      addTeacher(inputState, subjectId)
+      dispatcher(addTeacherAction({ teacher: inputState, subjectID }))
       setInputState("")
     }
   }
@@ -36,7 +37,7 @@ const SubjectSingle: React.FC<SubjectSingleProps> = ({
 
   const deleteTeacherButton = (event: React.MouseEvent<HTMLButtonElement>) => {
     event.preventDefault()
-    deleteTeacher(subjectId, parseInt(event.currentTarget.name))
+    dispatcher(deleteTeacherAction({ subjectID, teacherID: parseInt(event.currentTarget.name) }))
   }
 
   return (
@@ -68,22 +69,10 @@ const SubjectSingle: React.FC<SubjectSingleProps> = ({
         <button
           type="button"
           onClick={deleteSubjectButton}
-          name={subjectId.toString()}
+          name={subjectID.toString()}
           className={`btn btn-danger border-start border border-3 ${styles.deleteSubject}`}
         >
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            width="30"
-            height="30"
-            fill="currentColor"
-            className="bi bi-x"
-            viewBox="0 0 16 16"
-          >
-            <path
-              fillRule="evenodd"
-              d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708z"
-            />
-          </svg>
+          <DeleteButtonIcon />
         </button>
       </form>
     </div>

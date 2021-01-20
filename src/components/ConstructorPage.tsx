@@ -1,25 +1,19 @@
-import React, { useState, useEffect } from "react"
+import React, { useState, useEffect, Dispatch } from "react"
 import styles from "../styles/Constructor.module.css"
 import assets from "../assets/pdf"
 import { cardSelectionStateGenerator } from "../utils/timetable"
-import {
-  DayT,
-  SubjectT,
-  CardT,
-  LessonsType,
-  SetValidationErrorsFT,
-  AddLessonFT,
-} from "../types/timetable"
+import { DayT, SubjectT, CardT, LessonsType } from "../types/timetable"
 import { ValidationStatusT } from "../types/validation"
-import { validate } from "../utils/validation"
+import { ReducerAction } from "../types/reducer"
+import { addLessonAction } from "../utils/reducer/actions"
+import SplitButtonIcon from "../icons/splitButton.svg"
 
 type ConstructorPageProps = {
   days: DayT[]
   classNum: LessonsType
   addButton: (event: React.MouseEvent<HTMLButtonElement>) => void
-  addLesson: AddLessonFT
+  dispatcher: Dispatch<ReducerAction>
   validation: ValidationStatusT
-  setValidationErrors: SetValidationErrorsFT
   cards: CardT[]
   subjects: SubjectT[]
   teachers: string[]
@@ -29,19 +23,18 @@ const ConstructorPage: React.FC<ConstructorPageProps> = ({
   days,
   subjects,
   cards,
-  validation,
   teachers,
-  classNum,
+  classNum: classNumber,
   addButton,
-  setValidationErrors,
-  addLesson,
+  dispatcher,
+  validation,
 }) => {
   const [cardSelectionState, setCardSelectionState] = useState<boolean[][][]>(
-    cardSelectionStateGenerator(days, classNum)
+    cardSelectionStateGenerator(days, classNumber)
   )
 
   useEffect(() => {
-    setCardSelectionState(prev => cardSelectionStateGenerator(days, classNum, prev))
+    setCardSelectionState(prev => cardSelectionStateGenerator(days, classNumber, prev))
   }, [days])
 
   const selectChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
@@ -51,22 +44,17 @@ const ConstructorPage: React.FC<ConstructorPageProps> = ({
       if (dataset.dayid && dataset.eventid && dataset.groupid && dataset.lessonnum) {
         const { dayid, eventid, groupid, lessonnum } = dataset
         const isPair = cardSelectionState[parseInt(dayid)][parseInt(eventid)][parseInt(groupid)]
-        addLesson(
-          parseInt(dayid),
-          parseInt(eventid),
-          classNum,
-          parseInt(groupid),
-          isPair,
-          parseInt(event.currentTarget.value),
-          parseInt(lessonnum)
-        ).then(n_days_state => {
-          validate(
-            { days: n_days_state, cards, subjects, teachers, validation },
-            setValidationErrors,
-            parseInt(dayid),
-            parseInt(eventid)
-          )
-        })
+        dispatcher(
+          addLessonAction({
+            dayID: parseInt(dayid),
+            eventID: parseInt(eventid),
+            classNumber,
+            groupID: parseInt(groupid),
+            isPair,
+            lessonID: parseInt(event.currentTarget.value),
+            lessonNumber: parseInt(lessonnum),
+          })
+        )
       }
     }
   }
@@ -79,8 +67,8 @@ const ConstructorPage: React.FC<ConstructorPageProps> = ({
         const eventid = parseInt(dataset.eventid)
         const groupid = parseInt(dataset.groupid)
         if (
-          days[dayid].events[eventid][classNum][0][groupid] ==
-          days[dayid].events[eventid][classNum][1][groupid]
+          days[dayid].events[eventid][classNumber][0][groupid] ==
+          days[dayid].events[eventid][classNumber][1][groupid]
         ) {
           setCardSelectionState(prev =>
             prev.map((day, dayIndex) =>
@@ -111,12 +99,18 @@ const ConstructorPage: React.FC<ConstructorPageProps> = ({
             }`}</h4>
           </div>
           {day.events.map((event, eventIndex) =>
-            event[classNum][0].map((_, cardID) => (
+            event[classNumber][0].map((_, cardID) => (
               <div
                 key={cardID}
-                className={`${styles.eventCard} col-2 border border-1 d-flex flex-column justify-content-center px-2 position-relative`}
+                className={`${styles.eventCard} ${
+                  validation.errors[parseInt(classNumber.replace("lessons", "")) % 10][dayIndex][
+                    eventIndex
+                  ][cardID].id != -1
+                    ? "bg-danger"
+                    : ""
+                } col-2 border border-1 d-flex flex-column justify-content-center px-2 position-relative`}
               >
-                {cardSelectionState[dayIndex][eventIndex]
+                {cardSelectionState[dayIndex] && cardSelectionState[dayIndex][eventIndex]
                   ? Array(cardSelectionState[dayIndex][eventIndex][cardID] ? 1 : 2)
                       .fill("")
                       .map((_, newIndex) => (
@@ -128,7 +122,7 @@ const ConstructorPage: React.FC<ConstructorPageProps> = ({
                           data-groupId={cardID}
                           data-lessonNum={newIndex}
                           className="form-select"
-                          value={event[classNum][newIndex][cardID]}
+                          value={event[classNumber][newIndex][cardID]}
                         >
                           <option value="-1">
                             {cardSelectionState[dayIndex][eventIndex][cardID] ? "Пара" : "Урок"}
@@ -136,7 +130,7 @@ const ConstructorPage: React.FC<ConstructorPageProps> = ({
                           {cards.map((card, cardIndex) =>
                             card.status ? (
                               <option value={cardIndex}>{`${subjects[card.subject].title} - ${
-                                teachers[subjects[card.subject].teachers[card.teacher]]
+                                teachers[card.teacher]
                               } - ${card.room}`}</option>
                             ) : (
                               ""
@@ -147,25 +141,13 @@ const ConstructorPage: React.FC<ConstructorPageProps> = ({
                   : ""}
                 <button
                   onClick={splittoggle}
-                  disabled={event[classNum][0][cardID] != event[classNum][1][cardID]}
+                  disabled={event[classNumber][0][cardID] != event[classNumber][1][cardID]}
                   data-dayId={dayIndex}
                   data-eventId={eventIndex}
                   data-groupId={cardID}
                   className={`btn btn-secondary ${styles.splittoggle}`}
                 >
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    width="3.35vh"
-                    height="3.35vh"
-                    fill="currentColor"
-                    className="bi bi-chevron-bar-expand"
-                    viewBox="0 0 16 16"
-                  >
-                    <path
-                      fillRule="evenodd"
-                      d="M3.646 10.146a.5.5 0 0 1 .708 0L8 13.793l3.646-3.647a.5.5 0 0 1 .708.708l-4 4a.5.5 0 0 1-.708 0l-4-4a.5.5 0 0 1 0-.708zm0-4.292a.5.5 0 0 0 .708 0L8 2.207l3.646 3.647a.5.5 0 0 0 .708-.708l-4-4a.5.5 0 0 0-.708 0l-4 4a.5.5 0 0 0 0 .708zM1 8a.5.5 0 0 1 .5-.5h13a.5.5 0 0 1 0 1h-13A.5.5 0 0 1 1 8z"
-                    />
-                  </svg>
+                  <SplitButtonIcon />
                 </button>
               </div>
             ))

@@ -1,30 +1,36 @@
-import React, { createRef } from "react"
+import React, { createRef, useEffect } from "react"
 import SideBar from "./components/SideBar"
 import Constructor from "./components/Constructor"
 import stylesApp from "./styles/App.module.css"
 import stylesSideBar from "./styles/SideBar.module.css"
 import stylesConstructor from "./styles/Constructor.module.css"
 import { useTimetable } from "./hooks"
+import SidebarToggleIcon from "./icons/sidebarToggle.svg"
+import { initialState } from "./assets/timetable"
+import { setStateFromLocalStorageAction } from "./utils/reducer/actions"
 
 const App: React.FC = () => {
-  const {
-    state,
-    createSubject,
-    createDay,
-    createCard,
-    changeMainDate,
-    addTeacher,
-    addEvent,
-    addLesson,
-    deleteTeacher,
-    deleteSubject,
-    deleteCard,
-    setValidationErrors,
-  } = useTimetable()
+  const [state, dispatcher] = useTimetable()
 
   const sidebarToggleRef = createRef<HTMLButtonElement>()
   const sidebarRef = createRef<HTMLDivElement>()
   const constructorRef = createRef<HTMLDivElement>()
+
+  useEffect(() => {
+    let ldata = localStorage.getItem("TimetableState")
+    if (ldata) {
+      dispatcher(setStateFromLocalStorageAction({ ldata }))
+    } else {
+      localStorage.setItem("TimetableState", JSON.stringify(state))
+    }
+  }, [])
+
+  useEffect(() => {
+    let ldata = localStorage.getItem("TimetableState")
+    if (ldata && JSON.stringify(state) != JSON.stringify(initialState)) {
+      localStorage.setItem("TimetableState", JSON.stringify(state))
+    }
+  }, [state])
 
   const toggleSideBar = (event: React.MouseEvent) => {
     event.preventDefault()
@@ -42,12 +48,7 @@ const App: React.FC = () => {
     <div className={stylesApp.wrapper}>
       <SideBar
         sidebarRef={sidebarRef}
-        addTeacher={addTeacher}
-        createSubject={createSubject}
-        createCard={createCard}
-        deleteTeacher={deleteTeacher}
-        deleteSubject={deleteSubject}
-        deleteCard={deleteCard}
+        dispatcher={dispatcher}
         subjects={state.subjects}
         cards={state.cards}
         teachers={state.teachers}
@@ -59,32 +60,16 @@ const App: React.FC = () => {
         className="btn btn-secondary"
         ref={sidebarToggleRef}
       >
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          width="22"
-          height="22"
-          fill="currentColor"
-          className="bi bi-arrow-bar-right"
-          viewBox="0 0 16 16"
-        >
-          <path
-            fillRule="evenodd"
-            d="M6 8a.5.5 0 0 0 .5.5h5.793l-2.147 2.146a.5.5 0 0 0 .708.708l3-3a.5.5 0 0 0 0-.708l-3-3a.5.5 0 0 0-.708.708L12.293 7.5H6.5A.5.5 0 0 0 6 8zm-2.5 7a.5.5 0 0 1-.5-.5v-13a.5.5 0 0 1 1 0v13a.5.5 0 0 1-.5.5z"
-          />
-        </svg>
+        <SidebarToggleIcon />
       </button>
       <Constructor
         days={state.days}
         teachers={state.teachers}
         subjects={state.subjects}
         cards={state.cards}
-        addEvent={addEvent}
-        addLesson={addLesson}
-        changeMainDate={changeMainDate}
-        createDay={createDay}
+        dispatcher={dispatcher}
         constructorRef={constructorRef}
         validation={state.validation}
-        setValidationErrors={setValidationErrors}
       />
     </div>
   )

@@ -1,5 +1,5 @@
-import { SetValidationErrorsFT, TimetableT } from "../../types/timetable"
-import { ValidationErrorT } from "../../types/validation"
+import { TimetableT } from "../../types/timetable"
+import { ValidationErrorT, ValidationStatusT } from "../../types/validation"
 import { generateErrorWithAddress } from "./utils"
 
 /**
@@ -9,16 +9,11 @@ import { generateErrorWithAddress } from "./utils"
  * @param dayID Index of day to validate
  * @param eventID Index of event to validate
  */
-const validate = (
-  data: TimetableT,
-  setError: SetValidationErrorsFT,
-  dayID: number,
-  eventID: number
-): void => {
+const validate = (data: TimetableT, dayID: number, eventID: number): ValidationStatusT => {
   const errors = Array<ValidationErrorT>(12).fill({ id: -1 })
   const event = data.days[dayID].events[eventID]
 
-  const hasErros: [boolean, boolean] = [false, false]
+  const thisRowHasErrors: [boolean, boolean] = [false, false]
 
   Array(2)
     .fill("")
@@ -34,35 +29,56 @@ const validate = (
               lessonIndex,
               cardForCheckIndex
             )
-            if (card.teacher == cardForCheck.teacher && card.room != cardForCheck.room) {
+            if (
+              data.teachers[card.teacher] == data.teachers[cardForCheck.teacher] &&
+              card.room != cardForCheck.room
+            ) {
               errors[cardIndex] = generateError(0)
-              hasErros[Math.floor(lessonIndex / 6)] = true
+              thisRowHasErrors[Math.floor(cardIndex / 6)] = true
             }
-            if (card.room == cardForCheck.room && card.teacher != cardForCheck.teacher) {
+            if (
+              card.room == cardForCheck.room &&
+              data.teachers[card.teacher] != data.teachers[cardForCheck.teacher]
+            ) {
               errors[cardIndex] = generateError(1)
-              hasErros[Math.floor(lessonIndex / 6)] = true
+              thisRowHasErrors[Math.floor(cardIndex / 6)] = true
             }
-            if (card.teacher == cardForCheck.teacher && card.subject != cardForCheck.subject) {
+            if (
+              data.teachers[card.teacher] == data.teachers[cardForCheck.teacher] &&
+              card.subject != cardForCheck.subject
+            ) {
               errors[cardIndex] = generateError(2)
-              hasErros[Math.floor(lessonIndex / 6)] = true
+              thisRowHasErrors[Math.floor(cardIndex / 6)] = true
             }
           }
         })
       )
     })
 
-  setError(prev => ({
-    has: hasErros,
-    errors: prev.errors.map((clas, classIndex) =>
-      hasErros[classIndex]
-        ? clas.map((day, dayIndex) =>
-            dayIndex == dayID
-              ? day.map((event, eventIndex) => (eventIndex == eventID ? errors : event))
-              : day
-          )
-        : clas
+  const newHasErrors: [boolean, boolean] = [...thisRowHasErrors]
+  const newRows = data.validation.rows.map((day, dayIndex) =>
+    day.map((event, eventIndex) => {
+      if (dayIndex == dayID && eventIndex == eventID) return thisRowHasErrors
+
+      newHasErrors[0] ||= event[0]
+      newHasErrors[1] ||= event[1]
+      return event
+    })
+  )
+
+  return {
+    has: newHasErrors,
+    rows: newRows,
+    errors: data.validation.errors.map((clas, classIndex) =>
+      clas.map((day, dayIndex) =>
+        dayIndex == dayID
+          ? day.map((event, eventIndex) =>
+              eventIndex == eventID ? errors.slice(classIndex ? 6 : 0, classIndex ? 12 : 6) : event
+            )
+          : day
+      )
     ),
-  }))
+  }
 }
 
 export { validate }

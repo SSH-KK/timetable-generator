@@ -1,49 +1,41 @@
-import React, { useState, useEffect } from "react"
+import React, { useState, useEffect, Dispatch, createRef } from "react"
+import { saveAs } from "file-saver"
 import ConstructorPage from "./ConstructorPage"
 import styles from "../styles/Constructor.module.css"
-import {
-  DayT,
-  SubjectT,
-  CardT,
-  TimetableT,
-  CreateDayFT,
-  ChangeMainDateFT,
-  SetValidationErrorsFT,
-  AddLessonFT,
-  AddEventFT,
-} from "../types/timetable"
+import SaveIcon from "../icons/save.svg"
+import { DayT, SubjectT, CardT } from "../types/timetable"
 import { createDocument } from "../utils/pdf"
 import { ValidationStatusT } from "../types/validation"
+import { ReducerAction } from "../types/reducer"
+import {
+  addEventAction,
+  changeMainDateAction,
+  createDayAction,
+  setStateFromLocalStorageAction,
+} from "../utils/reducer/actions"
 
 type ConstructorProps = {
   constructorRef: React.RefObject<HTMLDivElement>
-  createDay: CreateDayFT
-  addEvent: AddEventFT
-  addLesson: AddLessonFT
+  dispatcher: Dispatch<ReducerAction>
   teachers: string[]
-  changeMainDate: ChangeMainDateFT
   cards: CardT[]
   subjects: SubjectT[]
   days: DayT[]
   validation: ValidationStatusT
-  setValidationErrors: SetValidationErrorsFT
 }
 
 const Constructor: React.FC<ConstructorProps> = ({
   constructorRef,
-  createDay,
   subjects,
   days,
   cards,
   teachers,
-  changeMainDate,
-  addLesson,
-  addEvent,
+  dispatcher,
   validation,
-  setValidationErrors,
 }) => {
   const [pageState, setPageState] = useState<number>(0)
   const [startDateState, setStartDateState] = useState<Date>(new Date())
+  const fileInputRef = createRef<HTMLInputElement>()
 
   const changePage = (event: React.MouseEvent<HTMLElement>) => {
     event.preventDefault()
@@ -65,10 +57,14 @@ const Constructor: React.FC<ConstructorProps> = ({
     if (event.currentTarget.dataset) {
       const name = event.currentTarget.dataset.name
       if (name == "day") {
-        createDay(startDateState.getTime() + 24 * 3600 * 1000 * days.length)
+        dispatcher(
+          createDayAction({
+            date: startDateState.getTime() + 24 * 3600 * 1000 * days.length,
+          })
+        )
       } else if (name == "event" && event.currentTarget.dataset.daynum) {
         const dayNum = event.currentTarget.dataset.daynum
-        addEvent(parseInt(dayNum))
+        dispatcher(addEventAction({ dayID: parseInt(dayNum) }))
       }
     }
   }
@@ -90,8 +86,39 @@ const Constructor: React.FC<ConstructorProps> = ({
     }
   }
 
+  const downloadStorage = (event: React.MouseEvent<HTMLButtonElement>) => {
+    event.preventDefault()
+    const data = localStorage.getItem("TimetableState")
+    if (data) {
+      const fileToSave = new Blob([JSON.stringify(JSON.parse(data), undefined, 2)], {
+        type: "application/json",
+      })
+      saveAs(fileToSave, "TimetableState.json")
+    }
+  }
+
+  const importFile = (event: React.MouseEvent<HTMLFormElement>) => {
+    event.preventDefault()
+    if (fileInputRef.current && fileInputRef.current.files) {
+      let reader = new FileReader()
+      reader.readAsText(fileInputRef.current.files[0])
+      reader.onload = () => {
+        let result = reader.result
+        if (typeof result == "string") {
+          try {
+            JSON.parse(result)
+            dispatcher(setStateFromLocalStorageAction({ ldata: result }))
+          } catch {
+            alert("Неверный формат данных")
+          }
+        }
+      }
+    }
+    event.currentTarget.reset()
+  }
+
   useEffect(() => {
-    changeMainDate(startDateState)
+    dispatcher(changeMainDateAction({ newDate: startDateState }))
   }, [startDateState])
 
   return (
@@ -136,18 +163,23 @@ const Constructor: React.FC<ConstructorProps> = ({
         >
           Скачать PDF
         </button>
+        <button
+          className={`btn btn-outline-success me-2 mb-2 mt-md-0 mt-2`}
+          onClick={downloadStorage}
+        >
+          <SaveIcon />
+        </button>
       </ul>
       <div className="container-fluid">
         {pageState == 0 ? (
           <ConstructorPage
             days={days}
             subjects={subjects}
-            addLesson={addLesson}
+            dispatcher={dispatcher}
             cards={cards}
             teachers={teachers}
             addButton={addButton}
             validation={validation}
-            setValidationErrors={setValidationErrors}
             classNum={"lessons10"}
           />
         ) : (
@@ -157,17 +189,24 @@ const Constructor: React.FC<ConstructorProps> = ({
           <ConstructorPage
             days={days}
             subjects={subjects}
-            addLesson={addLesson}
+            dispatcher={dispatcher}
             validation={validation}
             cards={cards}
             teachers={teachers}
             addButton={addButton}
-            setValidationErrors={setValidationErrors}
             classNum={"lessons11"}
           />
         ) : (
           ""
         )}
+        <form onSubmit={importFile}>
+          <div className="input-group mb-3">
+            <input className="form-control" ref={fileInputRef} type="file" />
+            <button type="submit" className="btn btn-info">
+              Загрузить
+            </button>
+          </div>
+        </form>
       </div>
     </div>
   )

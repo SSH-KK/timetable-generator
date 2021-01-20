@@ -7,6 +7,7 @@ import { initialEventLessonsGenrator } from "../timetable"
 import {
   addEventAction,
   addTeacherAction,
+  clearDays,
   createCardAction,
   createDayAction,
   createSubjectAction,
@@ -16,7 +17,7 @@ import {
 
 const tests: {
   title: string
-  initialState?: TimetableT
+  initialState?: Partial<TimetableT>
   action: ReducerAction
   result: Partial<TimetableT>
 }[] = [
@@ -50,7 +51,6 @@ const tests: {
   {
     title: "Adds event to existing day",
     initialState: {
-      ...initialState,
       days: [{ events: [], date: 1000 }],
       validation: { has: [false, false], errors: [[[]], [[]]], rows: [[]] },
     },
@@ -74,7 +74,6 @@ const tests: {
   {
     title: "Adds teacher to allowed teachers list in existing subject",
     initialState: {
-      ...initialState,
       subjects: [{ title: "Physics", status: true, teachers: [] }],
     },
     action: addTeacherAction({
@@ -89,7 +88,6 @@ const tests: {
   {
     title: "Deletes subject",
     initialState: {
-      ...initialState,
       subjects: [{ status: true, teachers: [0], title: "Physics" }],
     },
     action: deleteSubjectAction({ subjectID: 0 }),
@@ -100,7 +98,6 @@ const tests: {
   {
     title: "Deletes event",
     initialState: {
-      ...initialState,
       days: [
         {
           date: 1000,
@@ -126,6 +123,29 @@ const tests: {
         rows: [[]],
         has: [false, false],
       },
+    },
+  },
+  {
+    title: "Clears days state",
+    initialState: {
+      subjects: [{ status: false, teachers: [1], title: "Test" }],
+      days: [
+        {
+          date: 1000,
+          events: [
+            { lessons10: initialEventLessonsGenrator(), lessons11: initialEventLessonsGenrator() },
+          ],
+        },
+      ],
+      validation: {
+        has: [false, false],
+        errors: Array(2).fill([[Array<ValidationErrorT>(6).fill({ id: -1 })]]),
+        rows: [[[false, false]]],
+      },
+    },
+    action: clearDays({}),
+    result: {
+      subjects: [{ status: false, teachers: [1], title: "Test" }],
     },
   },
 ]

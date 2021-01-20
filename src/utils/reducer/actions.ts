@@ -4,6 +4,7 @@ import {
   AddLessonAction,
   AddTeacherAction,
   ChangeMainDateAction,
+  ClearDaysAction,
   CreateCardAction,
   CreateDayAction,
   CreateSubjectAction,
@@ -81,5 +82,10 @@ export const addLessonAction = (payload: AddLessonAction["payload"]): AddLessonA
 
 export const deleteEventAction = (payload: DeleteEventAction["payload"]): DeleteEventAction => ({
   type: ActionType.DELETE_EVENT,
+  payload,
+})
+
+export const clearDays = (payload: ClearDaysAction["payload"]): ClearDaysAction => ({
+  type: ActionType.CLEAR_DAYS,
   payload,
 })

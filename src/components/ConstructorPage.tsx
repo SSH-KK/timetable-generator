@@ -5,7 +5,7 @@ import { cardSelectionStateGenerator } from "../utils/timetable"
 import { DayT, SubjectT, CardT, LessonsType } from "../types/timetable"
 import { ValidationStatusT } from "../types/validation"
 import { ReducerAction } from "../types/reducer"
-import { addLessonAction } from "../utils/reducer/actions"
+import { addLessonAction, deleteEventAction } from "../utils/reducer/actions"
 import SplitButtonIcon from "../icons/splitButton.svg"
 
 type ConstructorPageProps = {
@@ -87,6 +87,16 @@ const ConstructorPage: React.FC<ConstructorPageProps> = ({
     }
   }
 
+  const deleteLastEvents = (event: React.MouseEvent<HTMLButtonElement>) => {
+    event.preventDefault()
+    const dataset = event.currentTarget.dataset
+    if (dataset.dayid && dataset.eventid) {
+      const dayid = parseInt(dataset.dayid)
+      const eventid = parseInt(dataset.eventid)
+      dispatcher(deleteEventAction({ dayID: dayid, eventID: eventid }))
+    }
+  }
+
   return (
     <>
       {days.map((day, dayIndex) => (
@@ -152,16 +162,37 @@ const ConstructorPage: React.FC<ConstructorPageProps> = ({
               </div>
             ))
           )}
-          <div className="d-grid gap-2 my-2">
-            <button
-              data-name="event"
-              data-dayNum={dayIndex}
-              onClick={addButton}
-              className="btn btn-outline-primary btn-sm"
-              type="button"
-            >
-              Новые пары
-            </button>
+          <div className="btn-group">
+            <div className={`${day.events.length > 1 ? "col-6" : "col-12"}`}>
+              <div className="d-grid gap-2">
+                <button
+                  data-name="event"
+                  data-dayNum={dayIndex}
+                  onClick={addButton}
+                  className="btn btn-outline-primary rounded rounded-0 rounded-start btn-sm"
+                  type="button"
+                >
+                  Новые пары
+                </button>
+              </div>
+            </div>
+            {day.events.length > 1 ? (
+              <div className="col-6">
+                <div className="d-grid gap-2">
+                  <button
+                    className="btn btn-outline-danger rounded rounded-0 rounded-end btn-sm"
+                    type="button"
+                    data-dayId={dayIndex}
+                    data-eventId={day.events.length - 1}
+                    onClick={deleteLastEvents}
+                  >
+                    Удалить последнии пары
+                  </button>
+                </div>
+              </div>
+            ) : (
+              ""
+            )}
           </div>
         </div>
       ))}

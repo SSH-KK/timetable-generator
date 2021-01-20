@@ -12,6 +12,7 @@ export enum ActionType {
   ADD_LESSON,
   CHANGE_MAIN_DATE,
   SET_STATE_FROM_LOCAL_STORAGE,
+  DELETE_EVENT,
 }
 
 interface Action {
@@ -21,9 +22,7 @@ interface Action {
 export { Action as ReducerAction }
 
 export interface SetStateFromLocalStorageAction extends Action {
-  payload: {
-    ldata: string
-  }
+  payload: { ldata: string }
 }
 
 export interface CreateSubjectAction extends Action {
@@ -73,6 +72,10 @@ export interface AddLessonAction extends Action {
   }
 }
 
+export interface DeleteEventAction extends Action {
+  payload: { dayID: number; eventID: number }
+}
+
 export const isSetStateFromLocalStorageAction = (
   action: Action
 ): action is SetStateFromLocalStorageAction =>
@@ -107,3 +110,6 @@ export const isChangeMainDateAction = (action: Action): action is ChangeMainDate
 
 export const isAddLessonAction = (action: Action): action is AddLessonAction =>
   action.type === ActionType.ADD_LESSON
+
+export const isDeleteEventAction = (action: Action): action is DeleteEventAction =>
+  action.type === ActionType.DELETE_EVENT

@@ -8,6 +8,7 @@ import {
   CreateDayAction,
   CreateSubjectAction,
   DeleteCardAction,
+  DeleteEventAction,
   DeleteSubjectAction,
   DeleteTeacherAction,
   SetStateFromLocalStorageAction,
@@ -75,5 +76,10 @@ export const changeMainDateAction = (
 
 export const addLessonAction = (payload: AddLessonAction["payload"]): AddLessonAction => ({
   type: ActionType.ADD_LESSON,
+  payload,
+})
+
+export const deleteEvent = (payload: DeleteEventAction["payload"]): DeleteEventAction => ({
+  type: ActionType.DELETE_EVENT,
   payload,
 })

@@ -13,6 +13,7 @@ import {
   isChangeMainDateAction,
   isAddLessonAction,
   isSetStateFromLocalStorageAction,
+  isDeleteEventAction,
 } from "../../types/reducer"
 import { TimetableT } from "../../types/timetable"
 import { ValidationErrorT } from "../../types/validation"
@@ -92,6 +93,9 @@ export const reducer = produce(
 
       draft.validation = validate(draft, dayID, eventID)
     }
+
+    if (isDeleteEventAction(action))
+      draft.days[action.payload.dayID].events.splice(action.payload.eventID, 1)
 
     return draft
   },

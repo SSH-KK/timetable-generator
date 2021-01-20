@@ -3,6 +3,7 @@ import { saveAs } from "file-saver"
 import ConstructorPage from "./ConstructorPage"
 import styles from "../styles/Constructor.module.css"
 import SaveIcon from "../icons/save.svg"
+import ClearIcon from '../icons/celar.svg'
 import { DayT, SubjectT, CardT } from "../types/timetable"
 import { createDocument } from "../utils/pdf"
 import { ValidationStatusT } from "../types/validation"
@@ -12,6 +13,7 @@ import {
   changeMainDateAction,
   createDayAction,
   setStateFromLocalStorageAction,
+  clearStateAction
 } from "../utils/reducer/actions"
 
 type ConstructorProps = {
@@ -117,6 +119,13 @@ const Constructor: React.FC<ConstructorProps> = ({
     event.currentTarget.reset()
   }
 
+  const clearState = (event: React.MouseEvent<HTMLButtonElement>) =>{
+    event.preventDefault()
+    dispatcher(
+      clearStateAction({})
+    )
+  }
+
   useEffect(() => {
     dispatcher(changeMainDateAction({ newDate: startDateState }))
   }, [startDateState])
@@ -169,6 +178,12 @@ const Constructor: React.FC<ConstructorProps> = ({
         >
           <SaveIcon />
         </button>
+        <button
+          className='btn btn-danger me-2 mb-2 mt-md-0 mt-2'
+          onClick={clearState}
+        >
+          <ClearIcon/>
+        </button>
       </ul>
       <div className="container-fluid">
         {pageState == 0 ? (
@@ -183,8 +198,8 @@ const Constructor: React.FC<ConstructorProps> = ({
             classNum={"lessons10"}
           />
         ) : (
-          ""
-        )}
+            ""
+          )}
         {pageState == 1 ? (
           <ConstructorPage
             days={days}
@@ -197,8 +212,8 @@ const Constructor: React.FC<ConstructorProps> = ({
             classNum={"lessons11"}
           />
         ) : (
-          ""
-        )}
+            ""
+          )}
         <form onSubmit={importFile}>
           <div className="input-group mb-3">
             <input className="form-control" ref={fileInputRef} type="file" />

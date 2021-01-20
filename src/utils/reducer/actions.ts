@@ -4,7 +4,7 @@ import {
   AddLessonAction,
   AddTeacherAction,
   ChangeMainDateAction,
-  ClearDaysAction,
+  ClearStateAction,
   CreateCardAction,
   CreateDayAction,
   CreateSubjectAction,
@@ -85,7 +85,7 @@ export const deleteEventAction = (payload: DeleteEventAction["payload"]): Delete
   payload,
 })
 
-export const clearDays = (payload: ClearDaysAction["payload"]): ClearDaysAction => ({
-  type: ActionType.CLEAR_DAYS,
+export const clearStateAction = (payload: ClearStateAction["payload"]): ClearStateAction => ({
+  type: ActionType.CLEAR_STATE,
   payload,
 })

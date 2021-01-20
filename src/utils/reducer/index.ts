@@ -14,7 +14,7 @@ import {
   isAddLessonAction,
   isSetStateFromLocalStorageAction,
   isDeleteEventAction,
-  isClearDays,
+  isClearStateAction,
 } from "../../types/reducer"
 import { TimetableT } from "../../types/timetable"
 import { ValidationErrorT } from "../../types/validation"
@@ -117,9 +117,8 @@ export const reducer = produce(
       draft.validation.rows[dayID].splice(eventID)
     }
 
-    if (isClearDays(action)) {
-      draft.days = []
-      draft.validation = { errors: [[], []], has: [false, false], rows: [] }
+    if (isClearStateAction(action)) {
+      draft = initialState
     }
 
     return draft

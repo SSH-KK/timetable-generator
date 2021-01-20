@@ -13,7 +13,7 @@ export enum ActionType {
   CHANGE_MAIN_DATE,
   SET_STATE_FROM_LOCAL_STORAGE,
   DELETE_EVENT,
-  CLEAR_DAYS,
+  CLEAR_STATE,
 }
 
 interface Action {
@@ -77,7 +77,7 @@ export interface DeleteEventAction extends Action {
   payload: { dayID: number; eventID: number }
 }
 
-export interface ClearDaysAction extends Action {
+export interface ClearStateAction extends Action {
   payload: Record<string, never>
 }
 
@@ -119,5 +119,5 @@ export const isAddLessonAction = (action: Action): action is AddLessonAction =>
 export const isDeleteEventAction = (action: Action): action is DeleteEventAction =>
   action.type === ActionType.DELETE_EVENT
 
-export const isClearDays = (action: Action): action is ClearDaysAction =>
-  action.type === ActionType.CLEAR_DAYS
+export const isClearStateAction = (action: Action): action is ClearStateAction =>
+  action.type === ActionType.CLEAR_STATE

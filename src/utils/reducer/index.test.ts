@@ -6,13 +6,16 @@ import { ValidationErrorT } from "../../types/validation"
 import { initialEventLessonsGenrator } from "../timetable"
 import {
   addEventAction,
+  addLessonAction,
   addTeacherAction,
-  clearDays,
+  changeMainDateAction,
+  clearStateAction,
   createCardAction,
   createDayAction,
   createSubjectAction,
   deleteEventAction,
   deleteSubjectAction,
+  deleteTeacherAction,
 } from "./actions"
 
 const tests: {
@@ -96,6 +99,34 @@ const tests: {
     },
   },
   {
+    title: "Deletes teacher",
+    initialState: {
+      subjects: [{ status: true, teachers: [0, 1], title: "Test" }],
+      teachers: ["Teacher 1", "Teacher to delete"],
+    },
+    action: deleteTeacherAction({ subjectID: 0, teacherID: 1 }),
+    result: {
+      teachers: ["Teacher 1", "Teacher to delete"],
+      subjects: [{ status: true, teachers: [0], title: "Test" }],
+    },
+  },
+  {
+    title: "Changes date on days",
+    initialState: {
+      days: [
+        { date: 1000, events: [] },
+        { date: 1000 + 24 * 3600 * 1000, events: [] },
+      ],
+    },
+    action: changeMainDateAction({ newDate: new Date(2000) }),
+    result: {
+      days: [
+        { date: 2000, events: [] },
+        { date: 2000 + 24 * 3600 * 1000, events: [] },
+      ],
+    },
+  },
+  {
     title: "Deletes event",
     initialState: {
       days: [
@@ -126,7 +157,7 @@ const tests: {
     },
   },
   {
-    title: "Clears days state",
+    title: "Clears state",
     initialState: {
       subjects: [{ status: false, teachers: [1], title: "Test" }],
       days: [
@@ -143,10 +174,8 @@ const tests: {
         rows: [[[false, false]]],
       },
     },
-    action: clearDays({}),
-    result: {
-      subjects: [{ status: false, teachers: [1], title: "Test" }],
-    },
+    action: clearStateAction({}),
+    result: {},
   },
 ]
 

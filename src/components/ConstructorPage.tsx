@@ -116,7 +116,7 @@ const ConstructorPage: React.FC<ConstructorPageProps> = ({
       {days.map((day, dayIndex) => (
         <div className="row" key={dayIndex}>
           <div className="col-12 border border-1 bg-secondary text-center border-bottom border-1">
-            <h4 className='mb-0 py-1'>{`${new Date(day.date).getDate()} ${
+            <h4 className="mb-0 py-1">{`${new Date(day.date).getDate()} ${
               assets.weekdays[
                 new Date(day.date).getDay() - 1 != -1 ? new Date(day.date).getDay() - 1 : 6
               ]

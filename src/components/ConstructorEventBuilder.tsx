@@ -128,9 +128,6 @@ const ConstructorEventBuilder: React.FC<ConstructorEventBuilderPropsT> = ({
               <select
                 key={selectIndex}
                 onChange={selectChange}
-                data-dayid={dayID}
-                data-eventid={eventID}
-                data-groupid={cardID}
                 data-lessonnum={selectIndex}
                 className="form-select"
                 value={event[classNumber][selectIndex][cardID]}

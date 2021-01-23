@@ -100,108 +100,108 @@ const SideBar: React.FC<SidebarProps> = ({ sidebarRef, state, dispatcher }) => {
     }
   }
 
-  return(
-      <nav id={styles.sidebar} className="shadow me-3" ref={sidebarRef}>
-        <div className="row pb-5 justify-content-center">
-          <h3 className="text-center">Предметы</h3>
-          {subjects.map((ob, subjectIndex) =>
-            ob.status ? (
-              <SubjectSingle
-                dispatcher={dispatcher}
-                subjectID={subjectIndex}
-                deleteSubjectButton={deleteSubjectButton}
-                subject={ob}
-                teachers={teachers}
-                key={subjectIndex}
+  return (
+    <nav id={styles.sidebar} className="shadow me-3" ref={sidebarRef}>
+      <div className="row pb-5 justify-content-center">
+        <h3 className="text-center">Предметы</h3>
+        {subjects.map((ob, subjectIndex) =>
+          ob.status ? (
+            <SubjectSingle
+              dispatcher={dispatcher}
+              subjectID={subjectIndex}
+              deleteSubjectButton={deleteSubjectButton}
+              subject={ob}
+              teachers={teachers}
+              key={subjectIndex}
+            />
+          ) : (
+            ""
+          )
+        )}
+        <div className="col-11">
+          <form className="mt-2" data-name="subject" onSubmit={createForm}>
+            <div className="input-group input-group-sm">
+              <input
+                type="text"
+                name="subject"
+                onChange={inputChange}
+                value={inputState.subject}
+                className="form-control border border-3  rounded rounded-3"
+                placeholder="Предмет"
               />
+            </div>
+          </form>
+        </div>
+        <h3 className="text-center mt-2">Пары</h3>
+        <div className="col-11">
+          <form className="mt-2" data-name="card" onSubmit={createForm}>
+            <select
+              name="subject"
+              value={inputState.card.subject}
+              onChange={cardSelectChange}
+              className="form-select"
+            >
+              <option value="-1">Предмет</option>
+              {subjects.map((subject, subjectIndex) =>
+                subject.status ? (
+                  <option value={subjectIndex} key={subjectIndex}>
+                    {subject.title}
+                  </option>
+                ) : (
+                  ""
+                )
+              )}
+            </select>
+            {inputState.card.subject != -1 ? (
+              <select
+                name="teacher"
+                value={inputState.card.teacher}
+                onChange={cardSelectChange}
+                className="form-select mt-2"
+              >
+                <option value="-1">Преподаватель</option>
+                {subjects[inputState.card.subject].teachers.map(teacher => (
+                  <option value={teacher} key={teacher}>
+                    {teachers[teacher]}
+                  </option>
+                ))}
+              </select>
             ) : (
               ""
-            )
-          )}
-          <div className="col-11">
-            <form className="mt-2" data-name="subject" onSubmit={createForm}>
-              <div className="input-group input-group-sm">
+            )}
+            {inputState.card.subject != -1 ? (
+              <div className="input-group input-group-sm mt-2">
                 <input
                   type="text"
-                  name="subject"
-                  onChange={inputChange}
-                  value={inputState.subject}
-                  className="form-control border border-3  rounded rounded-3"
-                  placeholder="Предмет"
+                  value={inputState.card.room}
+                  placeholder="Кабинет"
+                  onChange={cardSelectChange}
+                  name="room"
+                  className="form-control"
                 />
               </div>
-            </form>
-          </div>
-          <h3 className="text-center mt-2">Пары</h3>
-          <div className="col-11">
-            <form className="mt-2" data-name="card" onSubmit={createForm}>
-              <select
-                name="subject"
-                value={inputState.card.subject}
-                onChange={cardSelectChange}
-                className="form-select"
-              >
-                <option value="-1">Предмет</option>
-                {subjects.map((subject, subjectIndex) =>
-                  subject.status ? (
-                    <option value={subjectIndex} key={subjectIndex}>
-                      {subject.title}
-                    </option>
-                  ) : (
-                    ""
-                  )
-                )}
-              </select>
-              {inputState.card.subject != -1 ? (
-                <select
-                  name="teacher"
-                  value={inputState.card.teacher}
-                  onChange={cardSelectChange}
-                  className="form-select mt-2"
-                >
-                  <option value="-1">Преподаватель</option>
-                  {subjects[inputState.card.subject].teachers.map(teacher => (
-                    <option value={teacher} key={teacher}>
-                      {teachers[teacher]}
-                    </option>
-                  ))}
-                </select>
-              ) : (
-                ""
-              )}
-              {inputState.card.subject != -1 ? (
-                <div className="input-group input-group-sm mt-2">
-                  <input
-                    type="text"
-                    value={inputState.card.room}
-                    placeholder="Кабинет"
-                    onChange={cardSelectChange}
-                    name="room"
-                    className="form-control"
-                  />
-                </div>
-              ) : (
-                ""
-              )}
-            </form>
-          </div>
-          {cards.map((card, cardIndex) => (
-            <CardSingle
-              dispatcher={dispatcher}
-              card={{
-                cardIndex: cardIndex,
-                subStatus: subjects[card.subject].status,
-                status: cards[cardIndex].status,
-                room: card.room,
-                subject: subjects[card.subject].title,
-                teacher: teachers[card.teacher],
-              }}
-              key={cardIndex}
-            />
-          ))}
+            ) : (
+              ""
+            )}
+          </form>
         </div>
-      </nav>
-    )
+        {cards.map((card, cardIndex) => (
+          <CardSingle
+            dispatcher={dispatcher}
+            card={{
+              cardIndex: cardIndex,
+              subStatus: subjects[card.subject].status,
+              status: cards[cardIndex].status,
+              room: card.room,
+              subject: subjects[card.subject].title,
+              teacher: teachers[card.teacher],
+            }}
+            key={cardIndex}
+          />
+        ))}
+      </div>
+    </nav>
+  )
 }
 
 export default SideBar

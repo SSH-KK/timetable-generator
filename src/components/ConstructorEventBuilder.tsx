@@ -36,7 +36,7 @@ const ConstructorEventBuilder: React.FC<ConstructorEventBuilderPropsT> = ({
     if (e.currentTarget.dataset) {
       const dataset = e.currentTarget.dataset
       if (dataset.lessonnum) {
-        const {lessonnum} = dataset
+        const { lessonnum } = dataset
         const isPair = cardSelectionState[dayID][eventID][cardID]
         dispatcher(
           addLessonAction({
@@ -78,12 +78,19 @@ const ConstructorEventBuilder: React.FC<ConstructorEventBuilderPropsT> = ({
     }
   }
 
-  useEffect(()=>{
-    const dataChanges = [ (days[dayID].events[eventID][classNumber][0][cardID]!=-1 ? cards[days[dayID].events[eventID][classNumber][0][cardID]].status : ''), (days[dayID].events[eventID][classNumber][1][cardID]!=-1 ? cards[days[dayID].events[eventID][classNumber][1][cardID]].status : '') ]
-      dataChanges.forEach((ob, obIndex)=>{
-        if(!ob){
-          dispatcher(
-            addLessonAction({
+  useEffect(() => {
+    const dataChanges = [
+      days[dayID].events[eventID][classNumber][0][cardID] != -1
+        ? cards[days[dayID].events[eventID][classNumber][0][cardID]].status
+        : "",
+      days[dayID].events[eventID][classNumber][1][cardID] != -1
+        ? cards[days[dayID].events[eventID][classNumber][1][cardID]].status
+        : "",
+    ]
+    dataChanges.forEach((ob, obIndex) => {
+      if (!ob) {
+        dispatcher(
+          addLessonAction({
             dayID: dayID,
             eventID: eventID,
             classNumber,
@@ -91,11 +98,18 @@ const ConstructorEventBuilder: React.FC<ConstructorEventBuilderPropsT> = ({
             isPair: false,
             lessonID: -1,
             lessonNumber: obIndex,
-            })
-          )
-        }
-      })
-  },[ days[dayID].events[eventID][classNumber][0][cardID]!=-1 ? cards[days[dayID].events[eventID][classNumber][0][cardID]].status : '', days[dayID].events[eventID][classNumber][1][cardID]!=-1 ? cards[days[dayID].events[eventID][classNumber][1][cardID]].status : '' ])
+          })
+        )
+      }
+    })
+  }, [
+    days[dayID].events[eventID][classNumber][0][cardID] != -1
+      ? cards[days[dayID].events[eventID][classNumber][0][cardID]].status
+      : "",
+    days[dayID].events[eventID][classNumber][1][cardID] != -1
+      ? cards[days[dayID].events[eventID][classNumber][1][cardID]].status
+      : "",
+  ])
 
   const cardValidationClass =
     validation.errors[parseInt(classNumber.replace("lessons", "")) % 10][dayID][eventID][cardID]

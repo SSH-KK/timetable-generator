@@ -103,14 +103,14 @@ const ConstructorPage: React.FC<ConstructorPageProps> = ({
       <div className='row'>
       {[1,2,3,4,5,6].map((groupIndexNum)=>(
         <div className='col-2 border border-1' key={groupIndexNum-1}>
-          <h4 className='text-center'>{`${ getGroupNumber( (new Date().getMonth() <= 5 ? (new Date().getFullYear() % 2000) - 1 : new Date().getFullYear() % 2000)-1-(classNumber == 'lessons10' ? 0 : 1 )) }${groupIndexNum} группа`}</h4>
+          <h4 className='text-center mb-0 py-1'>{`${ getGroupNumber( (new Date().getMonth() <= 5 ? (new Date().getFullYear() % 2000) - 1 : new Date().getFullYear() % 2000)-1-(classNumber == 'lessons10' ? 0 : 1 )) }${groupIndexNum} группа`}</h4>
         </div>
       ))}
       </div>
       {days.map((day, dayIndex) => (
         <div className="row" key={dayIndex}>
           <div className="col-12 border border-1 bg-secondary text-center border-bottom border-1">
-            <h4>{`${new Date(day.date).getDate()} ${
+            <h4 className='mb-0 py-1'>{`${new Date(day.date).getDate()} ${
               assets.weekdays[
                 new Date(day.date).getDay() - 1 != -1 ? new Date(day.date).getDay() - 1 : 6
               ]

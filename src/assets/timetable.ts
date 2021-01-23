@@ -1,4 +1,4 @@
-import { TimetableT } from "../types/timetable"
+import { TimetableT } from "@type/timetable"
 
 export const initialState: TimetableT = {
   days: [],
@@ -9,5 +9,14 @@ export const initialState: TimetableT = {
     has: [false, false],
     errors: [[], []],
     rows: [],
+  },
+}
+
+export const initialSidebarState = {
+  subject: "",
+  card: {
+    subject: -1,
+    teacher: -1,
+    room: "",
   },
 }

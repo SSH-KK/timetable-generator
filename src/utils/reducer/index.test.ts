@@ -1,9 +1,9 @@
-import { reducer } from "./index"
-import { ReducerAction } from "../../types/reducer"
-import { initialState } from "../../assets/timetable"
-import { TimetableT } from "../../types/timetable"
-import { ValidationErrorT } from "../../types/validation"
-import { initialEventLessonsGenrator } from "../timetable"
+import { reducer } from "."
+import { ReducerAction } from "@type/reducer"
+import { initialState } from "@assets/timetable"
+import { TimetableT } from "@type/timetable"
+import { ValidationErrorT } from "@type/validation"
+import { initialEventLessonsGenrator } from "@utils/timetable"
 import {
   addEventAction,
   addLessonAction,

@@ -13,7 +13,7 @@ import {
   DeleteSubjectAction,
   DeleteTeacherAction,
   SetStateFromLocalStorageAction,
-} from "../../types/reducer"
+} from "@type/reducer"
 
 export const setStateFromLocalStorageAction = (
   payload: SetStateFromLocalStorageAction["payload"]

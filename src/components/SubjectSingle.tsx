@@ -1,15 +1,15 @@
 import React, { Dispatch, useState } from "react"
-import { SubjectT } from "../types/timetable"
-import styles from "../styles/SideBar.module.css"
-import { ReducerAction } from "../types/reducer"
-import { addTeacherAction, deleteTeacherAction } from "../utils/reducer/actions"
-import DeleteButtonIcon from "../icons/deleteButton.svg"
+import { SubjectT } from "@type/timetable"
+import styles from "@styles/SideBar.module.css"
+import { ReducerAction } from "@type/reducer"
+import { addTeacherAction, deleteTeacherAction } from "@utils/reducer/actions"
+import DeleteButtonIcon from "@icons/deleteButton.svg"
 
 type SubjectSingleProps = {
   subject: SubjectT
   teachers: string[]
   dispatcher: Dispatch<ReducerAction>
-  deleteSubjectButton: (event: React.MouseEvent<HTMLButtonElement>) => void
+  deleteSubjectButton: (e: React.MouseEvent<HTMLButtonElement>) => void
   subjectID: number
 }
 
@@ -22,22 +22,22 @@ const SubjectSingle: React.FC<SubjectSingleProps> = ({
 }) => {
   const [inputState, setInputState] = useState("")
 
-  const addTeacherForm = (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault()
+  const addTeacherForm = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault()
     if (inputState) {
       dispatcher(addTeacherAction({ teacher: inputState, subjectID }))
       setInputState("")
     }
   }
 
-  const inputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    event.preventDefault()
-    setInputState(event.target.value)
+  const inputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    e.preventDefault()
+    setInputState(e.target.value)
   }
 
-  const deleteTeacherButton = (event: React.MouseEvent<HTMLButtonElement>) => {
-    event.preventDefault()
-    dispatcher(deleteTeacherAction({ subjectID, teacherID: parseInt(event.currentTarget.name) }))
+  const deleteTeacherButton = (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault()
+    dispatcher(deleteTeacherAction({ subjectID, teacherID: parseInt(e.currentTarget.name) }))
   }
 
   return (

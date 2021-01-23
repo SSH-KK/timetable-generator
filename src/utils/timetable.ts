@@ -1,4 +1,4 @@
-import { DayT, LessonsType } from "../types/timetable"
+import { DayT, LessonsType } from "@type/timetable"
 
 export const initialEventLessonsGenrator = (): number[][] => Array(2).fill(Array(6).fill(-1))
 

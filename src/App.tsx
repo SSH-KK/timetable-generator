@@ -1,13 +1,13 @@
 import React, { createRef, useEffect } from "react"
-import SideBar from "./components/SideBar"
-import Constructor from "./components/Constructor"
-import stylesApp from "./styles/App.module.css"
-import stylesSideBar from "./styles/SideBar.module.css"
-import stylesConstructor from "./styles/Constructor.module.css"
+import SideBar from "@components/SideBar"
+import Constructor from "@components/Constructor"
+import stylesApp from "@styles/App.module.css"
+import stylesSideBar from "@styles/SideBar.module.css"
+import stylesConstructor from "@styles/Constructor.module.css"
 import { useTimetable } from "./hooks"
-import SidebarToggleIcon from "./icons/sidebarToggle.svg"
-import { initialState } from "./assets/timetable"
-import { setStateFromLocalStorageAction } from "./utils/reducer/actions"
+import SidebarToggleIcon from "@icons/sidebarToggle.svg"
+import { initialState } from "@assets/timetable"
+import { setStateFromLocalStorageAction } from "@utils/reducer/actions"
 
 const App: React.FC = () => {
   const [state, dispatcher] = useTimetable()
@@ -17,27 +17,27 @@ const App: React.FC = () => {
   const constructorRef = createRef<HTMLDivElement>()
 
   useEffect(() => {
-    let ldata = localStorage.getItem("TimetableState")
-    if (ldata) {
-      dispatcher(setStateFromLocalStorageAction({ ldata }))
-    } else {
-      localStorage.setItem("TimetableState", JSON.stringify(state))
-    }
+    const ldata = localStorage.getItem("TimetableState")
+
+    if (ldata) dispatcher(setStateFromLocalStorageAction({ ldata }))
+    else localStorage.setItem("TimetableState", JSON.stringify(state))
   }, [])
 
   useEffect(() => {
-    let ldata = localStorage.getItem("TimetableState")
-    if (ldata && JSON.stringify(state) != JSON.stringify(initialState)) {
+    const ldata = localStorage.getItem("TimetableState")
+
+    if (ldata && JSON.stringify(state) != JSON.stringify(initialState))
       localStorage.setItem("TimetableState", JSON.stringify(state))
-    }
   }, [state])
 
-  const toggleSideBar = (event: React.MouseEvent) => {
-    event.preventDefault()
+  const toggleSideBar = (e: React.MouseEvent) => {
+    e.preventDefault()
+
     if (sidebarToggleRef.current && sidebarRef.current && constructorRef.current) {
       const sidebarToggle = sidebarToggleRef.current
       const sidebar = sidebarRef.current
       const constructor = constructorRef.current
+
       sidebar.classList.toggle(stylesSideBar.active)
       sidebarToggle.classList.toggle(stylesApp.active)
       constructor.classList.toggle(stylesConstructor.active)
@@ -46,13 +46,7 @@ const App: React.FC = () => {
 
   return (
     <div className={stylesApp.wrapper}>
-      <SideBar
-        sidebarRef={sidebarRef}
-        dispatcher={dispatcher}
-        subjects={state.subjects}
-        cards={state.cards}
-        teachers={state.teachers}
-      />
+      <SideBar sidebarRef={sidebarRef} dispatcher={dispatcher} state={state} />
       <button
         type="button"
         onClick={toggleSideBar}
@@ -62,15 +56,8 @@ const App: React.FC = () => {
       >
         <SidebarToggleIcon />
       </button>
-      <Constructor
-        days={state.days}
-        teachers={state.teachers}
-        subjects={state.subjects}
-        cards={state.cards}
-        dispatcher={dispatcher}
-        constructorRef={constructorRef}
-        validation={state.validation}
-      />
+
+      <Constructor state={state} dispatcher={dispatcher} constructorRef={constructorRef} />
     </div>
   )
 }

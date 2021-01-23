@@ -12,8 +12,17 @@
     "allowJs": true,
     "jsx": "react",
     "resolveJsonModule": true,
-    "allowSyntheticDefaultImports": true
+    "allowSyntheticDefaultImports": true,
+    "baseUrl": "./src/",
+    "paths": {
+      "@assets/*": ["assets/*"],
+      "@components/*": ["components/*"],
+      "@icons/*": ["icons/*"],
+      "@styles/*": ["styles/*"],
+      "@type/*": ["types/*"],
+      "@utils/*": ["utils/*"],
+      "@fonts/*": ["fonts/*"]
+    }
   },
-  "include": ["./src/**/*"],
-  "exclude": ["./src/**/*.test.ts"]
+  "include": ["./src/**/*"]
 }

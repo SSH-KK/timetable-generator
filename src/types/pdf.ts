@@ -1,4 +1,4 @@
-import { EventT } from "./timetable"
+import { EventT } from "@type/timetable"
 
 export type SpanGenerator = (
   event: EventT,

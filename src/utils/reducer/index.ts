@@ -1,5 +1,5 @@
 import produce from "immer"
-import { initialState } from "../../assets/timetable"
+import { initialState } from "@assets/timetable"
 import {
   ReducerAction,
   isCreateCardAction,
@@ -15,9 +15,9 @@ import {
   isSetStateFromLocalStorageAction,
   isDeleteEventAction,
   isClearStateAction,
-} from "../../types/reducer"
-import { TimetableT } from "../../types/timetable"
-import { ValidationErrorT } from "../../types/validation"
+} from "@type/reducer"
+import { TimetableT } from "@type/timetable"
+import { ValidationErrorT } from "@type/validation"
 import { initialEventLessonsGenrator } from "../timetable"
 import { setErrorsStatus, validate } from "../validation"
 

@@ -1,6 +1,6 @@
-import assets from "../../assets/pdf"
-import { SpanGenerator } from "../../types/pdf"
-import { LessonsType, TimetableT } from "../../types/timetable"
+import assets from "@assets/pdf"
+import { SpanGenerator } from "@type/pdf"
+import { LessonsType, TimetableT } from "@type/timetable"
 
 /**
  * Function for generation of document name

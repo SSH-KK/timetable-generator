@@ -1,5 +1,5 @@
-import { TimetableT } from "../../types/timetable"
-import { SetErrorsStatusFT, ValidationErrorT, ValidationStatusT } from "../../types/validation"
+import { TimetableT } from "@type/timetable"
+import { SetErrorsStatusFT, ValidationErrorT, ValidationStatusT } from "@type/validation"
 import { generateErrorWithAddress } from "./utils"
 
 /**

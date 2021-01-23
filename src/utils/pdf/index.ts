@@ -1,10 +1,10 @@
 import pdfMake from "pdfmake/build/pdfmake"
 import { TableCell, TDocumentDefinitions } from "pdfmake/interfaces"
 
-import { LessonsType, TimetableT } from "../../types/timetable"
+import { LessonsType, TimetableT } from "@type/timetable"
 
-import vfs from "../vfsFonts"
-import assets from "../../assets/pdf"
+import vfs from "./vfsFonts"
+import assets from "@assets/pdf"
 import {
   colSpanGenerator,
   generateDayHeader,

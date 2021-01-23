@@ -1,100 +1,63 @@
 import React, { useState, useEffect, Dispatch } from "react"
-import styles from "../styles/Constructor.module.css"
-import assets from "../assets/pdf"
-import { cardSelectionStateGenerator } from "../utils/timetable"
-import { DayT, SubjectT, CardT, LessonsType } from "../types/timetable"
-import { ValidationStatusT } from "../types/validation"
-import { ReducerAction } from "../types/reducer"
-import { addLessonAction, deleteEventAction } from "../utils/reducer/actions"
-import { getGroupNumber } from "../utils/pdf/utils"
-import SplitButtonIcon from "../icons/splitButton.svg"
-import { generateTitle } from "../utils/ConstructorPage"
+import { cardSelectionStateGenerator } from "@utils/timetable"
+import { LessonsType, TimetableT } from "@type/timetable"
+import { ReducerAction } from "@type/reducer"
+import { addEventAction, createDayAction, deleteEventAction } from "@utils/reducer/actions"
+import ConstructorEventBuilder from "@components/ConstructorEventBuilder"
+import { generateDayTitle, getGenerationTitle } from "@utils/ConstructorPage"
 
 type ConstructorPageProps = {
-  days: DayT[]
   classNum: LessonsType
-  addButton: (event: React.MouseEvent<HTMLButtonElement>) => void
   dispatcher: Dispatch<ReducerAction>
-  validation: ValidationStatusT
-  cards: CardT[]
-  subjects: SubjectT[]
-  teachers: string[]
+  state: TimetableT
+  startDate: Date
 }
 
 const ConstructorPage: React.FC<ConstructorPageProps> = ({
-  days,
-  subjects,
-  cards,
-  teachers,
   classNum: classNumber,
-  addButton,
   dispatcher,
-  validation,
+  startDate,
+  state,
 }) => {
+  const { days } = state
+
   const [cardSelectionState, setCardSelectionState] = useState<boolean[][][]>(
     cardSelectionStateGenerator(days, classNumber)
   )
+
+  const addButton = (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault()
+
+    if (e.currentTarget.dataset) {
+      const name = e.currentTarget.dataset.name
+
+      if (name == "day")
+        dispatcher(
+          createDayAction({
+            date: startDate.getTime() + 24 * 3600 * 1000 * days.length,
+          })
+        )
+      else if (name == "event" && e.currentTarget.dataset.daynum) {
+        const dayNum = e.currentTarget.dataset.daynum
+
+        dispatcher(addEventAction({ dayID: parseInt(dayNum) }))
+      }
+    }
+  }
 
   useEffect(() => {
     setCardSelectionState(prev => cardSelectionStateGenerator(days, classNumber, prev))
   }, [days])
 
-  const selectChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
-    event.preventDefault()
-    if (event.currentTarget.dataset) {
-      const dataset = event.currentTarget.dataset
-      if (dataset.dayid && dataset.eventid && dataset.groupid && dataset.lessonnum) {
-        const { dayid, eventid, groupid, lessonnum } = dataset
-        const isPair = cardSelectionState[parseInt(dayid)][parseInt(eventid)][parseInt(groupid)]
-        dispatcher(
-          addLessonAction({
-            dayID: parseInt(dayid),
-            eventID: parseInt(eventid),
-            classNumber,
-            groupID: parseInt(groupid),
-            isPair,
-            lessonID: parseInt(event.currentTarget.value),
-            lessonNumber: parseInt(lessonnum),
-          })
-        )
-      }
-    }
-  }
+  const deleteLastEvents = (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault()
 
-  const splittoggle = (event: React.MouseEvent<HTMLButtonElement>) => {
-    if (event.currentTarget.dataset) {
-      const dataset = event.currentTarget.dataset
-      if (dataset.dayid && dataset.eventid && dataset.groupid) {
-        const dayid = parseInt(dataset.dayid)
-        const eventid = parseInt(dataset.eventid)
-        const groupid = parseInt(dataset.groupid)
-        if (
-          days[dayid].events[eventid][classNumber][0][groupid] ==
-          days[dayid].events[eventid][classNumber][1][groupid]
-        ) {
-          setCardSelectionState(prev =>
-            prev.map((day, dayIndex) =>
-              dayIndex == dayid
-                ? day.map((event, eventIndex) =>
-                    eventIndex == eventid
-                      ? event.map((group, groupIndex) => (groupIndex == groupid ? !group : group))
-                      : event
-                  )
-                : day
-            )
-          )
-        }
-        // can add split for different selection in lessons
-      }
-    }
-  }
+    const dataset = e.currentTarget.dataset
 
-  const deleteLastEvents = (event: React.MouseEvent<HTMLButtonElement>) => {
-    event.preventDefault()
-    const dataset = event.currentTarget.dataset
     if (dataset.dayid && dataset.eventid) {
       const dayid = parseInt(dataset.dayid)
       const eventid = parseInt(dataset.eventid)
+
       dispatcher(deleteEventAction({ dayID: dayid, eventID: eventid }))
     }
   }
@@ -102,85 +65,33 @@ const ConstructorPage: React.FC<ConstructorPageProps> = ({
   return (
     <>
       <div className="row">
-        {[1, 2, 3, 4, 5, 6].map(groupIndexNum => (
-          <div className="col-2 border border-1" key={groupIndexNum - 1}>
-            <h4 className="text-center mb-0 py-1">{`${getGroupNumber(
-              (new Date().getMonth() <= 5
-                ? (new Date().getFullYear() % 2000) - 1
-                : new Date().getFullYear() % 2000) -
-                1 -
-                (classNumber == "lessons10" ? 0 : 1)
-            )}${groupIndexNum} группа`}</h4>
+        {[1, 2, 3, 4, 5, 6].map(groupNum => (
+          <div className="col-2 border border-1" key={groupNum}>
+            <h4 className="text-center mb-0 py-1">
+              {getGenerationTitle(new Date(), classNumber, groupNum)}
+            </h4>
           </div>
         ))}
       </div>
       {days.map((day, dayIndex) => (
         <div className="row" key={dayIndex}>
           <div className="col-12 border border-1 bg-secondary text-center border-bottom border-1">
-            <h4 className="mb-0 py-1">{`${new Date(day.date).getDate()} ${
-              assets.weekdays[
-                new Date(day.date).getDay() - 1 != -1 ? new Date(day.date).getDay() - 1 : 6
-              ]
-            }`}</h4>
+            <h4 className="mb-0 py-1">{generateDayTitle(day)}</h4>
           </div>
           {day.events.map((event, eventIndex) =>
-            event[classNumber][0].map((_, cardID) => (
-              <div
-                key={cardID}
-                className={`${styles.eventCard} ${
-                  validation.errors[parseInt(classNumber.replace("lessons", "")) % 10][dayIndex][
-                    eventIndex
-                  ][cardID].id != -1
-                    ? "bg-danger"
-                    : ""
-                } col-2 border border-1 d-flex flex-column justify-content-center px-2 position-relative`}
-              >
-                {cardSelectionState[dayIndex] && cardSelectionState[dayIndex][eventIndex]
-                  ? Array(cardSelectionState[dayIndex][eventIndex][cardID] ? 1 : 2)
-                      .fill("")
-                      .map((_, newIndex) => (
-                        <select
-                          key={newIndex}
-                          onChange={selectChange}
-                          data-dayId={dayIndex}
-                          data-eventId={eventIndex}
-                          data-groupId={cardID}
-                          data-lessonNum={newIndex}
-                          className="form-select"
-                          value={event[classNumber][newIndex][cardID]}
-                          title={generateTitle(
-                            subjects,
-                            cards,
-                            teachers,
-                            event[classNumber][newIndex][cardID]
-                          )}
-                        >
-                          <option value="-1">
-                            {cardSelectionState[dayIndex][eventIndex][cardID] ? "Пара" : "Урок"}
-                          </option>
-                          {cards.map((card, cardIndex) =>
-                            card.status ? (
-                              <option value={cardIndex}>{`${subjects[card.subject].title} - ${
-                                teachers[card.teacher]
-                              } - ${card.room}`}</option>
-                            ) : (
-                              ""
-                            )
-                          )}
-                        </select>
-                      ))
-                  : ""}
-                <button
-                  onClick={splittoggle}
-                  disabled={event[classNumber][0][cardID] != event[classNumber][1][cardID]}
-                  data-dayId={dayIndex}
-                  data-eventId={eventIndex}
-                  data-groupId={cardID}
-                  className={`btn btn-secondary ${styles.splittoggle}`}
-                >
-                  <SplitButtonIcon />
-                </button>
-              </div>
+            event[classNumber][0].map((_, cardIndex) => (
+              <ConstructorEventBuilder
+                key={`${eventIndex} ${cardIndex}`}
+                cardID={cardIndex}
+                cardSelectionState={cardSelectionState}
+                classNumber={classNumber}
+                dayID={dayIndex}
+                dispatcher={dispatcher}
+                event={event}
+                eventID={eventIndex}
+                setCardSelectionState={setCardSelectionState}
+                state={state}
+              />
             ))
           )}
           <div className="btn-group">
@@ -188,7 +99,7 @@ const ConstructorPage: React.FC<ConstructorPageProps> = ({
               <div className="d-grid gap-2">
                 <button
                   data-name="event"
-                  data-dayNum={dayIndex}
+                  data-daynum={dayIndex}
                   onClick={addButton}
                   className="btn btn-outline-primary rounded rounded-0 rounded-start btn-sm"
                   type="button"
@@ -203,11 +114,11 @@ const ConstructorPage: React.FC<ConstructorPageProps> = ({
                   <button
                     className="btn btn-outline-danger rounded rounded-0 rounded-end btn-sm"
                     type="button"
-                    data-dayId={dayIndex}
-                    data-eventId={day.events.length - 1}
+                    data-dayid={dayIndex}
+                    data-eventid={day.events.length - 1}
                     onClick={deleteLastEvents}
                   >
-                    Удалить последнии пары
+                    Удалить последние пары
                   </button>
                 </div>
               </div>

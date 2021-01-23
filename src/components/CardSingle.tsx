@@ -1,8 +1,8 @@
 import React, { Dispatch, useEffect } from "react"
-import styles from "../styles/SideBar.module.css"
-import { ReducerAction } from "../types/reducer"
-import { deleteCardAction } from "../utils/reducer/actions"
-import DeleteButtonIcon from "../icons/deleteButton.svg"
+import styles from "@styles/SideBar.module.css"
+import { ReducerAction } from "@type/reducer"
+import { deleteCardAction } from "@utils/reducer/actions"
+import DeleteButtonIcon from "@icons/deleteButton.svg"
 
 type CardSingleProps = {
   card: {
@@ -13,14 +13,20 @@ type CardSingleProps = {
     teacher: string
     cardIndex: number
   }
-  deleteCardButton: (event: React.MouseEvent<HTMLButtonElement>) => void
   dispatcher: Dispatch<ReducerAction>
 }
 
-const CardSingle: React.FC<CardSingleProps> = ({ card, deleteCardButton, dispatcher }) => {
+const CardSingle: React.FC<CardSingleProps> = ({ card, dispatcher }) => {
   useEffect(() => {
     !card.subStatus ? dispatcher(deleteCardAction({ cardID: card.cardIndex })) : ""
   }, [card.subStatus])
+
+  const deleteCardButton = (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault()
+
+    const cardIndex = parseInt(e.currentTarget.name)
+    dispatcher(deleteCardAction({ cardID: cardIndex }))
+  }
 
   return card.status ? (
     <div className={`${styles.subjectCard} col-11 border rounded rounded-2 border-3 p-2 mt-2`}>

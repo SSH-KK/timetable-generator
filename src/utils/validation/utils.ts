@@ -1,4 +1,4 @@
-import { ValidationErrorT } from "../../types/validation"
+import { ValidationErrorT } from "@type/validation"
 
 /**
  * Gets class number from index

@@ -1,86 +1,56 @@
 import React, { useState, useEffect, Dispatch, createRef } from "react"
 import { saveAs } from "file-saver"
-import ConstructorPage from "./ConstructorPage"
-import styles from "../styles/Constructor.module.css"
-import SaveIcon from "../icons/save.svg"
-import ClearIcon from "../icons/clear.svg"
-import { DayT, SubjectT, CardT } from "../types/timetable"
-import { createDocument } from "../utils/pdf"
-import { ValidationStatusT } from "../types/validation"
-import { ReducerAction } from "../types/reducer"
+import ConstructorPage from "@components/ConstructorPage"
+import styles from "@styles/Constructor.module.css"
+import SaveIcon from "@icons/save.svg"
+import ClearIcon from "@icons/clear.svg"
+import { TimetableT } from "@type/timetable"
+import { createDocument } from "@utils/pdf"
+import { ReducerAction } from "@type/reducer"
 import {
-  addEventAction,
   changeMainDateAction,
-  createDayAction,
   setStateFromLocalStorageAction,
   clearStateAction,
-} from "../utils/reducer/actions"
+} from "@utils/reducer/actions"
+import { getGenerationNumber } from "@utils/ConstructorPage"
 
 type ConstructorProps = {
   constructorRef: React.RefObject<HTMLDivElement>
   dispatcher: Dispatch<ReducerAction>
-  teachers: string[]
-  cards: CardT[]
-  subjects: SubjectT[]
-  days: DayT[]
-  validation: ValidationStatusT
+  state: TimetableT
 }
 
-const Constructor: React.FC<ConstructorProps> = ({
-  constructorRef,
-  subjects,
-  days,
-  cards,
-  teachers,
-  dispatcher,
-  validation,
-}) => {
-  const [pageState, setPageState] = useState<number>(0)
+const Constructor: React.FC<ConstructorProps> = ({ constructorRef, state, dispatcher }) => {
+  const [pageClassNumberState, setPageState] = useState<number>(0)
   const [startDateState, setStartDateState] = useState<Date>(new Date())
   const fileInputRef = createRef<HTMLInputElement>()
 
-  const changePage = (event: React.MouseEvent<HTMLElement>) => {
-    event.preventDefault()
-    if (event.currentTarget.dataset.name) {
-      const name = parseInt(event.currentTarget.dataset.name)
+  const { cards, days, subjects, teachers, validation } = state
+
+  const changePage = (e: React.MouseEvent<HTMLElement>) => {
+    e.preventDefault()
+
+    if (e.currentTarget.dataset.name) {
+      const name = parseInt(e.currentTarget.dataset.name)
       setPageState(name)
     }
   }
 
-  const changeDate = (event: React.ChangeEvent<HTMLInputElement>) => {
-    event.preventDefault()
-    if (event.currentTarget.value) {
-      setStartDateState(new Date(event.currentTarget.value))
-    }
+  const changeDate = (e: React.ChangeEvent<HTMLInputElement>) => {
+    e.preventDefault()
+
+    if (e.currentTarget.value) setStartDateState(new Date(e.currentTarget.value))
   }
 
-  const addButton = (event: React.MouseEvent<HTMLButtonElement>) => {
-    event.preventDefault()
-    if (event.currentTarget.dataset) {
-      const name = event.currentTarget.dataset.name
-      if (name == "day") {
-        dispatcher(
-          createDayAction({
-            date: startDateState.getTime() + 24 * 3600 * 1000 * days.length,
-          })
-        )
-      } else if (name == "event" && event.currentTarget.dataset.daynum) {
-        const dayNum = event.currentTarget.dataset.daynum
-        dispatcher(addEventAction({ dayID: parseInt(dayNum) }))
-      }
-    }
-  }
+  const downloadDocument = (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault()
 
-  const downloadDocument = (event: React.MouseEvent<HTMLButtonElement>) => {
-    event.preventDefault()
-    if (!validation.has[pageState]) {
-      let potoch =
-        startDateState.getMonth() <= 5
-          ? (startDateState.getFullYear() % 2000) - 1
-          : startDateState.getFullYear() % 2000
-      potoch = potoch - 1 - pageState
+    if (!validation.has[pageClassNumberState]) {
+      let potoch = getGenerationNumber(startDateState)
+      potoch = potoch - 1 - pageClassNumberState
+
       createDocument(
-        pageState + 10,
+        pageClassNumberState + 10,
         potoch,
         { cards, subjects, days, teachers, validation },
         startDateState.getTime()
@@ -88,24 +58,31 @@ const Constructor: React.FC<ConstructorProps> = ({
     }
   }
 
-  const downloadStorage = (event: React.MouseEvent<HTMLButtonElement>) => {
-    event.preventDefault()
+  const downloadStorage = (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault()
+
     const data = localStorage.getItem("TimetableState")
+
     if (data) {
       const fileToSave = new Blob([JSON.stringify(JSON.parse(data), undefined, 2)], {
         type: "application/json",
       })
+
       saveAs(fileToSave, "TimetableState.json")
     }
   }
 
-  const importFile = (event: React.MouseEvent<HTMLFormElement>) => {
-    event.preventDefault()
+  const importFile = (e: React.MouseEvent<HTMLFormElement>) => {
+    e.preventDefault()
+
     if (fileInputRef.current && fileInputRef.current.files) {
-      let reader = new FileReader()
+      const reader = new FileReader()
+
       reader.readAsText(fileInputRef.current.files[0])
+
       reader.onload = () => {
-        let result = reader.result
+        const result = reader.result
+
         if (typeof result == "string") {
           try {
             JSON.parse(result)
@@ -116,11 +93,13 @@ const Constructor: React.FC<ConstructorProps> = ({
         }
       }
     }
-    event.currentTarget.reset()
+
+    e.currentTarget.reset()
   }
 
-  const clearState = (event: React.MouseEvent<HTMLButtonElement>) => {
-    event.preventDefault()
+  const clearState = (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault()
+
     dispatcher(clearStateAction({}))
   }
 
@@ -135,7 +114,7 @@ const Constructor: React.FC<ConstructorProps> = ({
           <a
             onClick={changePage}
             data-name="0"
-            className={`nav-link ${pageState == 0 ? "active" : ""}`}
+            className={`nav-link ${pageClassNumberState == 0 ? "active" : ""}`}
           >
             10 класс
           </a>
@@ -144,7 +123,7 @@ const Constructor: React.FC<ConstructorProps> = ({
           <a
             onClick={changePage}
             data-name="1"
-            className={`nav-link ${pageState == 1 ? "active" : ""}`}
+            className={`nav-link ${pageClassNumberState == 1 ? "active" : ""}`}
           >
             11 класс
           </a>
@@ -165,7 +144,7 @@ const Constructor: React.FC<ConstructorProps> = ({
         </form>
         <button
           className={`btn btn-outline-danger me-2 mb-2`}
-          disabled={validation.has[pageState]}
+          disabled={validation.has[pageClassNumberState]}
           onClick={downloadDocument}
         >
           Скачать PDF
@@ -181,29 +160,22 @@ const Constructor: React.FC<ConstructorProps> = ({
         </button>
       </ul>
       <div className="container-fluid">
-        {pageState == 0 ? (
+        {pageClassNumberState == 0 ? (
           <ConstructorPage
-            days={days}
-            subjects={subjects}
             dispatcher={dispatcher}
-            cards={cards}
-            teachers={teachers}
-            addButton={addButton}
-            validation={validation}
+            startDate={startDateState}
+            state={state}
             classNum={"lessons10"}
           />
         ) : (
           ""
         )}
-        {pageState == 1 ? (
+
+        {pageClassNumberState == 1 ? (
           <ConstructorPage
-            days={days}
-            subjects={subjects}
             dispatcher={dispatcher}
-            validation={validation}
-            cards={cards}
-            teachers={teachers}
-            addButton={addButton}
+            startDate={startDateState}
+            state={state}
             classNum={"lessons11"}
           />
         ) : (

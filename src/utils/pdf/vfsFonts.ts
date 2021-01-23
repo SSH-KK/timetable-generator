@@ -1,5 +1,5 @@
-import regular from "../fonts/PTSerif-Regular.ttf"
-import bold from "../fonts/PTSerif-Bold.ttf"
+import regular from "@fonts/PTSerif-Regular.ttf"
+import bold from "@fonts/PTSerif-Bold.ttf"
 
 import pdfFonts from "pdfmake/build/vfs_fonts"
 

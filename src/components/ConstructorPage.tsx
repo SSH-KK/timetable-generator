@@ -8,7 +8,7 @@ import { ReducerAction } from "../types/reducer"
 import { addLessonAction, deleteEventAction } from "../utils/reducer/actions"
 import { getGroupNumber } from "../utils/pdf/utils"
 import SplitButtonIcon from "../icons/splitButton.svg"
-import { generateTitle } from '../utils/ConstructorPage'
+import { generateTitle } from "../utils/ConstructorPage"
 
 type ConstructorPageProps = {
   days: DayT[]
@@ -148,7 +148,12 @@ const ConstructorPage: React.FC<ConstructorPageProps> = ({
                           data-lessonNum={newIndex}
                           className="form-select"
                           value={event[classNumber][newIndex][cardID]}
-                          title={generateTitle(subjects, cards, teachers, event[classNumber][newIndex][cardID]) }
+                          title={generateTitle(
+                            subjects,
+                            cards,
+                            teachers,
+                            event[classNumber][newIndex][cardID]
+                          )}
                         >
                           <option value="-1">
                             {cardSelectionState[dayIndex][eventIndex][cardID] ? "Пара" : "Урок"}

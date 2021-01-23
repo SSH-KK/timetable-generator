@@ -100,8 +100,7 @@ const SideBar: React.FC<SidebarProps> = ({ sidebarRef, state, dispatcher }) => {
     }
   }
 
-  return useMemo(
-    () => (
+  return(
       <nav id={styles.sidebar} className="shadow me-3" ref={sidebarRef}>
         <div className="row pb-5 justify-content-center">
           <h3 className="text-center">Предметы</h3>
@@ -202,9 +201,7 @@ const SideBar: React.FC<SidebarProps> = ({ sidebarRef, state, dispatcher }) => {
           ))}
         </div>
       </nav>
-    ),
-    [state.subjects, state.teachers, state.cards, inputState]
-  )
+    )
 }
 
 export default SideBar

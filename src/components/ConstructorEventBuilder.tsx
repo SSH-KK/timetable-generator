@@ -1,4 +1,4 @@
-import React, { Dispatch, SetStateAction } from "react"
+import React, { Dispatch, SetStateAction, useEffect } from "react"
 import styles from "@styles/Constructor.module.css"
 import { EventT, LessonsType, TimetableT } from "@type/timetable"
 import SplitButtonIcon from "@icons/splitButton.svg"
@@ -35,15 +35,15 @@ const ConstructorEventBuilder: React.FC<ConstructorEventBuilderPropsT> = ({
     e.preventDefault()
     if (e.currentTarget.dataset) {
       const dataset = e.currentTarget.dataset
-      if (dataset.dayid && dataset.eventid && dataset.groupid && dataset.lessonnum) {
-        const { dayid, eventid, groupid, lessonnum } = dataset
-        const isPair = cardSelectionState[parseInt(dayid)][parseInt(eventid)][parseInt(groupid)]
+      if (dataset.lessonnum) {
+        const {lessonnum} = dataset
+        const isPair = cardSelectionState[dayID][eventID][cardID]
         dispatcher(
           addLessonAction({
-            dayID: parseInt(dayid),
-            eventID: parseInt(eventid),
+            dayID: dayID,
+            eventID: eventID,
             classNumber,
-            groupID: parseInt(groupid),
+            groupID: cardID,
             isPair,
             lessonID: parseInt(e.currentTarget.value),
             lessonNumber: parseInt(lessonnum),
@@ -77,6 +77,25 @@ const ConstructorEventBuilder: React.FC<ConstructorEventBuilderPropsT> = ({
       }
     }
   }
+
+  useEffect(()=>{
+    const dataChanges = [ (days[dayID].events[eventID][classNumber][0][cardID]!=-1 ? cards[days[dayID].events[eventID][classNumber][0][cardID]].status : ''), (days[dayID].events[eventID][classNumber][1][cardID]!=-1 ? cards[days[dayID].events[eventID][classNumber][1][cardID]].status : '') ]
+      dataChanges.forEach((ob, obIndex)=>{
+        if(!ob){
+          dispatcher(
+            addLessonAction({
+            dayID: dayID,
+            eventID: eventID,
+            classNumber,
+            groupID: cardID,
+            isPair: false,
+            lessonID: -1,
+            lessonNumber: obIndex,
+            })
+          )
+        }
+      })
+  },[ days[dayID].events[eventID][classNumber][0][cardID]!=-1 ? cards[days[dayID].events[eventID][classNumber][0][cardID]].status : '', days[dayID].events[eventID][classNumber][1][cardID]!=-1 ? cards[days[dayID].events[eventID][classNumber][1][cardID]].status : '' ])
 
   const cardValidationClass =
     validation.errors[parseInt(classNumber.replace("lessons", "")) % 10][dayID][eventID][cardID]

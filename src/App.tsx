@@ -30,9 +30,8 @@ const App: React.FC = () => {
       localStorage.setItem("TimetableState", JSON.stringify(state))
   }, [state])
 
-  const toggleSideBar = (e: React.MouseEvent) => {
+  const toggleSideBar = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault()
-
     if (sidebarToggleRef.current && sidebarRef.current && constructorRef.current) {
       const sidebarToggle = sidebarToggleRef.current
       const sidebar = sidebarRef.current

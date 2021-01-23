@@ -21,6 +21,8 @@ import { ValidationErrorT } from "../../types/validation"
 import { initialEventLessonsGenrator } from "../timetable"
 import { setErrorsStatus, validate } from "../validation"
 
+declare const localStorage: Storage | undefined
+
 export const reducer = produce(
   (draft: TimetableT = initialState, action: ReducerAction): TimetableT => {
     if (isCreateSubjectAction(action))
@@ -119,9 +121,11 @@ export const reducer = produce(
 
     if (isClearStateAction(action)) {
       draft = initialState
-      let ldata = localStorage.getItem("TimetableState")
-      if (ldata) {
-        localStorage.setItem("TimetableState", JSON.stringify(initialState))
+      if (typeof localStorage !== "undefined") {
+        const ldata = localStorage.getItem("TimetableState")
+        if (ldata) {
+          localStorage.setItem("TimetableState", JSON.stringify(initialState))
+        }
       }
     }
 

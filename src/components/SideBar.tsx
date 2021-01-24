@@ -69,7 +69,7 @@ const SideBar: React.FC<SidebarProps> = ({ sidebarRef, state, dispatcher }) => {
       const name = e.target.name
 
       if (
-        (name == "room" && (parseInt(e.target.value) || e.target.value == "")) ||
+        (name == "room" && ((parseInt(e.target.value) && parseInt(e.target.value)<600) || e.target.value == "")) ||
         name != "room"
       ) {
         setInputState(prev => ({
@@ -103,35 +103,6 @@ const SideBar: React.FC<SidebarProps> = ({ sidebarRef, state, dispatcher }) => {
   return (
     <nav id={styles.sidebar} className="shadow me-3" ref={sidebarRef}>
       <div className="row pb-5 justify-content-center">
-        <h3 className="text-center">Предметы</h3>
-        {subjects.map((ob, subjectIndex) =>
-          ob.status ? (
-            <SubjectSingle
-              dispatcher={dispatcher}
-              subjectID={subjectIndex}
-              deleteSubjectButton={deleteSubjectButton}
-              subject={ob}
-              teachers={teachers}
-              key={subjectIndex}
-            />
-          ) : (
-            ""
-          )
-        )}
-        <div className="col-11">
-          <form className="mt-2" data-name="subject" onSubmit={createForm}>
-            <div className="input-group input-group-sm">
-              <input
-                type="text"
-                name="subject"
-                onChange={inputChange}
-                value={inputState.subject}
-                className="form-control border border-3  rounded rounded-3"
-                placeholder="Предмет"
-              />
-            </div>
-          </form>
-        </div>
         <h3 className="text-center mt-2">Пары</h3>
         <div className="col-11">
           <form className="mt-2" data-name="card" onSubmit={createForm}>
@@ -199,6 +170,35 @@ const SideBar: React.FC<SidebarProps> = ({ sidebarRef, state, dispatcher }) => {
             key={cardIndex}
           />
         ))}
+        <h3 className="text-center">Предметы</h3>
+        <div className="col-11">
+          <form className="mt-2" data-name="subject" onSubmit={createForm}>
+            <div className="input-group input-group-sm">
+              <input
+                type="text"
+                name="subject"
+                onChange={inputChange}
+                value={inputState.subject}
+                className="form-control border border-3  rounded rounded-3"
+                placeholder="Предмет"
+              />
+            </div>
+          </form>
+        </div>
+        {subjects.map((ob, subjectIndex) =>
+          ob.status ? (
+            <SubjectSingle
+              dispatcher={dispatcher}
+              subjectID={subjectIndex}
+              deleteSubjectButton={deleteSubjectButton}
+              subject={ob}
+              teachers={teachers}
+              key={subjectIndex}
+            />
+          ) : (
+            ""
+          )
+        )}
       </div>
     </nav>
   )

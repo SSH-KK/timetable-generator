@@ -1,4 +1,4 @@
-import { LessonsType } from "./timetable"
+import { LessonsType, TimetableT } from "./timetable"
 
 export enum ActionType {
   CREATE_SUBJECT,

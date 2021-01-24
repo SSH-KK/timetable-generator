@@ -69,7 +69,8 @@ const SideBar: React.FC<SidebarProps> = ({ sidebarRef, state, dispatcher }) => {
       const name = e.target.name
 
       if (
-        (name == "room" && ((parseInt(e.target.value) && parseInt(e.target.value)<600) || e.target.value == "")) ||
+        (name == "room" &&
+          ((parseInt(e.target.value) && parseInt(e.target.value) < 600) || e.target.value == "")) ||
         name != "room"
       ) {
         setInputState(prev => ({

@@ -4,7 +4,7 @@ import { EventT, LessonsType, TimetableT } from "@type/timetable"
 import SplitButtonIcon from "@icons/splitButton.svg"
 import { generateTitle } from "@utils/ConstructorPage"
 import { ReducerAction } from "@type/reducer"
-import { addLessonAction} from "@utils/reducer/actions"
+import { addLessonAction } from "@utils/reducer/actions"
 
 type ConstructorEventBuilderPropsT = {
   cardSelectionState: boolean[][][]

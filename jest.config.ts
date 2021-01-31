@@ -9,4 +9,5 @@ export default {
     "@type/(.*)": "<rootDir>/src/types/$1",
     "@utils/(.*)": "<rootDir>/src/utils/$1",
   },
+  testPathIgnorePatterns: ["<rootDir>/node_modules/"],
 }

@@ -73,7 +73,6 @@ const ConstructorEventBuilder: React.FC<ConstructorEventBuilderPropsT> = ({
             )
           )
         }
-        // can add split for different selection in lessons
       }
     }
   }

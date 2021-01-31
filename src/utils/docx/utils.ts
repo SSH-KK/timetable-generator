@@ -12,8 +12,8 @@ export const generateDocumentName = (classNumber: number): string =>
 /**
  * Function for data formation for document header
  */
-export const getDate = (): string => {
-  const now = new Date()
+export const getDate = (date: number): string => {
+  const now = new Date(date)
   return `${now.getDate()} ${assets.months[now.getMonth()]} ${now.getFullYear()} года`
 }
 

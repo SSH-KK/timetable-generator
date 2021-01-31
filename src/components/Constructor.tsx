@@ -5,7 +5,6 @@ import styles from "@styles/Constructor.module.css"
 import SaveIcon from "@icons/save.svg"
 import ClearIcon from "@icons/clear.svg"
 import { TimetableT } from "@type/timetable"
-import { createDocument } from "@utils/pdf"
 import { ReducerAction } from "@type/reducer"
 import {
   changeMainDateAction,
@@ -13,6 +12,8 @@ import {
   clearStateAction,
 } from "@utils/reducer/actions"
 import { getGenerationNumber } from "@utils/ConstructorPage"
+
+import downloadDocx from "@utils/docx"
 
 type ConstructorProps = {
   constructorRef: React.RefObject<HTMLDivElement>
@@ -49,7 +50,7 @@ const Constructor: React.FC<ConstructorProps> = ({ constructorRef, state, dispat
       let potoch = getGenerationNumber(startDateState)
       potoch = potoch - 1 - pageClassNumberState
 
-      createDocument(
+      downloadDocx(
         pageClassNumberState + 10,
         potoch,
         { cards, subjects, days, teachers, validation },

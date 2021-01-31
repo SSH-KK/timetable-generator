@@ -1,5 +1,5 @@
 import { SubjectT, CardT, DayT, LessonsType } from "@type/timetable"
-import assets from "@assets/pdf"
+import assets from "@assets/docx"
 import { getGroupNumber } from "./docx/utils"
 
 export const generateTitle = (

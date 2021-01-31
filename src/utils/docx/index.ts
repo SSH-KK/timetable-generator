@@ -1,4 +1,4 @@
-import { TimetableT } from "@type/timetable"
+import { LessonsType, TimetableT } from "@type/timetable"
 import {
   Document,
   AlignmentType,
@@ -11,8 +11,17 @@ import {
   VerticalAlign,
   VerticalMergeType,
   WidthType,
+  ShadingType,
 } from "docx"
-import { getDate, getGroupNumber } from "./utils"
+import {
+  shouldColSpan,
+  generateDayHeader,
+  generateEventContent,
+  getDate,
+  getGroupNumber,
+  shouldRowSpan,
+} from "./utils"
+import assets from "@assets/docx"
 
 const header = (date: number) => [
   new Paragraph({
@@ -100,6 +109,7 @@ const generateTable = (
             ),
         ],
       }),
+      ...formatData(timetableState, firstDay, classNumber),
     ],
 
     width: {
@@ -107,6 +117,72 @@ const generateTable = (
       type: WidthType.PERCENTAGE,
     },
   })
+
+const formatData = (data: TimetableT, firstDay: number, classNumber: number): TableRow[] =>
+  data.days.flatMap((day, dayIndex) => [
+    new TableRow({
+      children: [
+        new TableCell({
+          shading: { fill: "A6A6A6", val: ShadingType.CLEAR, color: "auto" },
+          children: [
+            new Paragraph({
+              alignment: AlignmentType.CENTER,
+              children: [new TextRun({ text: generateDayHeader(firstDay, dayIndex), bold: true })],
+            }),
+          ],
+          columnSpan: 9,
+        }),
+      ],
+    }),
+    ...day.events.flatMap((event, eventIndex) =>
+      event[`lessons${classNumber}` as LessonsType].map(
+        (lesson, lessonIndex) =>
+          new TableRow({
+            children: [
+              new TableCell({
+                children: [new Paragraph((eventIndex + 1).toString())],
+                verticalMerge:
+                  lessonIndex === 0 ? VerticalMergeType.RESTART : VerticalMergeType.CONTINUE,
+              }),
+              new TableCell({
+                children: [new Paragraph((eventIndex * 2 + lessonIndex + 1).toString())],
+              }),
+              new TableCell({
+                children: [new Paragraph(assets.lessonTimes[eventIndex * 2 + lessonIndex])],
+              }),
+              ...lesson.flatMap((lessonElement, groupIndex) =>
+                (groupIndex > 0 &&
+                  shouldColSpan(event, lessonIndex, groupIndex - 1, classNumber)) ||
+                (lessonIndex == 1 && shouldRowSpan(event, 0, groupIndex, classNumber))
+                  ? []
+                  : [
+                      data.cards[lessonElement]
+                        ? new TableCell({
+                            children: [new Paragraph(generateEventContent(data, lessonElement))],
+                            rowSpan: shouldRowSpan(event, lessonIndex, groupIndex, classNumber)
+                              ? 2
+                              : 1,
+                            columnSpan: shouldColSpan(event, lessonIndex, groupIndex, classNumber)
+                              ? 2
+                              : 1,
+                          })
+                        : new TableCell({
+                            children: [],
+                            verticalMerge: !data.cards[
+                              event[`lessons${classNumber}` as LessonsType][1][groupIndex]
+                            ]
+                              ? lessonIndex === 0
+                                ? VerticalMergeType.RESTART
+                                : VerticalMergeType.CONTINUE
+                              : undefined,
+                          }),
+                    ]
+              ),
+            ],
+          })
+      )
+    ),
+  ])
 
 export default (
   classNumber: number,
@@ -122,6 +198,8 @@ export default (
       generateTable(classNumber, generation, timetableState, firstDay),
     ],
   })
+
+  console.log(document)
 
   Packer.toBlob(document).then(blob => saveAs(blob, "doc.docx"))
 }

@@ -32,20 +32,24 @@ const lessonTimes = [
   "12.50-13.30",
 ] as const
 
-const mainHeader = [['А','Пара'], ['Б','Урок'], ['В','Время']] as const
+const mainHeader = [
+  ["А", "Пара"],
+  ["Б", "Урок"],
+  ["В", "Время"],
+] as const
 
 const baseAlignment = {
-  horizontal: 'center',
-  vertical: 'middle',
+  horizontal: "center",
+  vertical: "middle",
   wrapText: true,
 } as const
 
 const fillPatterns = {
   gray: {
-    type: 'pattern',
-    pattern:'solid',
-    fgColor:{argb:'FFA6A6A6'},
-  }
+    type: "pattern",
+    pattern: "solid",
+    fgColor: { argb: "FFA6A6A6" },
+  },
 } as const
 
 export default {
@@ -54,5 +58,5 @@ export default {
   lessonTimes,
   mainHeader,
   baseAlignment,
-  fillPatterns
+  fillPatterns,
 }

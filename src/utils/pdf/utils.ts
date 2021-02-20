@@ -7,7 +7,7 @@ import { LessonsType, TimetableT } from "@type/timetable"
  * @param classNumber Class number
  */
 export const generateDocumentName = (classNumber: number): string =>
-  `Raspisanie_${classNumber}_Klassy_07_Dek_12_Dek_2020-2021.pdf`
+  `Raspisanie_${classNumber}_Klassy_07_Dek_12_Dek_2020-2021.xlsx`
 
 /**
  * Function for data formation for document header
@@ -50,7 +50,7 @@ export const generateEventContent = (data: TimetableT, cardId: number): string =
   const card = data.cards[cardId]
   const subject = data.subjects[card.subject]
 
-  return `${subject.title} Ауд. ${card.room} ${data.teachers[card.teacher]}`
+  return `${subject.title}\nАуд. ${card.room}\n${data.teachers[card.teacher]}`
 }
 
 /**

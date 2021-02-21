@@ -13,7 +13,7 @@ export enum ActionType {
   CHANGE_MAIN_DATE,
   SET_STATE_FROM_LOCAL_STORAGE,
   DELETE_EVENT,
-  CLEAR_STATE
+  CLEAR_STATE,
 }
 
 interface Action {
@@ -55,7 +55,15 @@ export interface DeleteCardAction extends Action {
 }
 
 export interface AddLessonAction extends Action {
-  payload: { dayID: number; eventID: number; classNumber: LessonsType; groupID: number; isPair: boolean; lessonID: number; lessonNumber: number }
+  payload: {
+    dayID: number
+    eventID: number
+    classNumber: LessonsType
+    groupID: number
+    isPair: boolean
+    lessonID: number
+    lessonNumber: number
+  }
 }
 
 export interface ChangeMainDateAction extends Action {
@@ -114,7 +122,9 @@ export function isChangeMainDateAction(action: Action): action is ChangeMainDate
   return action.type === ActionType.CHANGE_MAIN_DATE
 }
 
-export function isSetStateFromLocalStorageAction(action: Action): action is SetStateFromLocalStorageAction {
+export function isSetStateFromLocalStorageAction(
+  action: Action
+): action is SetStateFromLocalStorageAction {
   return action.type === ActionType.SET_STATE_FROM_LOCAL_STORAGE
 }
 

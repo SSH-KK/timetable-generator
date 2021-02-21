@@ -1,7 +1,7 @@
 import ExcelJS from "exceljs"
 import { saveAs } from "file-saver"
 import { LessonsType, TimetableT } from "@type/timetable"
-import assets from "@assets/pdf"
+import assets from "@assets/excel"
 import {
   generateDayHeader,
   generateDocumentName,
@@ -11,7 +11,7 @@ import {
 } from "./utils"
 
 /**
- * FuUnction to join all content of pdf
+ * FuUnction to join all content of excel
  * @param classNumber Class number
  * @param generation Generation
  * @param timetableState State returned by useTimetable hook
@@ -163,7 +163,7 @@ const generateDocument = (
 }
 
 /**
- * Function for pdf document generation
+ * Function for excel document generation
  * @param classNumber Class number
  * @param generation Generation
  * @param timetableState State returned by useTimetable hook

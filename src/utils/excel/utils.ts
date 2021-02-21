@@ -1,4 +1,4 @@
-import assets from "@assets/pdf"
+import assets from "@assets/excel"
 import { LessonsType, TimetableT } from "@type/timetable"
 
 /**

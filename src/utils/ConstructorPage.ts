@@ -1,6 +1,6 @@
 import { SubjectT, CardT, DayT, LessonsType } from "@type/timetable"
-import assets from "@assets/pdf"
-import { getGroupNumber } from "./pdf/utils"
+import assets from "@assets/excel"
+import { getGroupNumber } from "./excel/utils"
 
 export const generateTitle = (
   subjects: SubjectT[],

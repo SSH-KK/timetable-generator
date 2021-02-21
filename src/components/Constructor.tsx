@@ -5,7 +5,7 @@ import styles from "@styles/Constructor.module.css"
 import SaveIcon from "@icons/save.svg"
 import ClearIcon from "@icons/clear.svg"
 import { TimetableT } from "@type/timetable"
-import { createDocument } from "@utils/pdf"
+import { createDocument } from "@utils/excel"
 import { ReducerAction } from "@type/reducer"
 import {
   changeMainDateAction,
@@ -147,7 +147,7 @@ const Constructor: React.FC<ConstructorProps> = ({ constructorRef, state, dispat
           disabled={validation.has[pageClassNumberState]}
           onClick={downloadDocument}
         >
-          Скачать PDF
+          Скачать EXCEL
         </button>
         <button
           className={`btn btn-outline-success me-2 mb-2 mt-md-0 mt-2`}

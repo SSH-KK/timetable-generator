@@ -45,11 +45,11 @@ const generateDocument = (
     sheet.getCell(1, 4 + 2 * obIndex).alignment = assets.baseAlignment
     sheet.getCell(2, 4 + 2 * obIndex).value = `${getGroupNumber(generation)}${
       2 * obIndex + 1
-    } группа`
+      } группа`
     sheet.getCell(2, 4 + 2 * obIndex).alignment = assets.baseAlignment
     sheet.getCell(2, 4 + 2 * obIndex + 1).value = `${getGroupNumber(generation)}${
       2 * obIndex + 2
-    } группа`
+      } группа`
     sheet.getCell(2, 4 + 2 * obIndex + 1).alignment = assets.baseAlignment
   })
   let celsUp = 0
@@ -115,7 +115,8 @@ const generateDocument = (
               5 + celsUp + 2 * eventIndex,
               5 + 2 * Math.trunc(parIndex / 2)
             )
-          } else {
+            console.log('ALL SAME')
+          } else if( (temp_cells[0][1] == temp_cells[2][1] && temp_cells[0][1] != -1) || (temp_cells[1][1] == temp_cells[3][1] && temp_cells[1][1] != -1) ){
             if (temp_cells[0][1] == temp_cells[2][1] && temp_cells[0][1] != -1) {
               sheet.mergeCells(
                 4 + celsUp + 2 * eventIndex,
@@ -123,29 +124,37 @@ const generateDocument = (
                 5 + celsUp + 2 * eventIndex,
                 4 + 2 * Math.trunc(parIndex / 2)
               )
-            } else if (temp_cells[0][1] == temp_cells[1][1] && temp_cells[0][1] != -1) {
-              sheet.mergeCells(
-                4 + celsUp + 2 * eventIndex,
-                4 + 2 * Math.trunc(parIndex / 2),
-                4 + celsUp + 2 * eventIndex,
-                5 + 2 * Math.trunc(parIndex / 2)
-              )
-            } else if (temp_cells[2][1] == temp_cells[3][1] && temp_cells[1][1] != -1) {
-              sheet.mergeCells(
-                5 + celsUp + 2 * eventIndex,
-                4 + 2 * Math.trunc(parIndex / 2),
-                5 + celsUp + 2 * eventIndex,
-                5 + 2 * Math.trunc(parIndex / 2)
-              )
-            } else if (temp_cells[1][1] == temp_cells[3][1] && temp_cells[1][1] != -1) {
+              console.log('s 1')
+            } if (temp_cells[1][1] == temp_cells[3][1] && temp_cells[1][1] != -1) {
               sheet.mergeCells(
                 4 + celsUp + 2 * eventIndex,
                 5 + 2 * Math.trunc(parIndex / 2),
                 5 + celsUp + 2 * eventIndex,
                 5 + 2 * Math.trunc(parIndex / 2)
               )
+              console.log('s 4')
             }
           }
+          else {
+              if (temp_cells[0][1] == temp_cells[1][1] && temp_cells[0][1] != -1) {
+                sheet.mergeCells(
+                  4 + celsUp + 2 * eventIndex,
+                  4 + 2 * Math.trunc(parIndex / 2),
+                  4 + celsUp + 2 * eventIndex,
+                  5 + 2 * Math.trunc(parIndex / 2)
+                )
+                console.log('s 2')
+              }
+              if (temp_cells[2][1] == temp_cells[3][1] && temp_cells[1][1] != -1) {
+                sheet.mergeCells(
+                  5 + celsUp + 2 * eventIndex,
+                  4 + 2 * Math.trunc(parIndex / 2),
+                  5 + celsUp + 2 * eventIndex,
+                  5 + 2 * Math.trunc(parIndex / 2)
+                )
+                console.log('s 3')
+              }
+            }
         }
       })
     })

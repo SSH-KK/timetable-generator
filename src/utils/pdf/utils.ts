@@ -1,5 +1,4 @@
 import assets from "@assets/pdf"
-import { SpanGenerator } from "@type/pdf"
 import { LessonsType, TimetableT } from "@type/timetable"
 
 /**
@@ -52,31 +51,3 @@ export const generateEventContent = (data: TimetableT, cardId: number): string =
 
   return `${subject.title}\nАуд. ${card.room}\n${data.teachers[card.teacher]}`
 }
-
-/**
- * Function for checking if row span is needed
- * @param event Event object
- * @param lessonIndex Lesson index
- * @param groupIndex Group index
- * @param classNumber Class number
- */
-export const rowSpanGenerator: SpanGenerator = (event, lessonIndex, groupIndex, classNumber) =>
-  lessonIndex == 0 &&
-  event[`lessons${classNumber}` as LessonsType][0][groupIndex] ==
-    event[`lessons${classNumber}` as LessonsType][1][groupIndex] &&
-  colSpanGenerator(event, 0, groupIndex, classNumber) ==
-    colSpanGenerator(event, 1, groupIndex, classNumber)
-    ? 2
-    : 1
-/**
- * Function for checking if column span is needed
- * @param event Event object
- * @param lessonIndex Lesson index
- * @param groupIndex Group index
- * @param classNumber Class number
- */
-export const colSpanGenerator: SpanGenerator = (event, lessonIndex, groupIndex, classNumber) =>
-  event[`lessons${classNumber}` as LessonsType][lessonIndex][groupIndex] ==
-  event[`lessons${classNumber}` as LessonsType][lessonIndex][groupIndex + 1]
-    ? 2
-    : 1

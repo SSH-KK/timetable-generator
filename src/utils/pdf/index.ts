@@ -1,19 +1,13 @@
 import ExcelJS from "exceljs"
 import { saveAs } from "file-saver"
-
-// import pdfMake from "pdfmake/build/pdfmake"
-// import { TableCell, TDocumentDefinitions } from "pdfmake/interfaces"
-
 import { LessonsType, TimetableT } from "@type/timetable"
 import assets from "@assets/pdf"
 import {
-  colSpanGenerator,
   generateDayHeader,
   generateDocumentName,
   generateEventContent,
   getDate,
   getGroupNumber,
-  rowSpanGenerator,
 } from "./utils"
 
 /**

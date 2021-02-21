@@ -51,13 +51,11 @@
   "dependencies": {
     "@popperjs/core": "^2.6.0",
     "@types/file-saver": "^2.0.1",
-    "@types/pdfmake": "^0.1.16",
     "bootstrap": "^5.0.0-beta1",
     "bootstrap-icons": "^1.2.1",
     "exceljs": "^4.2.0",
     "file-saver": "^2.0.5",
     "immer": "^8.0.1",
-    "pdfmake": "^0.1.68",
     "react": "^15.0.0 || ^16.0.0 || ^17.0.0 ",
     "react-dom": "^15.0.0 || ^16.0.0 || ^17.0.0 "
   }

@@ -174,6 +174,7 @@ const tests: {
       groupID: 0,
       isPair: true,
       lessonID: 0,
+      lessonNumber: 0,
     }),
     result: {
       subjects: [{ status: true, teachers: [0], title: "Test" }],

@@ -12,7 +12,8 @@
     "wdev": "set NODE_ENV=development && webpack serve",
     "lint": "eslint --config .eslintrc",
     "format": "prettier --write \"src/**/*.+(js|ts|jsx|tsx|json|css|md)\"",
-    "test": "jest"
+    "test": "jest",
+    "codegen": "ts-node -O '{\"module\":\"commonjs\"}' codegen/reducer/index.ts"
   },
   "devDependencies": {
     "@babel/core": "^7.12.10",
@@ -41,6 +42,7 @@
     "prettier": "^2.2.1",
     "style-loader": "^2.0.0",
     "ts-loader": "^8.0.12",
+    "ts-morph": "^9.1.0",
     "ts-node": "^9.1.1",
     "tsconfig-paths-webpack-plugin": "^3.3.0",
     "typescript": "^4.1.2",

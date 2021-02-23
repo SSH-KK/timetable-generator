@@ -40,7 +40,7 @@ const mainHeader = [
 
 const baseHeight = {
   small: 25,
-  big: 55
+  big: 55,
 } as const
 
 const baseAlignment = {
@@ -64,5 +64,5 @@ export default {
   mainHeader,
   baseAlignment,
   fillPatterns,
-  baseHeight
+  baseHeight,
 }

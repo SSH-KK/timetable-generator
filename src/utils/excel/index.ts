@@ -158,7 +158,7 @@ const generateDocument = (
 
     celsUp += day.events.length * 2 + 1
   })
-  sheet.pageSetup.printArea = `A1:I${celsUp+3}`
+  sheet.pageSetup.printArea = `A1:I${celsUp + 3}`
   return workbook.xlsx.writeBuffer()
 }
 

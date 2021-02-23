@@ -38,6 +38,11 @@ const mainHeader = [
   ["В", "Время"],
 ] as const
 
+const baseHeight = {
+  small: 25,
+  big: 55
+} as const
+
 const baseAlignment = {
   horizontal: "center",
   vertical: "middle",
@@ -59,4 +64,5 @@ export default {
   mainHeader,
   baseAlignment,
   fillPatterns,
+  baseHeight
 }

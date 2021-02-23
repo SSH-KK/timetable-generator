@@ -46,14 +46,19 @@ const generateDocument = (
     } группа`
     sheet.getCell(2, 4 + 2 * obIndex + 1).alignment = assets.baseAlignment
   })
+  sheet.getRow(1).height = assets.baseHeight.small
+  sheet.getRow(2).height = assets.baseHeight.small
   let celsUp = 0
   timetableState.days.forEach((day, dayIndex) => {
     sheet.mergeCells(3 + celsUp, 1, 3 + celsUp, 9)
     sheet.getCell(3 + celsUp, 1).value = generateDayHeader(firstDay, dayIndex)
+    sheet.getRow(3 + celsUp).height = assets.baseHeight.small
     sheet.getCell(3 + celsUp, 1).alignment = assets.baseAlignment
     sheet.getCell(3 + celsUp, 1).fill = assets.fillPatterns.gray
 
     day.events.forEach((event, eventIndex) => {
+      sheet.getRow(4 + celsUp + 2 * eventIndex).height = assets.baseHeight.big
+      sheet.getRow(5 + celsUp + 2 * eventIndex).height = assets.baseHeight.big
       sheet.mergeCells(4 + celsUp + 2 * eventIndex, 1, 5 + celsUp + 2 * eventIndex, 1)
       const parNumCell = sheet.getCell(4 + celsUp + 2 * eventIndex, 1)
       parNumCell.value = eventIndex + 1
@@ -109,7 +114,6 @@ const generateDocument = (
               5 + celsUp + 2 * eventIndex,
               5 + 2 * Math.trunc(parIndex / 2)
             )
-            console.log("ALL SAME")
           } else if (
             (temp_cells[0][1] == temp_cells[2][1] && temp_cells[0][1] != -1) ||
             (temp_cells[1][1] == temp_cells[3][1] && temp_cells[1][1] != -1)
@@ -121,7 +125,6 @@ const generateDocument = (
                 5 + celsUp + 2 * eventIndex,
                 4 + 2 * Math.trunc(parIndex / 2)
               )
-              console.log("s 1")
             }
             if (temp_cells[1][1] == temp_cells[3][1] && temp_cells[1][1] != -1) {
               sheet.mergeCells(
@@ -130,7 +133,6 @@ const generateDocument = (
                 5 + celsUp + 2 * eventIndex,
                 5 + 2 * Math.trunc(parIndex / 2)
               )
-              console.log("s 4")
             }
           } else {
             if (temp_cells[0][1] == temp_cells[1][1] && temp_cells[0][1] != -1) {
@@ -140,7 +142,6 @@ const generateDocument = (
                 4 + celsUp + 2 * eventIndex,
                 5 + 2 * Math.trunc(parIndex / 2)
               )
-              console.log("s 2")
             }
             if (temp_cells[2][1] == temp_cells[3][1] && temp_cells[1][1] != -1) {
               sheet.mergeCells(
@@ -149,7 +150,6 @@ const generateDocument = (
                 5 + celsUp + 2 * eventIndex,
                 5 + 2 * Math.trunc(parIndex / 2)
               )
-              console.log("s 3")
             }
           }
         }
@@ -158,7 +158,7 @@ const generateDocument = (
 
     celsUp += day.events.length * 2 + 1
   })
-
+  sheet.pageSetup.printArea = `A1:I${celsUp+3}`
   return workbook.xlsx.writeBuffer()
 }
 
